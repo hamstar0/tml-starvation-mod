@@ -71,8 +71,8 @@ namespace Starvation {
 				}
 				is_starving = true;
 			} else {
-				if( plr.buffTime[buff_idx] > ( mymod.Config.WellRedDrainRate + 1 ) ) {
-					plr.buffTime[buff_idx] -= mymod.Config.WellRedDrainRate;
+				if( plr.buffTime[buff_idx] > ( mymod.Config.WellFedDrainRate + 1 ) ) {
+					plr.buffTime[buff_idx] -= mymod.Config.WellFedDrainRate;
 				}
 			}
 

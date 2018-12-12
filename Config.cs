@@ -14,7 +14,7 @@ namespace Starvation {
 
 		//public bool DebugModeInfo = false;
 
-		public int WellRedDrainRate = 4;
+		public int WellFedDrainRate = 4;
 		public int StarvationHarm = 1;
 		public int StarvationHarmRate = 10;
 
