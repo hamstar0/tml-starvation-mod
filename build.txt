@@ -1,0 +1,6 @@
+author = hamstar
+version = 1.1.0
+displayName = Starvation
+modReferences = HamstarHelpers@3.1.0
+buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*
+languageVersion = 6
