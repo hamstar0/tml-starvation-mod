@@ -3,14 +3,15 @@ using HamstarHelpers.Components.Network.Data;
 
 
 namespace Starvation.NetProtocols {
-	class ModSettingsProtocol : PacketProtocolRequestToServer {
+	class ModSettingsProtocol : PacketProtocol {
 		public StarvationConfigData ModSettings;
 
 
 
 		////////////////
 
-		protected ModSettingsProtocol( PacketProtocolDataConstructorLock ctorLock ) : base( ctorLock ) { }
+		//protected ModSettingsProtocol( PacketProtocolDataConstructorLock ctorLock ) : base( ctorLock ) { }
+		protected ModSettingsProtocol( PacketProtocolDataConstructorLock ctorLock ) { }
 
 		////////////////
 
@@ -20,7 +21,7 @@ namespace Starvation.NetProtocols {
 
 		////////////////
 		
-		protected override void ReceiveReply() {
+		protected override void ReceiveWithClient() {
 			StarvationMod.Instance.ConfigJson.SetData( this.ModSettings );
 		}
 	}

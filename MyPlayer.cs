@@ -37,7 +37,7 @@ namespace Starvation {
 		}
 
 		private void OnConnectClient() {
-			PacketProtocolRequestToServer.QuickRequest<ModSettingsProtocol>();
+			PacketProtocol.QuickRequestToServer<ModSettingsProtocol>();
 		}
 
 		private void OnConnectServer() {
