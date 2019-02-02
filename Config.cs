@@ -18,6 +18,8 @@ namespace Starvation {
 		public int StarvationHarm = 1;
 		public int StarvationHarmRate = 10;
 
+		public int PlayerStarterSoup = 3;
+
 
 
 		////////////////

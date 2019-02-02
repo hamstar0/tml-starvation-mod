@@ -91,10 +91,12 @@ namespace Starvation {
 		////
 
 		public override void SetupStartInventory( IList<Item> items, bool mediumcoreDeath ) {
-			if( !mediumcoreDeath ) {
+			var mymod = (StarvationMod)this.mod;
+
+			if( !mediumcoreDeath && mymod.Config.PlayerStarterSoup > 0 ) {
 				Item soup = new Item();
 				soup.SetDefaults( ItemID.BowlofSoup, true );
-				soup.stack = 3;
+				soup.stack = mymod.Config.PlayerStarterSoup;
 
 				items.Add( soup );
 			}
