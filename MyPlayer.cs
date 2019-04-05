@@ -2,6 +2,7 @@
 using HamstarHelpers.Helpers.DebugHelpers;
 using Microsoft.Xna.Framework;
 using Starvation.NetProtocols;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
@@ -11,6 +12,18 @@ using Terraria.ModLoader;
 
 namespace Starvation {
 	class StarvationPlayer : ModPlayer {
+		private bool IsStarving = false;
+		private int HurtDelay = 0;
+
+
+		////////////////
+
+		public override bool CloneNewInstances => false;
+
+
+
+		////////////////
+
 		public override void SyncPlayer( int toWho, int fromWho, bool newPlayer ) {
 			if( Main.netMode == 2 ) {
 				if( toWho == -1 && fromWho == this.player.whoAmI ) {
@@ -37,20 +50,12 @@ namespace Starvation {
 		}
 
 		private void OnConnectClient() {
-			PacketProtocolRequestToServer.QuickRequest<ModSettingsProtocol>();
+			PacketProtocolRequestToServer.QuickRequest<ModSettingsProtocol>( -1 );
 		}
 
 		private void OnConnectServer() {
 		}
 
-
-		////////////////
-
-		private bool IsStarving = false;
-		private int HurtDelay = 0;
-
-
-		public override bool CloneNewInstances => false;
 
 
 		////////////////
@@ -61,31 +66,33 @@ namespace Starvation {
 			if( plr.dead ) { return; }
 
 			var mymod = (StarvationMod)this.mod;
-			int buff_idx = plr.FindBuffIndex( BuffID.WellFed );
-			bool is_starving = false;
+			int buffIdx = plr.FindBuffIndex( BuffID.WellFed );
+			bool isStarving = false;
 
-			if( buff_idx == -1 ) {
+			if( buffIdx == -1 ) {
 				if( this.HurtDelay-- < 0 ) {
-					this.HurtDelay = mymod.Config.StarvationHarmRate;
+					this.HurtDelay = mymod.Config.StarvationHarmDelay;
 					this.HungerHurt();
 				}
-				is_starving = true;
+				isStarving = true;
 			} else {
-				if( plr.buffTime[buff_idx] > ( mymod.Config.WellFedDrainRate + 1 ) ) {
-					plr.buffTime[buff_idx] -= mymod.Config.WellFedDrainRate;
+				if( plr.buffTime[buffIdx] > ( mymod.Config.WellFedDrainRate + 1 ) ) {
+					float addDrain = mymod.Config.AddedWellFedDrainRatePerMaxHealthOver100 * (float)Math.Max(0, this.player.statLifeMax-100);
+					plr.buffTime[buffIdx] -= mymod.Config.WellFedDrainRate + (int)addDrain;
 				}
 			}
 
-			if( is_starving && is_starving != this.IsStarving ) {
+			if( isStarving && isStarving != this.IsStarving ) {
 				Main.NewText( "You're starving! Find food quickly.", Color.Red );
 			}
-			this.IsStarving = is_starving;
+			this.IsStarving = isStarving;
 		}
 
 		////
 
 		public override void OnRespawn( Player player ) {
-			player.AddBuff( BuffID.WellFed, 60 * 60 * 3 );
+			var mymod = (StarvationMod)this.mod;
+			player.AddBuff( BuffID.WellFed, mymod.Config.RespawnWellFedDuration );
 		}
 
 		////
@@ -109,9 +116,12 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			Player plr = this.player;
 
-			CombatText.NewText( plr.getRect(), CombatText.LifeRegenNegative, mymod.Config.StarvationHarm, false, true );
+			float addedHarm = mymod.Config.AddedStarvationHarmPerMaxHealthOver100 * (float)Math.Max(0, plr.statLifeMax-100);
+			int harm = mymod.Config.StarvationHarm + (int)addedHarm;
 
-			plr.statLife -= mymod.Config.StarvationHarm;
+			CombatText.NewText( plr.getRect(), CombatText.LifeRegenNegative, harm, false, true );
+
+			plr.statLife -= harm;
 			if( plr.statLife <= 0 ) {
 				plr.KillMe( PlayerDeathReason.ByCustomReason( plr.name + " starved to death." ), 10f, 0, false );
 			}

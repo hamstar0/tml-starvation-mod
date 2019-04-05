@@ -14,11 +14,23 @@ namespace Starvation {
 
 		//public bool DebugModeInfo = false;
 
-		public int WellFedDrainRate = 4;
+		public int WellFedDrainRate = 4;	// Ticks
 		public int StarvationHarm = 1;
-		public int StarvationHarmRate = 10;
+		public int StarvationHarmDelay = 10;	// Ticks
 
 		public int PlayerStarterSoup = 3;
+
+		public int RespawnWellFedDuration = 60 * 60 * 3;    // 3 minutes
+
+		public float AddedWellFedDrainRatePerMaxHealthOver100 = (1f + (1f/3f)) / 100f;	// Doubles drain rate at 400 hp
+		public float AddedStarvationHarmPerMaxHealthOver100 = 1f / 100f;
+
+
+		////
+
+		public string _OLD_SETTINGS_BELOW_ = "";
+
+		public int StarvationHarmRate = 10;
 
 
 
@@ -44,6 +56,12 @@ namespace Starvation {
 
 			if( this.VersionSinceUpdate == "" ) {
 				this.SetDefaults();
+			}
+
+			if( versSince < new Version(1, 1, 3) ) {
+				if( this.VersionSinceUpdate != "" ) {
+					this.StarvationHarmDelay = this.StarvationHarmRate;
+				}
 			}
 
 			this.VersionSinceUpdate = mymod.Version.ToString();

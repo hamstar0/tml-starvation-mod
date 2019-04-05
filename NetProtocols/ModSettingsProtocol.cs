@@ -1,5 +1,4 @@
 ﻿using HamstarHelpers.Components.Network;
-using HamstarHelpers.Components.Network.Data;
 
 
 namespace Starvation.NetProtocols {
@@ -9,8 +8,9 @@ namespace Starvation.NetProtocols {
 
 
 		////////////////
-		
-		protected ModSettingsProtocol( PacketProtocolDataConstructorLock ctorLock ) : base( ctorLock ) { }
+
+		private ModSettingsProtocol() { }
+
 
 		////////////////
 
