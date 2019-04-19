@@ -22,8 +22,11 @@ namespace Starvation {
 
 		public int RespawnWellFedDuration = 60 * 60 * 3;    // 3 minutes
 
-		public float AddedWellFedDrainRatePerMaxHealthOver100 = (1f + (1f/3f)) / 100f;	// Doubles drain rate at 400 hp
+		public float AddedWellFedDrainRatePerMaxHealthOver100 = (1f + (1f/3f)) / 100f;  // Doubles drain rate at 400 hp
 		public float AddedStarvationHarmPerMaxHealthOver100 = 1f / 100f;
+
+		public bool FoodSpoilageEnabled = false;
+		public float FoodSpoilageRate = 3f;
 
 
 		////
