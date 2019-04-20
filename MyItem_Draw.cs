@@ -52,6 +52,7 @@ namespace Starvation {
 		////////////////
 
 		private void AddSpoilageTip( Item item, List<TooltipLine> tooltips ) {
+			var mymod = (StarvationMod)this.mod;
 			int buffTime = this.ComputeBuffTime( item );
 			float freshness = (float)buffTime / (float)item.buffTime;
 			float spoilage = 1f - freshness;
@@ -65,10 +66,13 @@ namespace Starvation {
 				spoiledFmt = ( spoiledAmt / 60 ) + "m";
 			}
 
-			var tip = new TooltipLine( this.mod, "SpoilageTip", spoiledFmt + " of Well Fed duration lost." );
-			tip.overrideColor = Color.Lerp( Color.Lime, Color.Red, spoilage );
+			var tip1 = new TooltipLine( this.mod, "SpoilageRate", "Spoils for " + mymod.Config.FoodSpoilageRate + " 'Well Fed' duration for every second until use" );
 
-			tooltips.Add( tip );
+			var tip2 = new TooltipLine( this.mod, "SpoilageAmount", spoiledFmt + " of Well Fed duration lost." );
+			tip2.overrideColor = Color.Lerp( Color.Lime, Color.Red, spoilage );
+
+			tooltips.Add( tip1 );
+			tooltips.Add( tip2 );
 		}
 	}
 }

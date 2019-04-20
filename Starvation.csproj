@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="MyBuff.cs" />
     <Compile Include="MyItem_Spoil.cs" />
     <Compile Include="MyItem_Draw.cs" />
     <Compile Include="MyItem.cs" />
@@ -68,6 +69,9 @@
       <HintPath>..\..\..\Reference\tModLoader Patcher\references\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="Terraria.Libraries.ReLogic.ReLogic">
+      <HintPath>..\..\..\References\Libraries\Terraria.Libraries.ReLogic.ReLogic.dll</HintPath>
+    </Reference>
     <Reference Include="tModLoaderServerDebug">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServerDebug.exe</HintPath>
     </Reference>

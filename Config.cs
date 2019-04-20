@@ -26,7 +26,7 @@ namespace Starvation {
 		public float AddedStarvationHarmPerMaxHealthOver100 = 1f / 100f;
 
 		public bool FoodSpoilageEnabled = false;
-		public float FoodSpoilageRate = 3f;
+		public float FoodSpoilageRate = 2f;
 
 
 		////
@@ -64,6 +64,11 @@ namespace Starvation {
 			if( versSince < new Version(1, 1, 3) ) {
 				if( this.VersionSinceUpdate != "" ) {
 					this.StarvationHarmDelay = this.StarvationHarmRate;
+				}
+			}
+			if( versSince < new Version( 1, 3, 1 ) ) {
+				if( this.FoodSpoilageRate == 3f ) {
+					this.FoodSpoilageRate = newConfig.FoodSpoilageRate;
 				}
 			}
 
