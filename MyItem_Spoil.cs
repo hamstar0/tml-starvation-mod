@@ -33,7 +33,7 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			int buffIdx = player.FindBuffIndex( BuffID.WellFed );
 
-			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRate > 0 ) {
+			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRate > 0f ) {
 				int newBuffTime = this.ComputeBuffTime( item );
 
 				if( player.buffTime[buffIdx] < newBuffTime ) {

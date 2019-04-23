@@ -11,6 +11,9 @@ namespace Starvation {
 	partial class StarvationItem : GlobalItem {
 		public int AverageDuration = 0;
 
+		private int Ticks = 0;
+		private DateTime PrevDate = DateTime.UtcNow;
+
 
 		////////////////
 
@@ -23,7 +26,7 @@ namespace Starvation {
 		public override GlobalItem Clone( Item item, Item itemClone ) {
 			var clone = (StarvationItem)base.Clone( item, itemClone );
 
-			if( this.NeedsSaving(item) ) {
+			if( this.NeedsSaving( item ) ) {
 				clone.AverageDuration = this.AverageDuration;
 			}
 
@@ -83,17 +86,30 @@ namespace Starvation {
 
 		public override void Update( Item item, ref float gravity, ref float maxFallSpeed ) {
 			if( this.NeedsSaving( item ) ) {
-				this.AverageDuration++;
-
+				this.UpdateDuration();
 				item.maxStack = 1;
 			}
 		}
 
 		public override void UpdateInventory( Item item, Player player ) {
 			if( this.NeedsSaving( item ) ) {
-				this.AverageDuration++;
-
+				this.UpdateDuration();
 				item.maxStack = 1;
+			}
+		}
+
+		////
+
+		private void UpdateDuration() {
+			DateTime now = DateTime.UtcNow;
+			TimeSpan diff = now - this.PrevDate;
+
+			if( diff.TotalSeconds >= 1d ) {
+				this.PrevDate = now;
+				this.Ticks = 0;
+			} else if( this.Ticks < 60 ) {
+				this.AverageDuration++;
+				this.Ticks++;
 			}
 		}
 	}
