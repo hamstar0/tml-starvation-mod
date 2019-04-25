@@ -81,6 +81,7 @@
     <Content Include="build.txt" />
     <Content Include="description.txt" />
     <Content Include="icon.png" />
+    <Content Include="Items\SpoiledFood.png" />
     <Content Include="Items\UnlifeCrystal.png" />
   </ItemGroup>
   <ItemGroup>

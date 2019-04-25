@@ -20,7 +20,7 @@ namespace Starvation.Items {
 
 			this.DisplayName.SetDefault( "Unlife Crystal" );
 
-			string tooltip = "Decreases maximum life by 20";
+			string tooltip = "Permanently decreases maximum life by 20";
 			if( mymod.Config.UnlifeCrystalReturnsLifeCrystal ) {
 				tooltip += "\nReturns a Life Crystal on use";
 			}
