@@ -29,6 +29,7 @@ namespace Starvation {
 		public float FoodSpoilageRate = 1f;
 
 		public bool CraftableUnlifeCrystal = true;
+		public bool UnlifeCrystalReturnsLifeCrystal = true;
 
 
 		////

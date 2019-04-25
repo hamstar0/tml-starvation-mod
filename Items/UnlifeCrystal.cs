@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HamstarHelpers.Helpers.ItemHelpers;
+using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,8 +16,16 @@ namespace Starvation.Items {
 		////////////////
 
 		public override void SetStaticDefaults() {
+			var mymod = (StarvationMod)this.mod;
+
 			this.DisplayName.SetDefault( "Unlife Crystal" );
-			this.Tooltip.SetDefault( "Decreases maximum life by 20" );
+
+			string tooltip = "Decreases maximum life by 20";
+			if( mymod.Config.UnlifeCrystalReturnsLifeCrystal ) {
+				tooltip += "\nReturns a Life Crystal on use";
+			}
+
+			this.Tooltip.SetDefault( tooltip );
 		}
 
 		public override void SetDefaults() {
@@ -40,15 +50,22 @@ namespace Starvation.Items {
 		}
 
 		public override bool ConsumeItem( Player player ) {
+			var mymod = (StarvationMod)this.mod;
 			bool canUnheal = player.statLifeMax > 20;
 
 			if( canUnheal ) {
 				player.statLifeMax -= 20;
+
+				if( mymod.Config.UnlifeCrystalReturnsLifeCrystal ) {
+					Vector2 pos = player.Center - (new Vector2(UnlifeCrystal.Width, UnlifeCrystal.Height) / 2f);
+					ItemHelpers.CreateItem( pos, ItemID.LifeCrystal, 1, UnlifeCrystal.Width, UnlifeCrystal.Height );
+				}
 			}
 
 			return canUnheal;
 		}
 
+		////
 
 		public override void AddRecipes() {
 			var myrecipe = new UnlifeCrystalItemRecipe( this );
