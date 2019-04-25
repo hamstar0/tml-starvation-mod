@@ -77,7 +77,8 @@ namespace Starvation {
 				isStarving = true;
 			} else {
 				if( plr.buffTime[buffIdx] > ( mymod.Config.WellFedDrainRate + 1 ) ) {
-					float addDrain = mymod.Config.AddedWellFedDrainRatePerMaxHealthOver100 * (float)Math.Max(0, this.player.statLifeMax-100);
+					float mul = mymod.Config.AddedWellFedDrainRateMultiplierPerMaxHealthOver100;
+					float addDrain = mul * (float)Math.Max(0, this.player.statLifeMax-100);
 					plr.buffTime[buffIdx] -= mymod.Config.WellFedDrainRate + (int)addDrain;
 				}
 			}
@@ -116,7 +117,8 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			Player plr = this.player;
 
-			float addedHarm = mymod.Config.AddedStarvationHarmPerMaxHealthOver100 * (float)Math.Max(0, plr.statLifeMax-100);
+			float mul = mymod.Config.AddedStarvationHarmMultiplierPerMaxHealthOver100;
+			float addedHarm = mul * (float)Math.Max(0, plr.statLifeMax-100);
 			int harm = mymod.Config.StarvationHarm + (int)addedHarm;
 
 			CombatText.NewText( plr.getRect(), CombatText.LifeRegenNegative, harm, false, true );

@@ -14,7 +14,7 @@ namespace Starvation {
 
 		//public bool DebugModeInfo = false;
 
-		public int WellFedDrainRate = 4;	// Ticks
+		public int WellFedDrainRate = 2;	// Ticks
 		public int StarvationHarm = 1;
 		public int StarvationHarmDelay = 10;	// Ticks
 
@@ -22,8 +22,8 @@ namespace Starvation {
 
 		public int RespawnWellFedDuration = 60 * 60 * 3;    // 3 minutes
 
-		public float AddedWellFedDrainRatePerMaxHealthOver100 = (1f + (1f/3f)) / 100f;  // Doubles drain rate at 400 hp
-		public float AddedStarvationHarmPerMaxHealthOver100 = 1f / 100f;
+		public float AddedWellFedDrainRateMultiplierPerMaxHealthOver100 = (2f / 3f) / 100f;	// CORRECTLY triples at 400 max hp
+		public float AddedStarvationHarmMultiplierPerMaxHealthOver100 = (2f / 3f) / 100f;
 
 		public bool FoodSpoilageEnabled = false;
 		public float FoodSpoilageRate = 1f;
@@ -34,6 +34,8 @@ namespace Starvation {
 		public string _OLD_SETTINGS_BELOW_ = "";
 
 		public int StarvationHarmRate = 10;
+		public float AddedWellFedDrainRatePerMaxHealthOver100 = (1f + (1f/3f)) / 100f;
+		public float AddedStarvationHarmPerMaxHealthOver100 = (1f + (1f/3f)) / 100f;
 
 
 
@@ -71,9 +73,15 @@ namespace Starvation {
 					this.FoodSpoilageRate = newConfig.FoodSpoilageRate;
 				}
 			}
-			if( versSince < new Version( 1, 3, 1 ) ) {
+			if( versSince < new Version( 1, 3, 2 ) ) {
 				if( this.FoodSpoilageRate == 2f ) {
 					this.FoodSpoilageRate = newConfig.FoodSpoilageRate;
+				}
+				if( this.AddedWellFedDrainRatePerMaxHealthOver100 == ((1f + (1f/3f)) / 100f) ) {
+					this.AddedWellFedDrainRatePerMaxHealthOver100 = newConfig.AddedWellFedDrainRatePerMaxHealthOver100;
+				}
+				if( this.WellFedDrainRate == 4f ) {
+					this.WellFedDrainRate = newConfig.WellFedDrainRate;
 				}
 			}
 
