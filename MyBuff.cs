@@ -14,7 +14,7 @@ namespace Starvation {
 				float rate = mymod.Config.WellFedDrainRate + (addedMaxHp * mymod.Config.AddedWellFedDrainRatePerMaxHealthOver100);
 				rate *= 100;
 
-				tip += "\nDepletion rate: " + rate.ToString("N2") + "%";
+				tip += "\nDepletion rate (based on max HP): " + rate.ToString("N2") + "%";
 			}
 		}
 	}

@@ -28,6 +28,8 @@ namespace Starvation {
 		public bool FoodSpoilageEnabled = false;
 		public float FoodSpoilageRate = 1f;
 
+		public bool CraftableUnlifeCrystal = true;
+
 
 		////
 
@@ -73,7 +75,7 @@ namespace Starvation {
 					this.FoodSpoilageRate = newConfig.FoodSpoilageRate;
 				}
 			}
-			if( versSince < new Version( 1, 3, 2 ) ) {
+			if( versSince < new Version( 1, 4, 0 ) ) {
 				if( this.FoodSpoilageRate == 2f ) {
 					this.FoodSpoilageRate = newConfig.FoodSpoilageRate;
 				}

@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Items\UnlifeCrystal.cs" />
     <Compile Include="MyBuff.cs" />
     <Compile Include="MyItem_Spoil.cs" />
     <Compile Include="MyItem_Draw.cs" />
@@ -80,14 +81,13 @@
     <Content Include="build.txt" />
     <Content Include="description.txt" />
     <Content Include="icon.png" />
+    <Content Include="Items\UnlifeCrystal.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE" />
     <None Include="README.md" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Items\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"C:\Program Files (x86)\Steam\steamapps\common\terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"</PostBuildEvent>
