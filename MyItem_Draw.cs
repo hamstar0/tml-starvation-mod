@@ -149,7 +149,7 @@ namespace Starvation {
 
 			var tip1 = new TooltipLine( this.mod,
 				"SpoilageRate",
-				"Spoils for " + mymod.Config.FoodSpoilageRate + " seconds of 'Well Fed' duration for every second until use"
+				"Loses " + mymod.Config.FoodSpoilageRate + " seconds of 'Well Fed' duration for every second until used"
 			);
 
 			string tip2Text;

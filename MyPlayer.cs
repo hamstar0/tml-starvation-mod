@@ -85,6 +85,9 @@ namespace Starvation {
 
 			if( isStarving && isStarving != this.IsStarving ) {
 				Main.NewText( "You're starving! Find food quickly.", Color.Red );
+				if( this.player.statLifeMax == 400 && mymod.Config.CraftableUnlifeCrystal ) {
+					Main.NewText( "Tip: Craft Unlife Crystals to reduce max hunger rate (but also max health).", new Color( 96, 96, 96 ) );
+				}
 			}
 			this.IsStarving = isStarving;
 		}
