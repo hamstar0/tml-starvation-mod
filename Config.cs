@@ -31,6 +31,20 @@ namespace Starvation {
 		public bool CraftableUnlifeCrystal = true;
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
 
+		public int CustomCookedMarshmallowWellFedDuration = -1;
+		public int CustomBowlOfSoupWellFedDuration = 45 * 60 * 60;				// 45 minutes
+		public int CustomPumpkinPieWellFedDuration = (int)(7.5f * 60f * 60f);	// 7.5 minutes
+		public int CustomCookedFishWellFedDuration = 15 * 60 * 60;				// 15 minutes
+		public int CustomCookedShrimpWellFedDuration = 15 * 60 * 60;			// 15 minutes
+		public int CustomSashimiWellFedDuration = 15 * 60 * 60;					// 15 minutes
+		public int CustomGrubSoupWellFedDuration = 90 * 60 * 60;				// 90 minutes
+		public int CustomPadThaiWellFedDuration = -1;
+		public int CustomPhoWellFedDuration = -1;
+		public int CustomGingerbreadCookieWellFedDuration = 5 * 60 * 60;		// 5 minutes
+		public int CustomSugarCookieWellFedDuration = 5 * 60 * 60;				// 5 minutes
+		public int CustomChristmasPuddingWellFedDuration = 5 * 60 * 60;			// 5 minutes
+		public int CustomBaconWellFedDuration = -1;
+
 
 		////
 

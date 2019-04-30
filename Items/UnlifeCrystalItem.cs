@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 
 namespace Starvation.Items {
-	class UnlifeCrystal : ModItem {
+	class UnlifeCrystalItem : ModItem {
 		public static int Width = 22;
 		public static int Height = 22;
 
@@ -29,8 +29,8 @@ namespace Starvation.Items {
 		}
 
 		public override void SetDefaults() {
-			this.item.width = UnlifeCrystal.Width;
-			this.item.height = UnlifeCrystal.Height;
+			this.item.width = UnlifeCrystalItem.Width;
+			this.item.height = UnlifeCrystalItem.Height;
 			this.item.consumable = true;
 			this.item.useStyle = 4;
 			this.item.useTime = 30;
@@ -57,8 +57,8 @@ namespace Starvation.Items {
 				player.statLifeMax -= 20;
 
 				if( mymod.Config.UnlifeCrystalReturnsLifeCrystal ) {
-					Vector2 pos = player.Center - (new Vector2(UnlifeCrystal.Width, UnlifeCrystal.Height) / 2f);
-					ItemHelpers.CreateItem( pos, ItemID.LifeCrystal, 1, UnlifeCrystal.Width, UnlifeCrystal.Height );
+					Vector2 pos = player.Center - (new Vector2(UnlifeCrystalItem.Width, UnlifeCrystalItem.Height) / 2f);
+					ItemHelpers.CreateItem( pos, ItemID.LifeCrystal, 1, UnlifeCrystalItem.Width, UnlifeCrystalItem.Height );
 				}
 			}
 
@@ -77,7 +77,7 @@ namespace Starvation.Items {
 
 
 	class UnlifeCrystalItemRecipe : ModRecipe {
-		public UnlifeCrystalItemRecipe( UnlifeCrystal myitem ) : base( myitem.mod ) {
+		public UnlifeCrystalItemRecipe( UnlifeCrystalItem myitem ) : base( myitem.mod ) {
 			var mymod = (StarvationMod)this.mod;
 
 			this.AddTile( TileID.WorkBenches );

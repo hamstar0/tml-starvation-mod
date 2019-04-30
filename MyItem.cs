@@ -78,6 +78,8 @@ namespace Starvation {
 		public override void SetDefaults( Item item ) {
 			if( this.NeedsSaving( item ) ) {
 				item.maxStack = 1;
+
+				this.ApplyWellFedModifiers( item );
 			}
 		}
 
@@ -97,7 +99,7 @@ namespace Starvation {
 				item.maxStack = 1;
 			}
 		}
-
+		
 		////
 
 		private void UpdateDuration() {

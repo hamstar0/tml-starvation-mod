@@ -36,8 +36,10 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Items\UnlifeCrystal.cs" />
+    <Compile Include="Items\TupperwareItem.cs" />
+    <Compile Include="Items\UnlifeCrystalItem.cs" />
     <Compile Include="MyBuff.cs" />
+    <Compile Include="MyItem_Custom.cs" />
     <Compile Include="MyItem_Spoil.cs" />
     <Compile Include="MyItem_Draw.cs" />
     <Compile Include="MyItem.cs" />
@@ -82,7 +84,8 @@
     <Content Include="description.txt" />
     <Content Include="icon.png" />
     <Content Include="Items\SpoiledFood.png" />
-    <Content Include="Items\UnlifeCrystal.png" />
+    <Content Include="Items\TupperwareItem.png" />
+    <Content Include="Items\UnlifeCrystalItem.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE" />
