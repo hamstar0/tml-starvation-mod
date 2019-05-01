@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HamstarHelpers.Helpers.ItemHelpers;
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -7,6 +8,19 @@ namespace Starvation.Items {
 	class TupperwareItem : ModItem {
 		public static int Width = 22;
 		public static int Height = 22;
+
+
+
+		////////////////
+
+		private int PerishableItemId;
+		private int StoredItemCount;
+		private int SpoilageAmount;
+
+
+		////////////////
+
+		public override bool CloneNewInstances => true;
 
 
 
@@ -36,12 +50,30 @@ namespace Starvation.Items {
 
 		////////////////
 
+		public override void Update( ref float gravity, ref float maxFallSpeed ) {
+			this.UpdateSpoilage();
+		}
+
+		public override void UpdateInventory( Player player ) {
+			this.UpdateSpoilage();
+		}
+
+
+		////////////////
+
 		public override bool CanRightClick() {
-			return base.CanRightClick();
+			return this.StoredItemCount > 0;
 		}
 
 		public override void RightClick( Player player ) {
-			base.RightClick( player );
+			var mymod = (StarvationMod)this.mod;
+			int itemId = ItemHelpers.CreateItem( player.Center, this.PerishableItemId, 1, 16, 16 );
+			var itemInfo = Main.item[ itemId ].GetGlobalItem<StarvationItem>();
+			//float spoilagePercent = (float)this.SpoilageAmount / (float)mymod.Config.FoodIngredientSpoilageDuration;
+
+			itemInfo.DurationOfExistence = this.SpoilageAmount;
+
+			this.StoredItemCount--;
 		}
 	}
 }

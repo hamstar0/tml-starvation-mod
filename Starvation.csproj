@@ -44,6 +44,7 @@
     <Compile Include="MyItem_Draw.cs" />
     <Compile Include="MyItem.cs" />
     <Compile Include="MyMod_Meta.cs" />
+    <Compile Include="MyNPC.cs" />
     <Compile Include="MyPlayer.cs" />
     <Compile Include="MyMod.cs" />
     <Compile Include="NetProtocols\ModSettingsProtocol.cs" />

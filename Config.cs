@@ -1,6 +1,7 @@
 ﻿using HamstarHelpers.Components.Config;
 using System;
 using System.Collections.Generic;
+using Terraria.ID;
 
 
 namespace Starvation {
@@ -28,9 +29,15 @@ namespace Starvation {
 
 		public bool FoodSpoilageEnabled = false;
 		public float FoodSpoilageRate = 1f;
+		public bool FoodIngredientsAlsoSpoil = true;
+		public int FoodIngredientSpoilageDuration = 30 * 60 * 60;	// 30 minutes; no "Well Fed" rate modifier
 
 		public bool CraftableUnlifeCrystal = true;
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
+
+		public int TupperwareDropsFromNpcId = NPCID.Skeleton;
+		public float TupperwareDropChance = 0.35f;
+		public float TupperwareSpoilageRate = 0.5f;
 
 		public IDictionary<string, int> CustomWellFedDurations = new Dictionary<string, int>();
 		public bool CustomPumpkinPieRecipe = true;

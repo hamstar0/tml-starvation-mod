@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 namespace Starvation {
 	partial class StarvationItem : GlobalItem {
 		public override void OnConsumeItem( Item item, Player player ) {
-			if( this.NeedsSaving( item ) ) {
+			if( this.NeedsSaving( item ) && item.buffType == BuffID.WellFed ) {
 				this.ModifyBuffDuration( item, player );
 			}
 		}
@@ -16,14 +16,33 @@ namespace Starvation {
 
 		////////////////
 
-		public int ComputeBuffTime( Item item ) {
+		public int ComputeRemainingBuffTime( Item item ) {
 			if( !this.NeedsSaving( item ) ) { return -1; }
 
 			var mymod = (StarvationMod)this.mod;
+			int spoilage;
 
-			int buffTime = item.buffTime - (int)( (float)this.AverageDuration * mymod.Config.FoodSpoilageRate );
+			if( item.buffType == BuffID.WellFed ) {
+				spoilage = (int)( (float)this.DurationOfExistence * mymod.Config.FoodSpoilageRate );
+				int buffTime = item.buffTime - spoilage;
 
-			return Math.Max( 0, buffTime );
+				return Math.Max( 0, buffTime );
+			} else {
+				spoilage = (int)( (float)this.DurationOfExistence * mymod.Config.TupperwareSpoilageRate );
+
+				return mymod.Config.FoodIngredientSpoilageDuration - spoilage;
+			}
+		}
+
+		public int ComputeMaxSpoilageDuration( Item item ) {
+			if( !this.NeedsSaving( item ) ) { return -1; }
+
+			if( item.buffType == BuffID.WellFed ) {
+				return item.buffTime;
+			}
+
+			var mymod = (StarvationMod)this.mod;
+			return mymod.Config.FoodIngredientSpoilageDuration;
 		}
 
 
@@ -34,7 +53,7 @@ namespace Starvation {
 			int buffIdx = player.FindBuffIndex( BuffID.WellFed );
 
 			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRate > 0f ) {
-				int newBuffTime = this.ComputeBuffTime( item );
+				int newBuffTime = this.ComputeRemainingBuffTime( item );
 
 				if( player.buffTime[buffIdx] < newBuffTime ) {
 					player.buffTime[buffIdx] = newBuffTime;

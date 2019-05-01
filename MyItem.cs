@@ -10,7 +10,7 @@ using Terraria.ModLoader.IO;
 
 namespace Starvation {
 	partial class StarvationItem : GlobalItem {
-		public int AverageDuration = 0;
+		public int DurationOfExistence = 0;
 
 		private int Ticks = 0;
 		private DateTime PrevDate = DateTime.UtcNow;
@@ -28,7 +28,7 @@ namespace Starvation {
 			var clone = (StarvationItem)base.Clone( item, itemClone );
 
 			if( this.NeedsSaving( item ) ) {
-				clone.AverageDuration = this.AverageDuration;
+				clone.DurationOfExistence = this.DurationOfExistence;
 			}
 
 			return clone;
@@ -42,8 +42,11 @@ namespace Starvation {
 				if( item.buffType == BuffID.WellFed ) {
 					return true;
 				}
-				if( EntityGroups.ItemGroups["Any Food Ingredient"].Contains(item.type) ) {
-					return true;
+
+				if( mymod.Config.FoodIngredientsAlsoSpoil ) {
+					if( EntityGroups.ItemGroups["Any Food Ingredient"].Contains( item.type ) ) {
+						return true;
+					}
 				}
 			}
 			return false;
@@ -52,7 +55,7 @@ namespace Starvation {
 		public override void Load( Item item, TagCompound tags ) {
 			if( this.NeedsSaving( item ) ) {
 				if( tags.ContainsKey( "duration" ) ) {
-					this.AverageDuration = tags.GetInt( "duration" );
+					this.DurationOfExistence = tags.GetInt( "duration" );
 				}
 			}
 		}
@@ -61,7 +64,7 @@ namespace Starvation {
 		public override TagCompound Save( Item item ) {
 			if( this.NeedsSaving( item ) ) {
 				return new TagCompound {
-					{ "duration", (int)this.AverageDuration }
+					{ "duration", (int)this.DurationOfExistence }
 				};
 			}
 			return new TagCompound();
@@ -71,13 +74,13 @@ namespace Starvation {
 
 		public override void NetReceive( Item item, BinaryReader reader ) {
 			if( this.NeedsSaving( item ) ) {
-				this.AverageDuration = reader.ReadInt32();
+				this.DurationOfExistence = reader.ReadInt32();
 			}
 		}
 
 		public override void NetSend( Item item, BinaryWriter writer ) {
 			if( this.NeedsSaving( item ) ) {
-				writer.Write( (Int32)this.AverageDuration );
+				writer.Write( (Int32)this.DurationOfExistence );
 			}
 		}
 
@@ -119,7 +122,7 @@ namespace Starvation {
 				this.PrevDate = now;
 				this.Ticks = 0;
 			} else if( this.Ticks < 60 ) {
-				this.AverageDuration++;
+				this.DurationOfExistence++;
 				this.Ticks++;
 			}
 		}

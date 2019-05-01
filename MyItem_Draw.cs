@@ -23,7 +23,8 @@ namespace Starvation {
 				return true;
 			}
 
-			float freshness = (float)this.ComputeBuffTime( item ) / (float)item.buffTime;
+			//float freshness = (float)this.ComputeRemainingBuffTime( item ) / (float)item.buffTime;
+			float freshness = this.ComputeRemainingBuffTime(item) / (float)this.ComputeMaxSpoilageDuration(item);
 			float spoilage = 1f - freshness;
 
 			if( spoilage == 1f ) {
@@ -53,8 +54,8 @@ namespace Starvation {
 			if( !this.NeedsSaving( item ) ) {
 				return true;
 			}
-
-			float freshness = (float)this.ComputeBuffTime( item ) / (float)item.buffTime;
+			
+			float freshness = this.ComputeRemainingBuffTime(item) / (float)this.ComputeMaxSpoilageDuration(item);
 			float spoilage = 1f - freshness;
 
 			if( spoilage == 1f ) {
@@ -95,8 +96,8 @@ namespace Starvation {
 			if( tex == null ) {
 				return;
 			}
-
-			float freshness = (float)this.ComputeBuffTime( item ) / (float)item.buffTime;
+			
+			float freshness = this.ComputeRemainingBuffTime(item) / (float)this.ComputeMaxSpoilageDuration(item);
 			float spoilage = 1f - freshness;
 
 			float barHeight = 32f;
@@ -134,7 +135,7 @@ namespace Starvation {
 
 		private void AddSpoilageTips( Item item, List<TooltipLine> tooltips ) {
 			var mymod = (StarvationMod)this.mod;
-			int buffTime = this.ComputeBuffTime( item );
+			int buffTime = this.ComputeRemainingBuffTime( item );
 			float freshness = (float)buffTime / (float)item.buffTime;
 			float spoilage = 1f - freshness;
 
