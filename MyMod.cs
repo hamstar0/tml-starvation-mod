@@ -1,7 +1,9 @@
 using HamstarHelpers.Components.Config;
 using HamstarHelpers.Components.Errors;
 using HamstarHelpers.Helpers.TmlHelpers.ModHelpers;
+using HamstarHelpers.Services.EntityGroups;
 using System;
+using Terraria;
 using Terraria.ModLoader;
 
 
@@ -33,6 +35,8 @@ namespace Starvation {
 		public override void Load() {
 			StarvationMod.Instance = this;
 
+			EntityGroups.Enable();
+
 			this.LoadConfig();
 		}
 
@@ -51,6 +55,12 @@ namespace Starvation {
 
 		public override void Unload() {
 			StarvationMod.Instance = null;
+		}
+
+		////
+
+		public override void PostAddRecipes() {
+			StarvationItem.ApplyRecipeMods();
 		}
 
 

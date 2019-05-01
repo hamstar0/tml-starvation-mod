@@ -1,5 +1,6 @@
 ﻿using HamstarHelpers.Components.Config;
 using System;
+using System.Collections.Generic;
 
 
 namespace Starvation {
@@ -31,19 +32,8 @@ namespace Starvation {
 		public bool CraftableUnlifeCrystal = true;
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
 
-		public int CustomCookedMarshmallowWellFedDuration = -1;
-		public int CustomBowlOfSoupWellFedDuration = 45 * 60 * 60;				// 45 minutes
-		public int CustomPumpkinPieWellFedDuration = (int)(7.5f * 60f * 60f);	// 7.5 minutes
-		public int CustomCookedFishWellFedDuration = 15 * 60 * 60;				// 15 minutes
-		public int CustomCookedShrimpWellFedDuration = 15 * 60 * 60;			// 15 minutes
-		public int CustomSashimiWellFedDuration = 15 * 60 * 60;					// 15 minutes
-		public int CustomGrubSoupWellFedDuration = 90 * 60 * 60;				// 90 minutes
-		public int CustomPadThaiWellFedDuration = -1;
-		public int CustomPhoWellFedDuration = -1;
-		public int CustomGingerbreadCookieWellFedDuration = 5 * 60 * 60;		// 5 minutes
-		public int CustomSugarCookieWellFedDuration = 5 * 60 * 60;				// 5 minutes
-		public int CustomChristmasPuddingWellFedDuration = 5 * 60 * 60;			// 5 minutes
-		public int CustomBaconWellFedDuration = -1;
+		public IDictionary<string, int> CustomWellFedDurations = new Dictionary<string, int>();
+		public bool CustomPumpkinPieRecipe = true;
 
 
 		////
@@ -58,9 +48,21 @@ namespace Starvation {
 
 		////////////////
 
-		public void SetDefaults() { }
-		
-		
+		public void SetDefaults() {
+			this.CustomWellFedDurations.Clear();
+			this.CustomWellFedDurations[ "Cooked Marshmallow" ] = 5 * 60 * 60;			// 5 minutes
+			this.CustomWellFedDurations[ "Bowl of Soup" ] = 45 * 60 * 60;				// 45 minutes
+			this.CustomWellFedDurations[ "Pumpkin Pie" ] = 25 * 60 * 60;				// 25 minutes
+			this.CustomWellFedDurations[ "Cooked Fish" ] = 15 * 60 * 60;                // 15 minutes
+			this.CustomWellFedDurations[ "Cooked Shrimp" ] = 15 * 60 * 60;				// 15 minutes
+			this.CustomWellFedDurations[ "Sashimi" ] = 15 * 60 * 60;					// 15 minutes
+			this.CustomWellFedDurations[ "Grub Soup" ] = 90 * 60 * 60;					// 90 minutes
+			this.CustomWellFedDurations[ "Gingerbread Cookie" ] = 5 * 60 * 60;			// 5 minutes
+			this.CustomWellFedDurations[ "Sugar Cookie" ] = 5 * 60 * 60;				// 5 minutes
+			this.CustomWellFedDurations[ "Christmas Pudding" ] = 5 * 60 * 60;			// 5 minutes
+		}
+
+
 		////////////////
 
 		public bool UpdateToLatestVersion() {
@@ -100,6 +102,9 @@ namespace Starvation {
 				if( this.WellFedDrainRate == 4f ) {
 					this.WellFedDrainRate = newConfig.WellFedDrainRate;
 				}
+			}
+			if( versSince < new Version( 1, 5, 0 ) ) {
+				this.SetDefaults();
 			}
 
 			this.VersionSinceUpdate = mymod.Version.ToString();

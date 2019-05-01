@@ -1,4 +1,5 @@
 ﻿using HamstarHelpers.Helpers.DebugHelpers;
+using HamstarHelpers.Services.EntityGroups;
 using System;
 using System.IO;
 using Terraria;
@@ -37,7 +38,15 @@ namespace Starvation {
 		public override bool NeedsSaving( Item item ) {
 			var mymod = (StarvationMod)this.mod;
 
-			return mymod.Config.FoodSpoilageEnabled && item.buffType == BuffID.WellFed;
+			if( mymod.Config.FoodSpoilageEnabled ) {
+				if( item.buffType == BuffID.WellFed ) {
+					return true;
+				}
+				if( EntityGroups.ItemGroups["Any Food Ingredient"].Contains(item.type) ) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public override void Load( Item item, TagCompound tags ) {

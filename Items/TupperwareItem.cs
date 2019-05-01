@@ -28,8 +28,8 @@ namespace Starvation.Items {
 		public override void SetDefaults() {
 			this.item.width = TupperwareItem.Width;
 			this.item.height = TupperwareItem.Height;
-			this.item.maxStack = 30;
-			this.item.value = Item.buyPrice( 0, 1, 0, 0 ); // Sells for 1g, 50s
+			this.item.maxStack = 1;
+			this.item.value = Item.buyPrice( 0, 1, 0, 0 );
 			this.item.rare = 2;
 		}
 

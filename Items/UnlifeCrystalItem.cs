@@ -37,7 +37,7 @@ namespace Starvation.Items {
 			this.item.useAnimation = 30;
 			this.item.UseSound = SoundID.Item4;
 			this.item.maxStack = 99;
-			this.item.value = Item.buyPrice( 0, 1, 50, 0 ); // Sells for 1g, 50s
+			this.item.value = Item.buyPrice( 0, 1, 50, 0 );
 			this.item.rare = 2;
 		}
 
