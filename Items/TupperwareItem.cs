@@ -13,9 +13,12 @@ namespace Starvation.Items {
 
 		////////////////
 
-		private int PerishableItemId;
+		private int PerishableItemId = 0;
 		private int StoredItemCount;
-		private int SpoilageAmount;
+		private int DurationOfExistence;
+
+		private int Ticks = 0;
+		private DateTime PrevDate = DateTime.UtcNow;
 
 
 		////////////////
@@ -62,7 +65,7 @@ namespace Starvation.Items {
 		////////////////
 
 		public override bool CanRightClick() {
-			return this.StoredItemCount > 0;
+			return this.PerishableItemId != 0 && this.StoredItemCount > 0;
 		}
 
 		public override void RightClick( Player player ) {
@@ -71,9 +74,25 @@ namespace Starvation.Items {
 			var itemInfo = Main.item[ itemId ].GetGlobalItem<StarvationItem>();
 			//float spoilagePercent = (float)this.SpoilageAmount / (float)mymod.Config.FoodIngredientSpoilageDuration;
 
-			itemInfo.DurationOfExistence = this.SpoilageAmount;
+			itemInfo.DurationOfExistence = this.DurationOfExistence;
 
 			this.StoredItemCount--;
+		}
+
+
+		////////////////
+
+		private void UpdateSpoilage() {
+			DateTime now = DateTime.UtcNow;
+			TimeSpan diff = now - this.PrevDate;
+
+			if( diff.TotalSeconds >= 1d ) {
+				this.PrevDate = now;
+				this.Ticks = 0;
+			} else if( this.Ticks < 60 ) {
+				this.DurationOfExistence++;
+				this.Ticks++;
+			}
 		}
 	}
 }

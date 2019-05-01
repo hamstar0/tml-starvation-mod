@@ -44,7 +44,10 @@ namespace Starvation {
 				}
 
 				if( mymod.Config.FoodIngredientsAlsoSpoil ) {
-					if( EntityGroups.ItemGroups["Any Food Ingredient"].Contains( item.type ) ) {
+LogHelpers.Log( "NeedsSaving? "+item.HoverName);
+					if( EntityGroups.ItemGroups.ContainsKey("Any Food Ingredient")
+							&& EntityGroups.ItemGroups["Any Food Ingredient"].Contains( item.type ) ) {
+LogHelpers.Log( "NeedsSaving! "+item.HoverName);
 						return true;
 					}
 				}
@@ -91,7 +94,9 @@ namespace Starvation {
 			if( this.NeedsSaving( item ) ) {
 				item.maxStack = 1;
 
-				this.ApplyWellFedModifiers( item );
+				if( item.buffType == BuffID.WellFed ) {
+					this.ApplyWellFedModifiers( item );
+				}
 			}
 		}
 
@@ -100,30 +105,15 @@ namespace Starvation {
 
 		public override void Update( Item item, ref float gravity, ref float maxFallSpeed ) {
 			if( this.NeedsSaving( item ) ) {
-				this.UpdateDuration();
+				this.UpdateSpoilage();
 				item.maxStack = 1;
 			}
 		}
 
 		public override void UpdateInventory( Item item, Player player ) {
 			if( this.NeedsSaving( item ) ) {
-				this.UpdateDuration();
+				this.UpdateSpoilage();
 				item.maxStack = 1;
-			}
-		}
-		
-		////
-
-		private void UpdateDuration() {
-			DateTime now = DateTime.UtcNow;
-			TimeSpan diff = now - this.PrevDate;
-
-			if( diff.TotalSeconds >= 1d ) {
-				this.PrevDate = now;
-				this.Ticks = 0;
-			} else if( this.Ticks < 60 ) {
-				this.DurationOfExistence++;
-				this.Ticks++;
 			}
 		}
 	}

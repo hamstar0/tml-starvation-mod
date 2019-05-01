@@ -62,5 +62,21 @@ namespace Starvation {
 				}
 			}
 		}
+
+
+		////////////////
+
+		private void UpdateSpoilage() {
+			DateTime now = DateTime.UtcNow;
+			TimeSpan diff = now - this.PrevDate;
+
+			if( diff.TotalSeconds >= 1d ) {
+				this.PrevDate = now;
+				this.Ticks = 0;
+			} else if( this.Ticks < 60 ) {
+				this.DurationOfExistence++;
+				this.Ticks++;
+			}
+		}
 	}
 }
