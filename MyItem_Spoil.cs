@@ -16,7 +16,7 @@ namespace Starvation {
 
 		////////////////
 
-		public int ComputeRemainingBuffTime( Item item ) {
+		public int ComputeRemainingFreshnessDuration( Item item ) {
 			if( !this.NeedsSaving( item ) ) { return -1; }
 
 			var mymod = (StarvationMod)this.mod;
@@ -34,7 +34,7 @@ namespace Starvation {
 			}
 		}
 
-		public int ComputeMaxSpoilageDuration( Item item ) {
+		public int ComputeMaxFreshnessDuration( Item item ) {
 			if( !this.NeedsSaving( item ) ) { return -1; }
 
 			if( item.buffType == BuffID.WellFed ) {
@@ -53,7 +53,7 @@ namespace Starvation {
 			int buffIdx = player.FindBuffIndex( BuffID.WellFed );
 
 			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRate > 0f ) {
-				int newBuffTime = this.ComputeRemainingBuffTime( item );
+				int newBuffTime = this.ComputeRemainingFreshnessDuration( item );
 
 				if( player.buffTime[buffIdx] < newBuffTime ) {
 					player.buffTime[buffIdx] = newBuffTime;

@@ -20,7 +20,7 @@ namespace Starvation {
 
 		private void AddSpoilageTips( Item item, List<TooltipLine> tooltips ) {
 			var mymod = (StarvationMod)this.mod;
-			int buffTime = this.ComputeRemainingBuffTime( item );
+			int buffTime = this.ComputeRemainingFreshnessDuration( item );
 			float freshness = (float)buffTime / (float)item.buffTime;
 			float spoilage = 1f - freshness;
 

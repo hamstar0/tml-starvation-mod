@@ -96,7 +96,7 @@ namespace Starvation {
 			}
 
 			//float freshness = (float)this.ComputeRemainingBuffTime( item ) / (float)item.buffTime;
-			float freshness = this.ComputeRemainingBuffTime(item) / (float)this.ComputeMaxSpoilageDuration(item);
+			float freshness = this.ComputeRemainingFreshnessDuration(item) / (float)this.ComputeMaxFreshnessDuration(item);
 
 			if( freshness <= 0f ) {
 				StarvationItem.DrawSpoilageWorld( sb, item.Center, lightColor, scale );
@@ -112,7 +112,7 @@ namespace Starvation {
 				return true;
 			}
 			
-			float freshness = this.ComputeRemainingBuffTime(item) / (float)this.ComputeMaxSpoilageDuration(item);
+			float freshness = this.ComputeRemainingFreshnessDuration(item) / (float)this.ComputeMaxFreshnessDuration(item);
 
 			if( freshness <= 0f ) {
 				StarvationItem.DrawSpoilageInventory( sb, Main.itemTexture[item.type], pos, drawColor, scale );
@@ -133,7 +133,7 @@ namespace Starvation {
 				return;
 			}
 			
-			float freshness = this.ComputeRemainingBuffTime(item) / (float)this.ComputeMaxSpoilageDuration(item);
+			float freshness = this.ComputeRemainingFreshnessDuration(item) / (float)this.ComputeMaxFreshnessDuration(item);
 
 			StarvationItem.DrawFreshnessGaugeInventory( sb, Main.itemTexture[item.type], pos, freshness, scale );
 		}

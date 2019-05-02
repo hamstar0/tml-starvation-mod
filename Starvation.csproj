@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Items\TupperwareItem_Interact.cs" />
     <Compile Include="Items\TupperwareItem_Draw.cs" />
     <Compile Include="Items\TupperwareItem.cs" />
     <Compile Include="Items\UnlifeCrystalItem.cs" />

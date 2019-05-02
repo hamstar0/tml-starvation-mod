@@ -1,5 +1,4 @@
-﻿using HamstarHelpers.Helpers.ItemHelpers;
-using System;
+﻿using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -19,6 +18,8 @@ namespace Starvation.Items {
 
 		private int Ticks = 0;
 		private DateTime PrevDate = DateTime.UtcNow;
+
+		private Item _CachedItem = null;
 
 
 		////////////////
@@ -64,24 +65,6 @@ namespace Starvation.Items {
 
 		////////////////
 
-		public override bool CanRightClick() {
-			return this.PerishableItemId != 0 && this.StoredItemCount > 0;
-		}
-
-		public override void RightClick( Player player ) {
-			var mymod = (StarvationMod)this.mod;
-			int itemId = ItemHelpers.CreateItem( player.Center, this.PerishableItemId, 1, 16, 16 );
-			var itemInfo = Main.item[ itemId ].GetGlobalItem<StarvationItem>();
-			//float spoilagePercent = (float)this.SpoilageAmount / (float)mymod.Config.FoodIngredientSpoilageDuration;
-
-			itemInfo.DurationOfExistence = this.DurationOfExistence;
-
-			this.StoredItemCount--;
-		}
-
-
-		////////////////
-
 		private void UpdateSpoilage() {
 			DateTime now = DateTime.UtcNow;
 			TimeSpan diff = now - this.PrevDate;
@@ -98,29 +81,20 @@ namespace Starvation.Items {
 
 		////////////////
 
-		public bool CanAddItem( Item item ) {
-			if( this.PerishableItemId != -1 && this.PerishableItemId != item.type ) {
-				return false;
+		public float ComputeFreshnessPercent() {
+			if( this.StoredItemCount == 0 ) {
+				return 0;
 			}
-			if( item.stack > 1 ) {
-				return false;
-			}
-
-			var mymod = (StarvationMod)this.mod;
-			if( this.StoredItemCount >= this.item.maxStack ) {
-				return false;
+			
+			if( this._CachedItem == null || this._CachedItem.type != this.PerishableItemId ) {
+				this._CachedItem = new Item();
+				this._CachedItem.SetDefaults( this.PerishableItemId, true );
 			}
 
-			var myitem = item.GetGlobalItem<StarvationItem>();
-			if( myitem.ComputeRemainingBuffTime(item) <= 0 ) {
-				return false;
-			}
+			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();
+			int spoilageDuration = myitem.ComputeMaxFreshnessDuration( this._CachedItem );
 
-			return true;
-		}
-		
-		internal void AddItem( Item item ) {
-			this.StoredItemCount++;
+			return (float)this.DurationOfExistence / (float)spoilageDuration;
 		}
 	}
 }
