@@ -12,8 +12,8 @@ namespace Starvation.Items {
 
 		////////////////
 
-		private int PerishableItemId = 0;
-		private int StoredItemCount;
+		private int StoredItemType = 0;
+		private int StoredItemStackSize;
 		private int DurationOfExistence;
 
 		private int Ticks = 0;
@@ -82,13 +82,13 @@ namespace Starvation.Items {
 		////////////////
 
 		public float ComputeFreshnessPercent() {
-			if( this.StoredItemCount == 0 ) {
+			if( this.StoredItemStackSize == 0 ) {
 				return 0;
 			}
 			
-			if( this._CachedItem == null || this._CachedItem.type != this.PerishableItemId ) {
+			if( this._CachedItem == null || this._CachedItem.type != this.StoredItemType ) {
 				this._CachedItem = new Item();
-				this._CachedItem.SetDefaults( this.PerishableItemId, true );
+				this._CachedItem.SetDefaults( this.StoredItemType, true );
 			}
 
 			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();

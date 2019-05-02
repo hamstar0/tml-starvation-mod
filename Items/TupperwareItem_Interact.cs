@@ -7,25 +7,25 @@ using Terraria.ModLoader;
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
 		public override bool CanRightClick() {
-			return this.PerishableItemId != 0 && this.StoredItemCount > 0;
+			return this.StoredItemType != 0 && this.StoredItemStackSize > 0;
 		}
 
 		public override void RightClick( Player player ) {
 			var mymod = (StarvationMod)this.mod;
-			int itemId = ItemHelpers.CreateItem( player.Center, this.PerishableItemId, 1, 16, 16 );
+			int itemId = ItemHelpers.CreateItem( player.Center, this.StoredItemType, 1, 16, 16 );
 			var itemInfo = Main.item[ itemId ].GetGlobalItem<StarvationItem>();
 			//float spoilagePercent = (float)this.SpoilageAmount / (float)mymod.Config.FoodIngredientSpoilageDuration;
 
 			itemInfo.DurationOfExistence = this.DurationOfExistence;
 
-			this.StoredItemCount--;
+			this.StoredItemStackSize--;
 		}
 
 
 		////////////////
 		
 		public bool CanAddItem( Item item ) {
-			if( this.PerishableItemId != -1 && this.PerishableItemId != item.type ) {
+			if( this.StoredItemType != -1 && this.StoredItemType != item.type ) {
 				return false;
 			}
 			if( item.stack > 1 ) {
@@ -33,7 +33,7 @@ namespace Starvation.Items {
 			}
 
 			var mymod = (StarvationMod)this.mod;
-			if( this.StoredItemCount >= this.item.maxStack ) {
+			if( this.StoredItemStackSize >= this.item.maxStack ) {
 				return false;
 			}
 
@@ -46,7 +46,7 @@ namespace Starvation.Items {
 		}
 		
 		internal void AddItem( Item item ) {
-			this.StoredItemCount++;
+			this.StoredItemStackSize++;
 		}
 	}
 }
