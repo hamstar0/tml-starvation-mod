@@ -36,10 +36,12 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Items\TupperwareItem_Draw.cs" />
     <Compile Include="Items\TupperwareItem.cs" />
     <Compile Include="Items\UnlifeCrystalItem.cs" />
     <Compile Include="MyBuff.cs" />
     <Compile Include="MyItem_Custom.cs" />
+    <Compile Include="MyItem_Tooltips.cs" />
     <Compile Include="MyItem_Spoil.cs" />
     <Compile Include="MyItem_Draw.cs" />
     <Compile Include="MyItem.cs" />
