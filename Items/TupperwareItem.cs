@@ -94,5 +94,33 @@ namespace Starvation.Items {
 				this.Ticks++;
 			}
 		}
+
+
+		////////////////
+
+		public bool CanAddItem( Item item ) {
+			if( this.PerishableItemId != -1 && this.PerishableItemId != item.type ) {
+				return false;
+			}
+			if( item.stack > 1 ) {
+				return false;
+			}
+
+			var mymod = (StarvationMod)this.mod;
+			if( this.StoredItemCount >= this.item.maxStack ) {
+				return false;
+			}
+
+			var myitem = item.GetGlobalItem<StarvationItem>();
+			if( myitem.ComputeRemainingBuffTime(item) <= 0 ) {
+				return false;
+			}
+
+			return true;
+		}
+		
+		internal void AddItem( Item item ) {
+			this.StoredItemCount++;
+		}
 	}
 }

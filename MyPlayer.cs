@@ -1,6 +1,7 @@
 ﻿using HamstarHelpers.Components.Network;
 using HamstarHelpers.Helpers.DebugHelpers;
 using Microsoft.Xna.Framework;
+using Starvation.Items;
 using Starvation.NetProtocols;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Starvation {
 	class StarvationPlayer : ModPlayer {
 		private bool IsStarving = false;
 		private int HurtDelay = 0;
+
+		private Item PrevSelectedItem = null;
 
 
 		////////////////
@@ -78,7 +81,7 @@ namespace Starvation {
 			} else {
 				if( plr.buffTime[buffIdx] > ( mymod.Config.WellFedDrainRate + 1 ) ) {
 					float mul = mymod.Config.AddedWellFedDrainRateMultiplierPerMaxHealthOver100;
-					float addDrain = mul * (float)Math.Max(0, this.player.statLifeMax-100);
+					float addDrain = mul * (float)Math.Max( 0, this.player.statLifeMax - 100 );
 					plr.buffTime[buffIdx] -= mymod.Config.WellFedDrainRate + (int)addDrain;
 				}
 			}
@@ -92,7 +95,27 @@ namespace Starvation {
 			this.IsStarving = isStarving;
 		}
 
-		////
+
+		public override void PostUpdate() {
+			Player plr = this.player;
+			if( plr.whoAmI != Main.myPlayer ) { return; }
+
+			if( Main.mouseItem != null && !Main.mouseItem.IsAir ) {
+				if( plr.HeldItem.type == this.mod.ItemType<TupperwareItem>() ) {
+					if( this.PrevSelectedItem != null ) {
+						this.AttemptTupperwareAddCurrentItem( plr, this.PrevSelectedItem );
+						this.PrevSelectedItem = null;
+					}
+				} else {
+					this.PrevSelectedItem = plr.HeldItem;
+				}
+			} else {
+				this.PrevSelectedItem = null;
+			}
+		}
+
+
+		////////////////
 
 		public override void OnRespawn( Player player ) {
 			var mymod = (StarvationMod)this.mod;
@@ -121,7 +144,7 @@ namespace Starvation {
 			Player plr = this.player;
 
 			float mul = mymod.Config.AddedStarvationHarmMultiplierPerMaxHealthOver100;
-			float addedHarm = mul * (float)Math.Max(0, plr.statLifeMax-100);
+			float addedHarm = mul * (float)Math.Max( 0, plr.statLifeMax - 100 );
 			int harm = mymod.Config.StarvationHarm + (int)addedHarm;
 
 			CombatText.NewText( plr.getRect(), CombatText.LifeRegenNegative, harm, false, true );
@@ -130,6 +153,35 @@ namespace Starvation {
 			if( plr.statLife <= 0 ) {
 				plr.KillMe( PlayerDeathReason.ByCustomReason( plr.name + " starved to death." ), 10f, 0, false );
 			}
+		}
+
+
+		////////////////
+
+		private bool AttemptTupperwareAddCurrentItem( Player player, Item item ) {
+			var tupperItem = (TupperwareItem)player.HeldItem.modItem;
+			if( tupperItem == null ) {
+				return false;
+			}
+
+			bool isAdded = false;
+			
+			if( tupperItem.CanAddItem( item ) ) {
+				for( int i = 0; i < player.inventory.Length; i++ ) {
+					Item invItem = player.inventory[i];
+					if( invItem == null || invItem.IsAir ) {
+						continue;
+					}
+					if( !invItem.IsNotTheSameAs( item ) ) {
+						tupperItem.AddItem( item );
+						player.inventory[ i ] = new Item();
+						isAdded = true;
+						break;
+					}
+				}
+			}
+
+			return isAdded;
 		}
 	}
 }
