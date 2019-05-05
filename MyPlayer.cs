@@ -99,7 +99,7 @@ namespace Starvation {
 		public override void PostUpdate() {
 			Player plr = this.player;
 			if( plr.whoAmI != Main.myPlayer ) { return; }
-
+			
 			if( Main.mouseItem != null && !Main.mouseItem.IsAir ) {
 				if( plr.HeldItem.type == this.mod.ItemType<TupperwareItem>() ) {
 					if( this.PrevSelectedItem != null ) {
@@ -159,7 +159,7 @@ namespace Starvation {
 		////////////////
 
 		private bool AttemptTupperwareAddCurrentItem( Player player, Item item ) {
-			var tupperItem = (TupperwareItem)player.HeldItem.modItem;
+			var tupperItem = Main.mouseItem.modItem as TupperwareItem;
 			if( tupperItem == null ) {
 				return false;
 			}
@@ -167,13 +167,16 @@ namespace Starvation {
 			bool isAdded = false;
 			
 			if( tupperItem.CanAddItem( item ) ) {
+				// Find the item player was holding (trades places with tupperware)
 				for( int i = 0; i < player.inventory.Length; i++ ) {
 					Item invItem = player.inventory[i];
 					if( invItem == null || invItem.IsAir ) {
 						continue;
 					}
+
 					if( !invItem.IsNotTheSameAs( item ) ) {
 						tupperItem.AddItem( item );
+
 						player.inventory[ i ] = new Item();
 						isAdded = true;
 						break;

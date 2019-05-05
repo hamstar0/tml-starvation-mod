@@ -44,11 +44,17 @@ namespace Starvation {
 				}
 
 				if( mymod.Config.FoodIngredientsAlsoSpoil ) {
-LogHelpers.Log( "NeedsSaving? "+item.HoverName);
-					if( EntityGroups.ItemGroups.ContainsKey("Any Food Ingredient")
-							&& EntityGroups.ItemGroups["Any Food Ingredient"].Contains( item.type ) ) {
-LogHelpers.Log( "NeedsSaving! "+item.HoverName);
-						return true;
+					var itemGrps = EntityGroups.ItemGroups;
+
+					if( itemGrps.ContainsKey("Any Food Ingredient") && itemGrps["Any Food Ingredient"].Contains( item.type ) ) {
+						switch( item.type ) {
+						case ItemID.Pumpkin:
+						case ItemID.BlinkrootSeeds:
+						case ItemID.Hay:
+							break;
+						default:
+							return true;
+						}
 					}
 				}
 			}

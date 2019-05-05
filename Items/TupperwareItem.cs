@@ -1,12 +1,14 @@
 ﻿using System;
+using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
-		public static int Width = 22;
-		public static int Height = 22;
+		public static int Width = 16;
+		public static int Height = 16;
 
 
 
@@ -30,6 +32,31 @@ namespace Starvation.Items {
 
 		////////////////
 
+		public override ModItem Clone() {
+			var clone = (TupperwareItem)base.Clone();
+			clone.StoredItemType = this.StoredItemType;
+			clone.StoredItemStackSize = this.StoredItemStackSize;
+			clone.DurationOfExistence = this.DurationOfExistence;
+			clone.Ticks = this.Ticks;
+			clone.PrevDate = this.PrevDate;
+			clone._CachedItem = this._CachedItem;
+			return clone;
+		}
+
+		public override ModItem Clone( Item item ) {
+			var clone = (TupperwareItem)base.Clone( item );
+			clone.StoredItemType = this.StoredItemType;
+			clone.StoredItemStackSize = this.StoredItemStackSize;
+			clone.DurationOfExistence = this.DurationOfExistence;
+			clone.Ticks = this.Ticks;
+			clone.PrevDate = this.PrevDate;
+			clone._CachedItem = this._CachedItem;
+			return clone;
+		}
+
+
+		////////////////
+
 		public override void SetStaticDefaults() {
 			var mymod = (StarvationMod)this.mod;
 
@@ -49,6 +76,39 @@ namespace Starvation.Items {
 			this.item.maxStack = 1;
 			this.item.value = Item.buyPrice( 0, 1, 0, 0 );
 			this.item.rare = 2;
+		}
+
+
+		////////////////
+
+		public override void Load( TagCompound tag ) {
+			if( !tag.ContainsKey("stack") ) {
+				return;
+			}
+
+			this.StoredItemStackSize = tag.GetInt( "stack" );
+			this.StoredItemType = tag.GetInt( "type" );
+			this.DurationOfExistence = tag.GetInt( "duration" );
+		}
+
+		public override TagCompound Save() {
+			return new TagCompound {
+				{ "stack", this.StoredItemStackSize },
+				{ "type", this.StoredItemType },
+				{ "duration", this.DurationOfExistence }
+			};
+		}
+
+		public override void NetRecieve( BinaryReader reader ) {
+			this.StoredItemStackSize = reader.ReadInt32();
+			this.StoredItemType = reader.ReadInt32();
+			this.DurationOfExistence = reader.ReadInt32();
+		}
+
+		public override void NetSend( BinaryWriter writer ) {
+			writer.Write( (int)this.StoredItemStackSize );
+			writer.Write( (int)this.StoredItemType );
+			writer.Write( (int)this.DurationOfExistence );
 		}
 
 
@@ -94,7 +154,7 @@ namespace Starvation.Items {
 			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();
 			int spoilageDuration = myitem.ComputeMaxFreshnessDuration( this._CachedItem );
 
-			return (float)this.DurationOfExistence / (float)spoilageDuration;
+			return 1f - ((float)this.DurationOfExistence / (float)spoilageDuration);
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using HamstarHelpers.Helpers.DebugHelpers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -21,7 +20,12 @@ namespace Starvation {
 		private void AddSpoilageTips( Item item, List<TooltipLine> tooltips ) {
 			var mymod = (StarvationMod)this.mod;
 			int buffTime = this.ComputeRemainingFreshnessDuration( item );
+
 			float freshness = (float)buffTime / (float)item.buffTime;
+			if( freshness >= 1f ) {
+				return;
+			}
+
 			float spoilage = 1f - freshness;
 
 			int spoiledAmt = ( item.buffTime - buffTime ) / 60;

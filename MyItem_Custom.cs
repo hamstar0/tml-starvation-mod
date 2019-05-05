@@ -1,5 +1,6 @@
 ﻿using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.ItemHelpers;
+using Starvation.Items;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -22,6 +23,12 @@ namespace Starvation {
 				}
 
 				for( int j=0; j<recipe.requiredItem.Length; j++ ) {
+					if( recipe.requiredItem[j].type == ItemID.Pumpkin ) {
+						recipe.requiredItem[j] = new Item();
+						recipe.requiredItem[j].SetDefaults( mymod.ItemType<MashedPumpkinItem>() );
+						continue;
+					}
+
 					if( recipe.requiredItem[j].IsAir ) {
 						recipe.requiredItem[j] = new Item();
 						recipe.requiredItem[j].SetDefaults( ItemID.Hay );

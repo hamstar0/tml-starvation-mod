@@ -9,23 +9,43 @@ using Terraria.ModLoader;
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
 		public static void DrawContainerItemInventory( SpriteBatch sb, int storedItemType, Vector2 pos, float scale ) {
-			Texture2D storedItemTex = Main.itemTexture[storedItemType];
+			if( storedItemType < 0 || storedItemType >= Main.itemTexture.Length ) { return; }
 
-			f
+			var mymod = StarvationMod.Instance;
+			Texture2D storedItemTex = Main.itemTexture[ storedItemType ];
+			Texture2D tupperTex = ModLoader.GetTexture( mymod.GetItem<TupperwareItem>().Texture );
+			if( tupperTex == null || storedItemTex == null ) { return; }
+
+			float customScale = 0.75f;
+			float storedWid = storedItemTex.Width * customScale;
+			float storedHei = storedItemTex.Width * customScale;
+
+			float halfTupperWid = ( (float)tupperTex.Width * scale ) * 0.5f;
+			float halfTupperHei = ( (float)tupperTex.Height * scale ) * 0.5f;
+			float halfStoredWid = ( (float)storedWid * scale ) * 0.5f;
+			float halfStoredHei = ( (float)storedHei * scale ) * 0.5f;
+			float posX = ( pos.X + halfTupperWid ) - halfStoredWid;
+			float posY = ( pos.Y + halfTupperHei ) - halfStoredHei;
+
+			var srcRect = new Rectangle( 0, 0, storedItemTex.Width, storedItemTex.Height );
+			Color color = Color.White * 0.65f;
+			float newScale = scale * customScale;
+
+			sb.Draw( storedItemTex, new Vector2(posX, posY), srcRect, color, 0f, default(Vector2), newScale, SpriteEffects.None, 1f );
 		}
 
 		////
 
-		public static void DrawItemStackInventory( SpriteBatch sb, Texture2D tupperTex, Vector2 pos, int stackSize, float scale ) {
-			float posX = pos.X + ( ( ( (float)tupperTex.Width * scale ) * 0.5f ) - 16f );
-			float posY = pos.Y + ( ( ( (float)tupperTex.Height * scale ) * 0.5f ) - 16f );
-
+		public static void DrawItemStackInventory( SpriteBatch sb, Vector2 pos, int stackSize, float scale ) {
+			var mymod = StarvationMod.Instance;
+			Texture2D tupperTex = ModLoader.GetTexture( mymod.GetItem<TupperwareItem>().Texture );
+			
 			var newPos = new Vector2(
-				posX + 28f,
-				posY + 28f
+				pos.X,
+				pos.Y + (20f * scale)
 			);
 
-			sb.DrawString( Main.fontItemStack, stackSize+"", newPos, Color.White );
+			sb.DrawString( Main.fontItemStack, stackSize+"", newPos, Color.White, 0f, default(Vector2), scale, SpriteEffects.None, 1f );
 		}
 
 
@@ -35,7 +55,7 @@ namespace Starvation.Items {
 		public override void PostDrawInInventory( SpriteBatch sb, Vector2 pos, Rectangle _1, Color drawColor, Color _2, Vector2 _3, float scale ) {
 			if( this.StoredItemStackSize == 0 ) { return; }
 
-			Texture2D tupperTex = this.mod.GetTexture( this.Texture );
+			Texture2D tupperTex = ModLoader.GetTexture( this.Texture );
 			float freshness = this.ComputeFreshnessPercent();
 
 			if( freshness <= 0 ) {
@@ -45,7 +65,7 @@ namespace Starvation.Items {
 				StarvationItem.DrawFreshnessGaugeInventory( sb, tupperTex, pos, freshness, scale );
 			}
 
-			TupperwareItem.DrawItemStackInventory( sb, tupperTex, pos, this.StoredItemStackSize, scale );
+			TupperwareItem.DrawItemStackInventory( sb, pos, this.StoredItemStackSize, scale );
 		}
 
 		public override void PostDrawInWorld( SpriteBatch sb, Color lightColor, Color _1, float _2, float scale, int whoAmI ) {

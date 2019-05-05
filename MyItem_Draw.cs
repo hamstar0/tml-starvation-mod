@@ -12,6 +12,9 @@ namespace Starvation {
 			if( itemTex == null ) {
 				return;
 			}
+			if( freshness >= 1f ) {
+				return;
+			}
 
 //DebugHelpers.Print("draw", "pos:{"+position.X.ToString("N2")+","+position.Y.ToString("N2")+"}, scale:"+scale.ToString("N2"), 20 );
 			float barHeight = 32f;

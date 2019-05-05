@@ -28,7 +28,7 @@ namespace Starvation {
 
 				return Math.Max( 0, buffTime );
 			} else {
-				spoilage = (int)( (float)this.DurationOfExistence * mymod.Config.TupperwareSpoilageRate );
+				spoilage = (int)( (float)this.DurationOfExistence * mymod.Config.FoodIngredientSpoilageRate );
 
 				return mymod.Config.FoodIngredientSpoilageDuration - spoilage;
 			}
