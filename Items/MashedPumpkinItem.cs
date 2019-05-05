@@ -25,7 +25,7 @@ namespace Starvation.Items {
 			this.item.width = MashedPumpkinItem.Width;
 			this.item.height = MashedPumpkinItem.Height;
 			this.item.maxStack = 30;
-			this.item.value = Item.buyPrice( 0, 0, 0, 50 );
+			this.item.value = Item.buyPrice( 0, 0, 2, 50 );
 			this.item.rare = 0;
 		}
 
@@ -34,8 +34,9 @@ namespace Starvation.Items {
 		public override void AddRecipes() {
 			var myrecipe = new ModRecipe( this.mod );
 			myrecipe.AddTile( TileID.WorkBenches );
-			myrecipe.AddIngredient( ItemID.Pumpkin, 2 );
+			myrecipe.AddIngredient( ItemID.Pumpkin, 10 );
 			myrecipe.SetResult( this, 1 );
+			myrecipe.AddRecipe();
 		}
 	}
 }

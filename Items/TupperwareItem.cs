@@ -7,8 +7,8 @@ using Terraria.ModLoader.IO;
 
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
-		public static int Width = 16;
-		public static int Height = 16;
+		public static int Width = 20;
+		public static int Height = 20;
 
 
 

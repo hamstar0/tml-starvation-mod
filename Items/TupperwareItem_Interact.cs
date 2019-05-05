@@ -1,4 +1,5 @@
-﻿using HamstarHelpers.Helpers.ItemHelpers;
+﻿using HamstarHelpers.Components.Errors;
+using HamstarHelpers.Helpers.ItemHelpers;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -7,20 +8,19 @@ using Terraria.ModLoader;
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
 		public override bool CanRightClick() {
-Main.NewText( "CanRightClick " + this.StoredItemType+" "+this.StoredItemStackSize);
 			return this.StoredItemType > 0 && this.StoredItemStackSize > 0;
 		}
 
 		public override void RightClick( Player player ) {
 			var mymod = (StarvationMod)this.mod;
-			int itemIdx = ItemHelpers.CreateItem( player.Center, this.StoredItemType, 1, 16, 16 );
-			var itemInfo = Main.item[ itemIdx ].GetGlobalItem<StarvationItem>();
+			int newItemIdx = ItemHelpers.CreateItem( player.Center, this.StoredItemType, 1, 16, 16 );
+			var newItemInfo = Main.item[ newItemIdx ].GetGlobalItem<StarvationItem>();
 			//float spoilagePercent = (float)this.SpoilageAmount / (float)mymod.Config.FoodIngredientSpoilageDuration;
 
-			itemInfo.DurationOfExistence = this.DurationOfExistence;
+			newItemInfo.DurationOfExistence = this.DurationOfExistence;
 
 			this.StoredItemStackSize--;
-Main.NewText( "RightClick " + itemIdx + " "+this.StoredItemStackSize);
+			this.item.stack++;
 		}
 
 
@@ -28,23 +28,19 @@ Main.NewText( "RightClick " + itemIdx + " "+this.StoredItemStackSize);
 		
 		public bool CanAddItem( Item item ) {
 			if( (this.StoredItemStackSize > 0 && this.StoredItemType != -1) && this.StoredItemType != item.type ) {
-Main.NewText("1 "+this.StoredItemType);
 				return false;
 			}
 			if( item.stack > 1 ) {
-Main.NewText("2");
 				return false;
 			}
 
 			var mymod = (StarvationMod)this.mod;
 			if( this.StoredItemStackSize >= mymod.Config.TupperwareMaxStackSize ) {
-Main.NewText("3");
 				return false;
 			}
 
 			var myitem = item.GetGlobalItem<StarvationItem>();
 			if( myitem.ComputeRemainingFreshnessDuration(item) <= 0 ) {
-Main.NewText("4 "+myitem.ComputeRemainingFreshnessDuration(item));
 				return false;
 			}
 
@@ -52,9 +48,21 @@ Main.NewText("4 "+myitem.ComputeRemainingFreshnessDuration(item));
 		}
 		
 		internal void AddItem( Item item ) {
+			if( this.StoredItemStackSize > 0 && this.StoredItemType != item.type ) {
+				throw new HamstarException("Tupperware cannot hold this type of item.");
+			}
+
+			var myitem = item.GetGlobalItem<StarvationItem>();
+
+			if( this.StoredItemStackSize > 0 ) {
+				this.DurationOfExistence = (this.StoredItemStackSize * this.DurationOfExistence) + myitem.DurationOfExistence;
+				this.DurationOfExistence /= this.StoredItemStackSize + 1;
+			} else {
+				this.DurationOfExistence = myitem.DurationOfExistence;
+			}
+
 			this.StoredItemType = item.type;
 			this.StoredItemStackSize++;
-Main.NewText("added "+item.HoverName+" "+this.StoredItemStackSize);
 		}
 	}
 }
