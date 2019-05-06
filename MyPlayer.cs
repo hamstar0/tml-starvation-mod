@@ -2,6 +2,7 @@
 using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.ItemHelpers;
 using HamstarHelpers.Helpers.PlayerHelpers;
+using HamstarHelpers.Helpers.TmlHelpers;
 using HamstarHelpers.Services.Timers;
 using Microsoft.Xna.Framework;
 using Starvation.Items;
@@ -100,6 +101,10 @@ namespace Starvation {
 
 			if( Timers.GetTimerTickDuration("StarvationInventoryRotCheck") <= 0 ) {
 				Timers.SetTimer( "StarvationInventoryRotCheck", 60, () => {
+					if( Main.gamePaused || !LoadHelpers.IsWorldSafelyBeingPlayed() ) {
+						return false;
+					}
+
 					for( int i=0; i<player.inventory.Length; i++ ) {
 						Item item = player.inventory[i];
 						if( item == null || item.IsAir ) { continue; }

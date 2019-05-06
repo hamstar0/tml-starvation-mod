@@ -29,12 +29,12 @@ namespace Starvation {
 				return;
 			}
 
-			float freshness = (float)freshnessDuration / (float)maxFreshnessDuration;
-			if( freshness >= 1f ) {
+			float freshnessPercent = (float)freshnessDuration / (float)maxFreshnessDuration;
+			if( freshnessPercent >= 1f ) {
 				return;
 			}
 
-			float spoilage = 1f - freshness;
+			float spoilagePercent = 1f - freshnessPercent;
 
 			int spoiledAmt = ( maxFreshnessDuration - freshnessDuration ) / 60;
 			string spoiledFmt;
@@ -47,14 +47,14 @@ namespace Starvation {
 
 			var tip1 = new TooltipLine( this.mod,
 				"SpoilageRate",
-				"Loses " + mymod.Config.FoodSpoilageRatePerSecond + "s duration to spoilage every second"
+				"Loses " + mymod.Config.FoodSpoilageRatePerSecond + "s freshness every second"
 			);
 
 			string tip2Text;
 			Color tip2Color;
-			if( spoilage < 1f ) {
+			if( spoilagePercent < 1f ) {
 				tip2Text = spoiledFmt + " of 'Well Fed' duration lost.";
-				tip2Color = Color.Lerp( Color.Lime, Color.Red, spoilage );
+				tip2Color = Color.Lerp( Color.Lime, Color.Red, spoilagePercent );
 			} else {
 				tip2Text = "Spoiled!";
 				tip2Color = new Color( 64, 96, 32 );

@@ -10,8 +10,8 @@ namespace Starvation {
 		public override void NPCLoot( NPC npc ) {
 			var mymod = (StarvationMod)this.mod;
 			
-			if( npc.type == mymod.Config.TupperwareDropsNpcIdsAndChances ) {
-				if( Main.rand.NextFloat() < mymod.Config.TupperwareDropChance ) {
+			if( mymod.Config.TupperwareDropsNpcIdsAndChances.ContainsKey(npc.type) ) {
+				if( Main.rand.NextFloat() < mymod.Config.TupperwareDropsNpcIdsAndChances[npc.type] ) {
 					ItemHelpers.CreateItem( npc.Center, mymod.ItemType<TupperwareItem>(), 1, TupperwareItem.Width, TupperwareItem.Height );
 				}
 			}

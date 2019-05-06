@@ -124,7 +124,7 @@ namespace Starvation.Items {
 				return -1;
 			}
 
-			float currentDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp);
+			float currentDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) * 60f;
 
 			return 1f - (currentDuration / maxFreshnessDuration);
 		}
