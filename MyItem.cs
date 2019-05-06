@@ -1,4 +1,5 @@
 ﻿using HamstarHelpers.Helpers.DebugHelpers;
+using HamstarHelpers.Helpers.DotNetHelpers;
 using HamstarHelpers.Services.EntityGroups;
 using System;
 using System.IO;
@@ -10,7 +11,7 @@ using Terraria.ModLoader.IO;
 
 namespace Starvation {
 	partial class StarvationItem : GlobalItem {
-		public int DurationOfExistence = 0;
+		public long Timestamp;
 
 		private int Ticks = 0;
 		private DateTime PrevDate = DateTime.UtcNow;
@@ -28,7 +29,7 @@ namespace Starvation {
 			var clone = (StarvationItem)base.Clone( item, itemClone );
 
 			if( this.NeedsSaving( item ) ) {
-				clone.DurationOfExistence = this.DurationOfExistence;
+				clone.Timestamp = this.Timestamp;
 			}
 
 			return clone;
@@ -58,13 +59,16 @@ namespace Starvation {
 					}
 				}
 			}
+
 			return false;
 		}
 
 		public override void Load( Item item, TagCompound tags ) {
 			if( this.NeedsSaving( item ) ) {
+				this.Timestamp = SystemHelpers.TimeStampInSeconds();
+
 				if( tags.ContainsKey( "duration" ) ) {
-					this.DurationOfExistence = tags.GetInt( "duration" );
+					this.Timestamp -= tags.GetInt( "duration" );
 				}
 			}
 		}
@@ -73,7 +77,7 @@ namespace Starvation {
 		public override TagCompound Save( Item item ) {
 			if( this.NeedsSaving( item ) ) {
 				return new TagCompound {
-					{ "duration", (int)this.DurationOfExistence }
+					{ "duration", (int)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) }
 				};
 			}
 			return new TagCompound();
@@ -83,13 +87,13 @@ namespace Starvation {
 
 		public override void NetReceive( Item item, BinaryReader reader ) {
 			if( this.NeedsSaving( item ) ) {
-				this.DurationOfExistence = reader.ReadInt32();
+				this.Timestamp = SystemHelpers.TimeStampInSeconds() - reader.ReadInt32();
 			}
 		}
 
 		public override void NetSend( Item item, BinaryWriter writer ) {
 			if( this.NeedsSaving( item ) ) {
-				writer.Write( (Int32)this.DurationOfExistence );
+				writer.Write( (Int32)SystemHelpers.TimeStampInSeconds() - this.Timestamp );
 			}
 		}
 
@@ -111,14 +115,12 @@ namespace Starvation {
 
 		public override void Update( Item item, ref float gravity, ref float maxFallSpeed ) {
 			if( this.NeedsSaving( item ) ) {
-				this.UpdateSpoilage();
 				item.maxStack = 1;
 			}
 		}
 
 		public override void UpdateInventory( Item item, Player player ) {
 			if( this.NeedsSaving( item ) ) {
-				this.UpdateSpoilage();
 				item.maxStack = 1;
 			}
 		}

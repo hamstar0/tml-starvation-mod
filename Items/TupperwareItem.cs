@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HamstarHelpers.Helpers.DotNetHelpers;
+using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
@@ -16,10 +17,7 @@ namespace Starvation.Items {
 
 		private int StoredItemType = 0;
 		private int StoredItemStackSize;
-		private int DurationOfExistence;
-
-		private int Ticks = 0;
-		private DateTime PrevDate = DateTime.UtcNow;
+		private long Timestamp;
 
 		private Item _CachedItem = null;
 
@@ -36,9 +34,7 @@ namespace Starvation.Items {
 			var clone = (TupperwareItem)base.Clone();
 			clone.StoredItemType = this.StoredItemType;
 			clone.StoredItemStackSize = this.StoredItemStackSize;
-			clone.DurationOfExistence = this.DurationOfExistence;
-			clone.Ticks = this.Ticks;
-			clone.PrevDate = this.PrevDate;
+			clone.Timestamp = this.Timestamp;
 			clone._CachedItem = this._CachedItem;
 			return clone;
 		}
@@ -47,9 +43,7 @@ namespace Starvation.Items {
 			var clone = (TupperwareItem)base.Clone( item );
 			clone.StoredItemType = this.StoredItemType;
 			clone.StoredItemStackSize = this.StoredItemStackSize;
-			clone.DurationOfExistence = this.DurationOfExistence;
-			clone.Ticks = this.Ticks;
-			clone.PrevDate = this.PrevDate;
+			clone.Timestamp = this.Timestamp;
 			clone._CachedItem = this._CachedItem;
 			return clone;
 		}
@@ -88,54 +82,27 @@ namespace Starvation.Items {
 
 			this.StoredItemStackSize = tag.GetInt( "stack" );
 			this.StoredItemType = tag.GetInt( "type" );
-			this.DurationOfExistence = tag.GetInt( "duration" );
+			this.Timestamp = SystemHelpers.TimeStampInSeconds() - tag.GetInt( "duration" );
 		}
 
 		public override TagCompound Save() {
 			return new TagCompound {
 				{ "stack", this.StoredItemStackSize },
 				{ "type", this.StoredItemType },
-				{ "duration", this.DurationOfExistence }
+				{ "duration", (int)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) }
 			};
 		}
 
 		public override void NetRecieve( BinaryReader reader ) {
 			this.StoredItemStackSize = reader.ReadInt32();
 			this.StoredItemType = reader.ReadInt32();
-			this.DurationOfExistence = reader.ReadInt32();
+			this.Timestamp = SystemHelpers.TimeStampInSeconds() - reader.ReadInt32();
 		}
 
 		public override void NetSend( BinaryWriter writer ) {
 			writer.Write( (int)this.StoredItemStackSize );
 			writer.Write( (int)this.StoredItemType );
-			writer.Write( (int)this.DurationOfExistence );
-		}
-
-
-		////////////////
-
-		public override void Update( ref float gravity, ref float maxFallSpeed ) {
-			this.UpdateSpoilage();
-		}
-
-		public override void UpdateInventory( Player player ) {
-			this.UpdateSpoilage();
-		}
-
-
-		////////////////
-
-		private void UpdateSpoilage() {
-			DateTime now = DateTime.UtcNow;
-			TimeSpan diff = now - this.PrevDate;
-
-			if( diff.TotalSeconds >= 1d ) {
-				this.PrevDate = now;
-				this.Ticks = 0;
-			} else if( this.Ticks < 60 ) {
-				this.DurationOfExistence++;
-				this.Ticks++;
-			}
+			writer.Write( (int)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) );
 		}
 
 
@@ -152,9 +119,10 @@ namespace Starvation.Items {
 			}
 
 			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();
-			int spoilageDuration = myitem.ComputeMaxFreshnessDuration( this._CachedItem );
+			float maxFreshnessDuration = (float)myitem.ComputeMaxFreshnessDuration( this._CachedItem );
+			float currentDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp);
 
-			return 1f - ((float)this.DurationOfExistence / (float)spoilageDuration);
+			return 1f - (currentDuration / maxFreshnessDuration);
 		}
 	}
 }

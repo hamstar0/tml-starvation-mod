@@ -1,4 +1,5 @@
 ﻿using HamstarHelpers.Helpers.DebugHelpers;
+using HamstarHelpers.Helpers.DotNetHelpers;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -20,15 +21,16 @@ namespace Starvation {
 			if( !this.NeedsSaving( item ) ) { return -1; }
 
 			var mymod = (StarvationMod)this.mod;
+			long now = SystemHelpers.TimeStampInSeconds();
 			int spoilage;
 
 			if( item.buffType == BuffID.WellFed ) {
-				spoilage = (int)( (float)this.DurationOfExistence * mymod.Config.FoodSpoilageRate );
+				spoilage = (int)( (now - this.Timestamp) * mymod.Config.FoodSpoilageRate );
 				int buffTime = item.buffTime - spoilage;
 
 				return Math.Max( 0, buffTime );
 			} else {
-				spoilage = (int)( (float)this.DurationOfExistence * mymod.Config.FoodIngredientSpoilageRate );
+				spoilage = (int)( (now - this.Timestamp) * mymod.Config.FoodIngredientSpoilageRate );
 
 				return mymod.Config.FoodIngredientSpoilageDuration - spoilage;
 			}
@@ -60,22 +62,6 @@ namespace Starvation {
 				} else if( player.buffTime[buffIdx] == item.buffTime ) {
 					player.buffTime[buffIdx] = newBuffTime;
 				}
-			}
-		}
-
-
-		////////////////
-
-		private void UpdateSpoilage() {
-			DateTime now = DateTime.UtcNow;
-			TimeSpan diff = now - this.PrevDate;
-
-			if( diff.TotalSeconds >= 1d ) {
-				this.PrevDate = now;
-				this.Ticks = 0;
-			} else if( this.Ticks < 60 ) {
-				this.DurationOfExistence++;
-				this.Ticks++;
 			}
 		}
 	}

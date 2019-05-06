@@ -17,7 +17,7 @@ namespace Starvation.Items {
 			var newItemInfo = Main.item[ newItemIdx ].GetGlobalItem<StarvationItem>();
 			//float spoilagePercent = (float)this.SpoilageAmount / (float)mymod.Config.FoodIngredientSpoilageDuration;
 
-			newItemInfo.DurationOfExistence = this.DurationOfExistence;
+			newItemInfo.Timestamp = this.Timestamp;
 
 			this.StoredItemStackSize--;
 			this.item.stack++;
@@ -55,10 +55,10 @@ namespace Starvation.Items {
 			var myitem = item.GetGlobalItem<StarvationItem>();
 
 			if( this.StoredItemStackSize > 0 ) {
-				this.DurationOfExistence = (this.StoredItemStackSize * this.DurationOfExistence) + myitem.DurationOfExistence;
-				this.DurationOfExistence /= this.StoredItemStackSize + 1;
+				this.Timestamp = ((long)this.StoredItemStackSize * this.Timestamp) + myitem.Timestamp;
+				this.Timestamp /= (long)this.StoredItemStackSize + 1L;
 			} else {
-				this.DurationOfExistence = myitem.DurationOfExistence;
+				this.Timestamp = myitem.Timestamp;
 			}
 
 			this.StoredItemType = item.type;
