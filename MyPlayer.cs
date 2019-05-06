@@ -3,6 +3,7 @@ using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.ItemHelpers;
 using HamstarHelpers.Helpers.PlayerHelpers;
 using HamstarHelpers.Helpers.TmlHelpers;
+using HamstarHelpers.Services.Messages;
 using HamstarHelpers.Services.Timers;
 using Microsoft.Xna.Framework;
 using Starvation.Items;
@@ -43,10 +44,20 @@ namespace Starvation {
 			if( player.whoAmI != Main.myPlayer ) { return; }
 			if( this.player.whoAmI != Main.myPlayer ) { return; }
 
+			var mymod = (StarvationMod)this.mod;
+
 			if( Main.netMode == 0 ) {
 				this.OnConnectSingle();
 			} else if( Main.netMode == 1 ) {
 				this.OnConnectClient();
+			}
+
+			if( mymod.Config.CraftableUnlifeCrystal && mymod.Config.AddedWellFedDrainRatePerTickMultiplierPerMaxHealthOver100 > 0 ) {
+				if( mymod.Config.UnlifeCrystalReturnsLifeCrystal ) {
+					InboxMessages.SetMessage( "StarvationUnlifeTip", "Craft and use Unlife Crystals to lower max HP to reduce hunger drain while traveling (produces Life Crystals on use).", false );
+				} else {
+					InboxMessages.SetMessage( "StarvationUnlifeTip", "Craft and use Unlife Crystals to lower max HP to reduce hunger drain while traveling.", false );
+				}
 			}
 		}
 
@@ -84,7 +95,7 @@ namespace Starvation {
 				isStarving = true;
 			} else {
 				if( plr.buffTime[buffIdx] > ( mymod.Config.WellFedAddedDrainPerTick + 1 ) ) {
-					float mul = mymod.Config.AddedWellFedDrainRateMultiplierPerMaxHealthOver100;
+					float mul = mymod.Config.AddedWellFedDrainRatePerTickMultiplierPerMaxHealthOver100;
 					float addDrain = mul * (float)Math.Max( 0, this.player.statLifeMax - 100 );
 					plr.buffTime[buffIdx] -= mymod.Config.WellFedAddedDrainPerTick + (int)addDrain;
 				}
@@ -182,7 +193,7 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			Player plr = this.player;
 
-			float mul = mymod.Config.AddedStarvationHarmMultiplierPerMaxHealthOver100;
+			float mul = mymod.Config.AddedStarvationHarmPerTickMultiplierPerMaxHealthOver100;
 			float addedHarm = mul * (float)Math.Max( 0, plr.statLifeMax - 100 );
 			int harm = mymod.Config.StarvationHarm + (int)addedHarm;
 

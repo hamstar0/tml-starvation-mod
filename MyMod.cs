@@ -3,7 +3,6 @@ using HamstarHelpers.Components.Errors;
 using HamstarHelpers.Helpers.TmlHelpers.ModHelpers;
 using HamstarHelpers.Services.EntityGroups;
 using System;
-using Terraria;
 using Terraria.ModLoader;
 
 

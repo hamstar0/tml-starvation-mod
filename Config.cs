@@ -24,14 +24,14 @@ namespace Starvation {
 
 		public int RespawnWellFedTickDuration = 60 * 60 * 3;    // 3 minutes
 
-		public float AddedWellFedDrainRateMultiplierPerMaxHealthOver100 = (2f / 3f) / 100f;	// CORRECTLY triples at 400 max hp
-		public float AddedStarvationHarmMultiplierPerMaxHealthOver100 = (2f / 3f) / 100f;
+		public float AddedWellFedDrainRatePerTickMultiplierPerMaxHealthOver100 = 1f / 200f;
+		public float AddedStarvationHarmPerTickMultiplierPerMaxHealthOver100 = 1f / 100f;
 
 		public bool FoodSpoilageEnabled = false;
-		public float FoodSpoilageRatePerSecond = 1f;
+		public float FoodSpoilageRatePerSecond = 0.5f;
 		public bool FoodIngredientsAlsoSpoil = true;
 		public int FoodIngredientSpoilageTickDuration = 30 * 60 * 60;   // 30 minutes
-		public float FoodIngredientSpoilageRatePerSecond = 1f;
+		public float FoodIngredientSpoilageRatePerSecond = 0.5f;
 
 		public bool CraftableUnlifeCrystal = true;
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
@@ -51,6 +51,8 @@ namespace Starvation {
 		public int StarvationHarmRate = 10;
 		public float AddedWellFedDrainRatePerMaxHealthOver100 = (1f + (1f/3f)) / 100f;
 		public float AddedStarvationHarmPerMaxHealthOver100 = (1f + (1f/3f)) / 100f;
+		public float AddedWellFedDrainRateMultiplierPerMaxHealthOver100 = (2f/3f) / 100f;
+		public float AddedStarvationHarmMultiplierPerMaxHealthOver100 = (2f/3f) / 100f;
 		public int WellFedDrainRate = 2;
 		public int StarvationHarmDelay = 10;
 		public int RespawnWellFedDuration = 60 * 60 * 3;
