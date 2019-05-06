@@ -56,13 +56,16 @@ namespace Starvation.Items {
 			if( this.StoredItemStackSize == 0 ) { return; }
 
 			Texture2D tupperTex = ModLoader.GetTexture( this.Texture );
-			float freshness = this.ComputeFreshnessPercent();
+			float freshnessPercent = this.ComputeFreshnessPercent();
+			if( freshnessPercent == -1 ) {
+				return;
+			}
 
-			if( freshness <= 0 ) {
+			if( freshnessPercent == 0 ) {
 				StarvationItem.DrawSpoilageInventory( sb, tupperTex, pos, drawColor, scale );
 			} else {
 				TupperwareItem.DrawContainerItemInventory( sb, this.StoredItemType, pos, scale );
-				StarvationItem.DrawFreshnessGaugeInventory( sb, tupperTex, pos, freshness, scale );
+				StarvationItem.DrawFreshnessGaugeInventory( sb, tupperTex, pos, freshnessPercent, scale );
 			}
 
 			TupperwareItem.DrawItemStackInventory( sb, pos, this.StoredItemStackSize, scale );
@@ -71,9 +74,9 @@ namespace Starvation.Items {
 		public override void PostDrawInWorld( SpriteBatch sb, Color lightColor, Color _1, float _2, float scale, int whoAmI ) {
 			if( this.StoredItemStackSize == 0 ) { return; }
 
-			float freshness = this.ComputeFreshnessPercent();
+			float freshnessPercent = this.ComputeFreshnessPercent();
 
-			if( freshness <= 0 ) {
+			if( freshnessPercent == 0 ) {
 				StarvationItem.DrawSpoilageWorld( sb, this.item.Center, lightColor, scale );
 			}
 		}

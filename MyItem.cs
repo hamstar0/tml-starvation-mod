@@ -13,9 +13,6 @@ namespace Starvation {
 	partial class StarvationItem : GlobalItem {
 		public long Timestamp;
 
-		private int Ticks = 0;
-		private DateTime PrevDate = DateTime.UtcNow;
-
 
 		////////////////
 
@@ -116,12 +113,18 @@ namespace Starvation {
 		public override void Update( Item item, ref float gravity, ref float maxFallSpeed ) {
 			if( this.NeedsSaving( item ) ) {
 				item.maxStack = 1;
+				if( this.Timestamp == 0 ) {
+					this.Timestamp = SystemHelpers.TimeStampInSeconds();
+				}
 			}
 		}
 
 		public override void UpdateInventory( Item item, Player player ) {
 			if( this.NeedsSaving( item ) ) {
 				item.maxStack = 1;
+				if( this.Timestamp == 0 ) {
+					this.Timestamp = SystemHelpers.TimeStampInSeconds();
+				}
 			}
 		}
 	}

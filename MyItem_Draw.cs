@@ -50,7 +50,7 @@ namespace Starvation {
 		////
 
 		public static bool DrawSpoilageInventory( SpriteBatch sb, Texture2D itemTex, Vector2 pos, Color color, float scale ) {
-			Texture2D spoiledTex = StarvationMod.Instance.GetTexture( "Items/SpoiledFood" );
+			Texture2D spoiledTex = StarvationMod.Instance.GetTexture( "Items/RotItem" );
 			if( spoiledTex == null || itemTex == null ) {
 				return false;
 			}
@@ -70,7 +70,7 @@ namespace Starvation {
 		}
 
 		public static bool DrawSpoilageWorld( SpriteBatch sb, Vector2 centerPos, Color color, float scale ) {
-			Texture2D spoiledTex = StarvationMod.Instance.GetTexture( "Items/SpoiledFood" );
+			Texture2D spoiledTex = StarvationMod.Instance.GetTexture( "Items/RotItem" );
 			if( spoiledTex == null ) {
 				return false;
 			}
@@ -93,15 +93,25 @@ namespace Starvation {
 		////////////////
 		
 		public override bool PreDrawInWorld( Item item, SpriteBatch sb, Color lightColor, Color _1, ref float _2, ref float scale,
-				int whoAmI ) {
+					int whoAmI ) {
 			if( !this.NeedsSaving( item ) ) {
 				return true;
 			}
 
 			//float freshness = (float)this.ComputeRemainingBuffTime( item ) / (float)item.buffTime;
-			float freshness = this.ComputeRemainingFreshnessDuration(item) / (float)this.ComputeMaxFreshnessDuration(item);
+			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
+			if( freshnessDuration == -1 ) {
+				return true;
+			}
 
-			if( freshness <= 0f ) {
+			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
+			if( maxFreshnessDuration == -1 ) {
+				return true;
+			}
+
+			float freshnessPercent = freshnessDuration / (float)maxFreshnessDuration;
+
+			if( freshnessPercent <= 0f ) {
 				StarvationItem.DrawSpoilageWorld( sb, item.Center, lightColor, scale );
 				return false;
 			}
@@ -110,12 +120,22 @@ namespace Starvation {
 		}
 
 		public override bool PreDrawInInventory( Item item, SpriteBatch sb, Vector2 pos, Rectangle frame, Color drawColor, Color itemColor,
-				Vector2 origin, float scale ) {
+					Vector2 origin, float scale ) {
 			if( !this.NeedsSaving( item ) ) {
 				return true;
 			}
-			
-			float freshness = this.ComputeRemainingFreshnessDuration(item) / (float)this.ComputeMaxFreshnessDuration(item);
+
+			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
+			if( freshnessDuration == -1 ) {
+				return true;
+			}
+
+			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
+			if( maxFreshnessDuration == -1 ) {
+				return true;
+			}
+
+			float freshness = freshnessDuration / (float)maxFreshnessDuration;
 
 			if( freshness <= 0f ) {
 				StarvationItem.DrawSpoilageInventory( sb, Main.itemTexture[item.type], pos, drawColor, scale );
@@ -128,17 +148,27 @@ namespace Starvation {
 		////
 
 		public override void PostDrawInInventory( Item item, SpriteBatch sb, Vector2 pos, Rectangle _1, Color _2, Color _3, Vector2 _4,
-				float scale ) {
+					float scale ) {
 			if( !this.NeedsSaving( item ) ) {
 				return;
 			}
 			if( item.type < 0 || item.type >= Main.itemTexture.Length ) {
 				return;
 			}
-			
-			float freshness = this.ComputeRemainingFreshnessDuration(item) / (float)this.ComputeMaxFreshnessDuration(item);
 
-			StarvationItem.DrawFreshnessGaugeInventory( sb, Main.itemTexture[item.type], pos, freshness, scale );
+			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
+			if( freshnessDuration == -1 ) {
+				return;
+			}
+
+			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
+			if( maxFreshnessDuration == -1 ) {
+				return;
+			}
+
+			float freshnessPercent = freshnessDuration / (float)maxFreshnessDuration;
+
+			StarvationItem.DrawFreshnessGaugeInventory( sb, Main.itemTexture[item.type], pos, freshnessPercent, scale );
 		}
 	}
 }

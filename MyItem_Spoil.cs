@@ -17,34 +17,42 @@ namespace Starvation {
 
 		////////////////
 
-		public int ComputeRemainingFreshnessDuration( Item item ) {
-			if( !this.NeedsSaving( item ) ) { return -1; }
+		public int ComputeRemainingFreshnessDurationTicks( Item item ) {
+			if( !this.NeedsSaving( item ) ) {
+				return -1;
+			}
+
+			if( this.Timestamp == 0 ) {
+				return -1;
+			}
 
 			var mymod = (StarvationMod)this.mod;
 			long now = SystemHelpers.TimeStampInSeconds();
 			int spoilage;
 
 			if( item.buffType == BuffID.WellFed ) {
-				spoilage = (int)( (now - this.Timestamp) * mymod.Config.FoodSpoilageRate );
-				int buffTime = item.buffTime - spoilage;
+				spoilage = (int)( (now - this.Timestamp) * mymod.Config.FoodSpoilageRatePerSecond );
+				int buffTime = item.buffTime - (spoilage * 60);
 
 				return Math.Max( 0, buffTime );
 			} else {
-				spoilage = (int)( (now - this.Timestamp) * mymod.Config.FoodIngredientSpoilageRate );
+				spoilage = (int)( (now - this.Timestamp) * mymod.Config.FoodIngredientSpoilageRatePerSecond );
 
-				return mymod.Config.FoodIngredientSpoilageDuration - spoilage;
+				return Math.Max( 0, mymod.Config.FoodIngredientSpoilageTickDuration - (spoilage * 60) );
 			}
 		}
 
-		public int ComputeMaxFreshnessDuration( Item item ) {
-			if( !this.NeedsSaving( item ) ) { return -1; }
+		public int ComputeMaxFreshnessDurationTicks( Item item ) {
+			if( !this.NeedsSaving( item ) ) {
+				return -1;
+			}
 
 			if( item.buffType == BuffID.WellFed ) {
 				return item.buffTime;
 			}
 
 			var mymod = (StarvationMod)this.mod;
-			return mymod.Config.FoodIngredientSpoilageDuration;
+			return mymod.Config.FoodIngredientSpoilageTickDuration;
 		}
 
 
@@ -54,13 +62,15 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			int buffIdx = player.FindBuffIndex( BuffID.WellFed );
 
-			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRate > 0f ) {
-				int newBuffTime = this.ComputeRemainingFreshnessDuration( item );
+			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRatePerSecond > 0f ) {
+				int newBuffTime = this.ComputeRemainingFreshnessDurationTicks( item );
 
-				if( player.buffTime[buffIdx] < newBuffTime ) {
-					player.buffTime[buffIdx] = newBuffTime;
-				} else if( player.buffTime[buffIdx] == item.buffTime ) {
-					player.buffTime[buffIdx] = newBuffTime;
+				if( newBuffTime != -1 ) {
+					if( player.buffTime[buffIdx] < newBuffTime ) {
+						player.buffTime[buffIdx] = newBuffTime;
+					} else if( player.buffTime[buffIdx] == item.buffTime ) {
+						player.buffTime[buffIdx] = newBuffTime;
+					}
 				}
 			}
 		}

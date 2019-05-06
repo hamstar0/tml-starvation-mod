@@ -52,8 +52,8 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			string itemName = ItemIdentityHelpers.GetQualifiedName( item.type );
 
-			if( mymod.Config.CustomWellFedDurations.ContainsKey(itemName) ) {
-				item.buffTime = mymod.Config.CustomWellFedDurations[itemName];
+			if( mymod.Config.CustomWellFedTickDurations.ContainsKey(itemName) ) {
+				item.buffTime = mymod.Config.CustomWellFedTickDurations[itemName];
 			}
 		}
 	}

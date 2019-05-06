@@ -40,7 +40,7 @@ namespace Starvation.Items {
 			}
 
 			var myitem = item.GetGlobalItem<StarvationItem>();
-			if( myitem.ComputeRemainingFreshnessDuration(item) <= 0 ) {
+			if( myitem.ComputeRemainingFreshnessDurationTicks(item) <= 0 ) {
 				return false;
 			}
 

@@ -110,7 +110,7 @@ namespace Starvation.Items {
 
 		public float ComputeFreshnessPercent() {
 			if( this.StoredItemStackSize == 0 ) {
-				return 0;
+				return -1;
 			}
 			
 			if( this._CachedItem == null || this._CachedItem.type != this.StoredItemType ) {
@@ -119,7 +119,11 @@ namespace Starvation.Items {
 			}
 
 			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();
-			float maxFreshnessDuration = (float)myitem.ComputeMaxFreshnessDuration( this._CachedItem );
+			float maxFreshnessDuration = (float)myitem.ComputeMaxFreshnessDurationTicks( this._CachedItem );
+			if( maxFreshnessDuration == -1 ) {
+				return -1;
+			}
+
 			float currentDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp);
 
 			return 1f - (currentDuration / maxFreshnessDuration);

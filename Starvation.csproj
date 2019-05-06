@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Items\RotItem.cs" />
     <Compile Include="Items\MashedPumpkinItem.cs" />
     <Compile Include="Items\TupperwareItem_Interact.cs" />
     <Compile Include="Items\TupperwareItem_Draw.cs" />
@@ -89,7 +90,7 @@
     <Content Include="description.txt" />
     <Content Include="icon.png" />
     <Content Include="Items\MashedPumpkinItem.png" />
-    <Content Include="Items\SpoiledFood.png" />
+    <Content Include="Items\RotItem.png" />
     <Content Include="Items\TupperwareItem.png" />
     <Content Include="Items\UnlifeCrystalItem.png" />
   </ItemGroup>

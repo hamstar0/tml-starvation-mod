@@ -1,5 +1,8 @@
 ﻿using HamstarHelpers.Components.Network;
 using HamstarHelpers.Helpers.DebugHelpers;
+using HamstarHelpers.Helpers.ItemHelpers;
+using HamstarHelpers.Helpers.PlayerHelpers;
+using HamstarHelpers.Services.Timers;
 using Microsoft.Xna.Framework;
 using Starvation.Items;
 using Starvation.NetProtocols;
@@ -74,15 +77,15 @@ namespace Starvation {
 
 			if( buffIdx == -1 ) {
 				if( this.HurtDelay-- < 0 ) {
-					this.HurtDelay = mymod.Config.StarvationHarmDelay;
+					this.HurtDelay = mymod.Config.StarvationHarmRepeatDelayInTicks;
 					this.HungerHurt();
 				}
 				isStarving = true;
 			} else {
-				if( plr.buffTime[buffIdx] > ( mymod.Config.WellFedDrainRate + 1 ) ) {
+				if( plr.buffTime[buffIdx] > ( mymod.Config.WellFedAddedDrainPerTick + 1 ) ) {
 					float mul = mymod.Config.AddedWellFedDrainRateMultiplierPerMaxHealthOver100;
 					float addDrain = mul * (float)Math.Max( 0, this.player.statLifeMax - 100 );
-					plr.buffTime[buffIdx] -= mymod.Config.WellFedDrainRate + (int)addDrain;
+					plr.buffTime[buffIdx] -= mymod.Config.WellFedAddedDrainPerTick + (int)addDrain;
 				}
 			}
 
@@ -92,7 +95,38 @@ namespace Starvation {
 					Main.NewText( "Tip: Craft Unlife Crystals to reduce max hunger rate (but also max health).", new Color( 96, 96, 96 ) );
 				}
 			}
+
 			this.IsStarving = isStarving;
+
+			if( Timers.GetTimerTickDuration("StarvationInventoryRotCheck") <= 0 ) {
+				Timers.SetTimer( "StarvationInventoryRotCheck", 60, () => {
+					for( int i=0; i<player.inventory.Length; i++ ) {
+						Item item = player.inventory[i];
+						if( item == null || item.IsAir ) { continue; }
+
+						if( RotItem.IsRotted(item) ) {
+							player.inventory[i] = new Item();
+							ItemHelpers.CreateItem( player.Center, mymod.ItemType<RotItem>(), item.stack, RotItem.Width, RotItem.Height );
+						}
+					}
+
+					bool? _;
+					Item[] myChest = PlayerItemHelpers.GetCurrentlyOpenChest( player, out _ );
+					if( myChest != null ) {
+						for( int i = 0; i < myChest.Length; i++ ) {
+							Item item = myChest[i];
+							if( item == null || item.IsAir ) { continue; }
+
+							if( RotItem.IsRotted( item ) ) {
+								myChest[i] = new Item();
+								ItemHelpers.CreateItem( player.Center, mymod.ItemType<RotItem>(), item.stack, RotItem.Width, RotItem.Height );
+							}
+						}
+					}
+
+					return false;
+				} );
+			}
 		}
 
 
@@ -119,7 +153,7 @@ namespace Starvation {
 
 		public override void OnRespawn( Player player ) {
 			var mymod = (StarvationMod)this.mod;
-			player.AddBuff( BuffID.WellFed, mymod.Config.RespawnWellFedDuration );
+			player.AddBuff( BuffID.WellFed, mymod.Config.RespawnWellFedTickDuration );
 		}
 
 		////

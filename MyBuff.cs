@@ -11,7 +11,7 @@ namespace Starvation {
 				var mymod = (StarvationMod)this.mod;
 
 				float addedMaxHp = Main.LocalPlayer.statLifeMax - 100;
-				float rate = mymod.Config.WellFedDrainRate + (addedMaxHp * mymod.Config.AddedWellFedDrainRatePerMaxHealthOver100);
+				float rate = mymod.Config.WellFedAddedDrainPerTick + (addedMaxHp * mymod.Config.AddedWellFedDrainRatePerMaxHealthOver100);
 				rate *= 100;
 
 				tip += "\nDepletion rate (based on max HP): " + rate.ToString("N2") + "%";
