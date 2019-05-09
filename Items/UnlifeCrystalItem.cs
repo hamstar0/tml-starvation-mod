@@ -82,7 +82,7 @@ namespace Starvation.Items {
 
 			this.AddTile( TileID.WorkBenches );
 
-			this.AddIngredient( ItemID.Seaweed, 1 );
+			this.AddIngredient( ItemID.FishingSeaweed, 1 );
 			this.AddIngredient( ItemID.AshBlock, 1 );
 			this.AddIngredient( ItemID.Gel, 10 );
 			this.AddIngredient( ItemID.Glass, 10 );

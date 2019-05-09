@@ -50,6 +50,7 @@ namespace Starvation {
 						case ItemID.BlinkrootSeeds:
 						case ItemID.Hay:
 						case ItemID.Mushroom:
+						case ItemID.Bowl:
 							break;
 						default:
 							return true;
