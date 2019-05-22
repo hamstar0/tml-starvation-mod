@@ -1,5 +1,4 @@
 using HamstarHelpers.Components.Config;
-using HamstarHelpers.Components.Errors;
 using HamstarHelpers.Helpers.TmlHelpers.ModHelpers;
 using HamstarHelpers.Services.EntityGroups;
 using System;
@@ -58,8 +57,11 @@ namespace Starvation {
 
 		////
 
+		public override void AddRecipes() {
+			StarvationItem.ApplyNewRecipes();
+		}
+
 		public override void PostAddRecipes() {
-			StarvationItem.ApplyRecipeMods();
 		}
 
 

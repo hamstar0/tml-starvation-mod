@@ -11,6 +11,41 @@ using Terraria.ModLoader.IO;
 
 namespace Starvation {
 	partial class StarvationItem : GlobalItem {
+		public static bool CanSpoil( Item item ) {
+			var mymod = StarvationMod.Instance;
+
+			if( !mymod.Config.FoodSpoilageEnabled ) {
+				return false;
+			}
+
+			if( item.buffType == BuffID.WellFed && item.buffTime > 0 ) {
+				return true;
+			}
+
+			if( mymod.Config.FoodIngredientsAlsoSpoil ) {
+				var itemGrps = EntityGroups.ItemGroups;
+
+				if( itemGrps.ContainsKey("Any Food Ingredient") && itemGrps["Any Food Ingredient"].Contains( item.type ) ) {
+					switch( item.type ) {
+					case ItemID.Pumpkin:
+					case ItemID.BlinkrootSeeds:
+					case ItemID.Hay:
+					case ItemID.Mushroom:
+					case ItemID.Bowl:
+						break;
+					default:
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+
+
+		////////////////
+
 		public long Timestamp;
 
 
@@ -34,32 +69,7 @@ namespace Starvation {
 
 
 		public override bool NeedsSaving( Item item ) {
-			var mymod = (StarvationMod)this.mod;
-
-			if( mymod.Config.FoodSpoilageEnabled ) {
-				if( item.buffType == BuffID.WellFed ) {
-					return true;
-				}
-
-				if( mymod.Config.FoodIngredientsAlsoSpoil ) {
-					var itemGrps = EntityGroups.ItemGroups;
-
-					if( itemGrps.ContainsKey("Any Food Ingredient") && itemGrps["Any Food Ingredient"].Contains( item.type ) ) {
-						switch( item.type ) {
-						case ItemID.Pumpkin:
-						case ItemID.BlinkrootSeeds:
-						case ItemID.Hay:
-						case ItemID.Mushroom:
-						case ItemID.Bowl:
-							break;
-						default:
-							return true;
-						}
-					}
-				}
-			}
-
-			return false;
+			return StarvationItem.CanSpoil( item );
 		}
 
 		public override void Load( Item item, TagCompound tags ) {

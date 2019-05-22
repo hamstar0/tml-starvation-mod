@@ -1,5 +1,6 @@
 ﻿using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.DotNetHelpers;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -33,8 +34,8 @@ namespace Starvation {
 			if( item.buffType == BuffID.WellFed ) {
 				spoilageTicks = (int)( (now - this.Timestamp) * mymod.Config.FoodSpoilageRatePerSecond );
 				int buffTime = item.buffTime - (spoilageTicks * 60);
-
-				return Math.Max( 0, buffTime );
+				
+				return (int)MathHelper.Clamp( buffTime, mymod.Config.FoodSpoilageMinDuration, mymod.Config.FoodSpoilageMaxDuration );
 			} else {
 				spoilageTicks = (int)( (now - this.Timestamp) * mymod.Config.FoodIngredientSpoilageRatePerSecond );
 

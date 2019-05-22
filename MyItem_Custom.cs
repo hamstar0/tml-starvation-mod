@@ -11,9 +11,25 @@ namespace Starvation {
 	partial class StarvationItem : GlobalItem {
 		public static void ApplyRecipeMods() {
 			var mymod = StarvationMod.Instance;
-			if( !mymod.Config.CustomPumpkinPieRecipe ) {
-				return;
+
+			if( mymod.Config.CustomPumpkinPieRecipe ) {
+				StarvationItem.ApplyCustomPumpkinPieRecipe();
 			}
+		}
+
+		public static void ApplyNewRecipes() {
+			var mymod = StarvationMod.Instance;
+
+			if( mymod.Config.FishbowlToGoldfishRecipe ) {
+				StarvationItem.AddCustomFishbowlToGoldfishRecipe();
+			}
+		}
+
+
+		////
+
+		private static void ApplyCustomPumpkinPieRecipe() {
+			var mymod = StarvationMod.Instance;
 
 			for( int i=0; i<Main.recipe.Length; i++ ) {
 				Recipe recipe = Main.recipe[i];
@@ -45,6 +61,16 @@ namespace Starvation {
 		}
 
 
+		private static void AddCustomFishbowlToGoldfishRecipe() {
+			var mymod = StarvationMod.Instance;
+			var myrecipe = new ModRecipe( mymod );
+			myrecipe.AddIngredient( ItemID.FishBowl );
+			myrecipe.AddTile( TileID.WorkBenches );
+			myrecipe.SetResult( ItemID.Goldfish );
+			myrecipe.AddRecipe();
+		}
+
+
 
 		////////////////
 
@@ -53,7 +79,7 @@ namespace Starvation {
 			string itemName = ItemIdentityHelpers.GetQualifiedName( item.type );
 
 			if( mymod.Config.CustomWellFedTickDurations.ContainsKey(itemName) ) {
-				item.buffTime = mymod.Config.CustomWellFedTickDurations[itemName];
+				item.buffTime = mymod.Config.CustomWellFedTickDurations[ itemName ];
 			}
 		}
 	}

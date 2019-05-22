@@ -20,7 +20,8 @@ namespace Starvation.Items {
 			newItemInfo.Timestamp = this.Timestamp;
 
 			this.StoredItemStackSize--;
-			this.item.stack++;
+
+			this.item.stack++;	//<- Special workaround for use of right click "consuming" the tupperware item itself
 		}
 
 
