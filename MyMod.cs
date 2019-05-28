@@ -62,6 +62,7 @@ namespace Starvation {
 		}
 
 		public override void PostAddRecipes() {
+			StarvationItem.ApplyRecipeMods();
 		}
 
 

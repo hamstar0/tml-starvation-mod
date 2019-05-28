@@ -65,6 +65,11 @@ namespace Starvation {
 		////////////////
 
 		private void OnConnectSingle() {
+			var mymod = (StarvationMod)this.mod;
+
+			if( !mymod.ConfigJson.LoadFile() ) {
+				mymod.ConfigJson.SaveFile();
+			}
 		}
 
 		private void OnConnectClient() {
