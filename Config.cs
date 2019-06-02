@@ -29,8 +29,8 @@ namespace Starvation {
 
 		public bool FoodSpoilageEnabled = false;
 		public float FoodSpoilageRateScale = 0.5f;
-		public int FoodSpoilageMinDuration = 60 * 60 * 10;  // 10 minutes
-		public int FoodSpoilageMaxDuration = 60 * 60 * 60 * 3;	// 3 hours
+		public int FoodSpoilageMinTickDuration = 60 * 60 * 10;  // 10 minutes
+		public int FoodSpoilageMaxTickDuration = 60 * 60 * 60 * 3;	// 3 hours
 
 		public bool FoodIngredientsAlsoSpoil = true;
 		public int FoodIngredientSpoilageTickDuration = 30 * 60 * 60;   // 30 minutes
@@ -40,7 +40,7 @@ namespace Starvation {
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
 
 		public IDictionary<int, float> TupperwareDropsNpcIdsAndChances = new Dictionary<int, float>(); //NPCID.Skeleton : 0.35f;
-		public float TupperwareSpoilageRate = 0.5f;
+		public float TupperwareSpoilageRateScale = 0.5f;
 		public int TupperwareMaxStackSize = 30;
 		public int TupperwareSellsFromMerchantByNpcId = NPCID.SkeletonMerchant;
 
@@ -65,11 +65,9 @@ namespace Starvation {
 		public float FoodSpoilageRate = 1f;
 		public float FoodIngredientSpoilageRate = 1f;
 		public float FoodSpoilageRatePerSecond = 0.5f;
-
-
-		////
-
-		public static int _2_1_0_FoodSpoilageMinDuration = 60 * 60 * 15;
+		public int FoodSpoilageMinDuration = 60 * 60 * 10;  // 10 minutes
+		public int FoodSpoilageMaxDuration = 60 * 60 * 60 * 3;  // 3 hours
+		public float TupperwareSpoilageRate = 0.5f;
 
 
 
@@ -139,11 +137,6 @@ namespace Starvation {
 			if( versSince < new Version(2, 1, 0) ) {
 				if( this.CustomWellFedTickDurations.ContainsKey("Grub Soup") && this.CustomWellFedTickDurations["Grub Soup"] == (90 * 60 * 60) ) {
 					this.CustomWellFedTickDurations["Grub Soup"] = newConfig.CustomWellFedTickDurations["Grub Soup"];
-				}
-			}
-			if( versSince < new Version(2, 1, 1) ) {
-				if( this.FoodSpoilageMinDuration == StarvationConfigData._2_1_0_FoodSpoilageMinDuration ) {
-					this.FoodSpoilageMinDuration = newConfig.FoodSpoilageMinDuration;
 				}
 			}
 

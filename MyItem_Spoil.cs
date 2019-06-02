@@ -52,7 +52,7 @@ namespace Starvation {
 			int ticks;
 
 			if( item.buffType == BuffID.WellFed ) {
-				ticks = (int)MathHelper.Clamp( item.buffTime, mymod.Config.FoodSpoilageMinDuration, mymod.Config.FoodSpoilageMaxDuration );
+				ticks = (int)MathHelper.Clamp( item.buffTime, mymod.Config.FoodSpoilageMinTickDuration, mymod.Config.FoodSpoilageMaxTickDuration );
 			} else {
 				ticks = mymod.Config.FoodIngredientSpoilageTickDuration;
 			}

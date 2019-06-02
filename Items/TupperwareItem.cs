@@ -1,4 +1,5 @@
-﻿using HamstarHelpers.Helpers.DotNetHelpers;
+﻿using HamstarHelpers.Helpers.DebugHelpers;
+using HamstarHelpers.Helpers.DotNetHelpers;
 using System;
 using System.IO;
 using Terraria;
@@ -119,17 +120,17 @@ namespace Starvation.Items {
 			}
 
 			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();
-			float maxFreshnessDuration = (float)myitem.ComputeMaxFreshnessDurationTicks( this._CachedItem );
-			if( maxFreshnessDuration == -1 ) {
+			float maxFreshnessTickDuration = (float)myitem.ComputeMaxFreshnessDurationTicks( this._CachedItem );
+			if( maxFreshnessTickDuration == -1 ) {
 				return -1;
 			}
 
 			var mymod = (StarvationMod)this.mod;
-			maxFreshnessDuration *= mymod.Config.TupperwareSpoilageRate;
+			maxFreshnessTickDuration /= mymod.Config.TupperwareSpoilageRateScale;
 
-			float currentDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) * 60f;
+			float currentTickDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) * 60f;
 
-			return Math.Max( 1f - (currentDuration / maxFreshnessDuration), 0f );
+			return Math.Max( 1f - (currentTickDuration / maxFreshnessTickDuration), 0f );
 		}
 	}
 }
