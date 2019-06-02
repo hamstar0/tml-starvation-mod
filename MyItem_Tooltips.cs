@@ -47,7 +47,7 @@ namespace Starvation {
 
 			var tip1 = new TooltipLine( this.mod,
 				"SpoilageRate",
-				"Loses " + mymod.Config.FoodSpoilageRatePerSecond + "s freshness every second"
+				"Loses " + Math.Round( mymod.Config.FoodSpoilageRateScale, 2 ) + "s freshness every second"
 			);
 
 			string tip2Text;

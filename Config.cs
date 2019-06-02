@@ -28,8 +28,8 @@ namespace Starvation {
 		public float AddedStarvationHarmPerTickMultiplierPerMaxHealthOver100 = 1f / 100f;
 
 		public bool FoodSpoilageEnabled = false;
-		public float FoodSpoilageRatePerSecond = 0.5f;
-		public int FoodSpoilageMinDuration = 60 * 60 * 15;  // 15 minutes
+		public float FoodSpoilageRateScale = 0.5f;
+		public int FoodSpoilageMinDuration = 60 * 60 * 10;  // 10 minutes
 		public int FoodSpoilageMaxDuration = 60 * 60 * 60 * 3;	// 3 hours
 
 		public bool FoodIngredientsAlsoSpoil = true;
@@ -64,6 +64,12 @@ namespace Starvation {
 		public int FoodIngredientSpoilageDuration = 30 * 60 * 60;
 		public float FoodSpoilageRate = 1f;
 		public float FoodIngredientSpoilageRate = 1f;
+		public float FoodSpoilageRatePerSecond = 0.5f;
+
+
+		////
+
+		public static int _2_1_0_FoodSpoilageMinDuration = 60 * 60 * 15;
 
 
 
@@ -111,12 +117,12 @@ namespace Starvation {
 					this.StarvationHarmRepeatDelayInTicks = this.StarvationHarmRate;
 				}
 			}
-			if( versSince < new Version( 1, 3, 1 ) ) {
+			if( versSince < new Version(1, 3, 1) ) {
 				if( this.FoodSpoilageRatePerSecond == 3f ) {
 					this.FoodSpoilageRatePerSecond = newConfig.FoodSpoilageRatePerSecond;
 				}
 			}
-			if( versSince < new Version( 1, 4, 0 ) ) {
+			if( versSince < new Version(1, 4, 0) ) {
 				if( this.FoodSpoilageRatePerSecond == 2f ) {
 					this.FoodSpoilageRatePerSecond = newConfig.FoodSpoilageRatePerSecond;
 				}
@@ -127,12 +133,17 @@ namespace Starvation {
 					this.WellFedAddedDrainPerTick = newConfig.WellFedAddedDrainPerTick;
 				}
 			}
-			if( versSince < new Version( 2, 0, 0 ) ) {
+			if( versSince < new Version(2, 0, 0) ) {
 				this.SetDefaults();
 			}
-			if( versSince < new Version( 2, 1, 0) ) {
+			if( versSince < new Version(2, 1, 0) ) {
 				if( this.CustomWellFedTickDurations.ContainsKey("Grub Soup") && this.CustomWellFedTickDurations["Grub Soup"] == (90 * 60 * 60) ) {
 					this.CustomWellFedTickDurations["Grub Soup"] = newConfig.CustomWellFedTickDurations["Grub Soup"];
+				}
+			}
+			if( versSince < new Version(2, 1, 1) ) {
+				if( this.FoodSpoilageMinDuration == StarvationConfigData._2_1_0_FoodSpoilageMinDuration ) {
+					this.FoodSpoilageMinDuration = newConfig.FoodSpoilageMinDuration;
 				}
 			}
 

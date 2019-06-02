@@ -32,10 +32,10 @@ namespace Starvation {
 			int spoilageTicks;
 
 			if( item.buffType == BuffID.WellFed ) {
-				spoilageTicks = (int)( (now - this.Timestamp) * mymod.Config.FoodSpoilageRatePerSecond );
+				spoilageTicks = (int)( (now - this.Timestamp) * mymod.Config.FoodSpoilageRateScale );
 				int buffTime = item.buffTime - (spoilageTicks * 60);
 				
-				return (int)MathHelper.Clamp( buffTime, mymod.Config.FoodSpoilageMinDuration, mymod.Config.FoodSpoilageMaxDuration );
+				return buffTime;
 			} else {
 				spoilageTicks = (int)( (now - this.Timestamp) * mymod.Config.FoodIngredientSpoilageRatePerSecond );
 
@@ -48,12 +48,16 @@ namespace Starvation {
 				return -1;
 			}
 
+			var mymod = (StarvationMod)this.mod;
+			int ticks;
+
 			if( item.buffType == BuffID.WellFed ) {
-				return item.buffTime;
+				ticks = (int)MathHelper.Clamp( item.buffTime, mymod.Config.FoodSpoilageMinDuration, mymod.Config.FoodSpoilageMaxDuration );
+			} else {
+				ticks = mymod.Config.FoodIngredientSpoilageTickDuration;
 			}
 
-			var mymod = (StarvationMod)this.mod;
-			return mymod.Config.FoodIngredientSpoilageTickDuration;
+			return ticks;
 		}
 
 
@@ -63,7 +67,7 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			int buffIdx = player.FindBuffIndex( BuffID.WellFed );
 
-			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRatePerSecond > 0f ) {
+			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRateScale > 0f ) {
 				int newBuffTime = this.ComputeRemainingFreshnessDurationTicks( item );
 
 				if( newBuffTime != -1 ) {

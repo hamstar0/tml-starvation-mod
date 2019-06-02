@@ -108,7 +108,7 @@ namespace Starvation.Items {
 
 		////////////////
 
-		public float ComputeFreshnessPercent() {
+		public float ComputeContainedItemsFreshnessPercent() {
 			if( this.StoredItemStackSize == 0 ) {
 				return -1;
 			}
@@ -124,9 +124,12 @@ namespace Starvation.Items {
 				return -1;
 			}
 
+			var mymod = (StarvationMod)this.mod;
+			maxFreshnessDuration *= mymod.Config.TupperwareSpoilageRate;
+
 			float currentDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) * 60f;
 
-			return 1f - (currentDuration / maxFreshnessDuration);
+			return Math.Max( 1f - (currentDuration / maxFreshnessDuration), 0f );
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using HamstarHelpers.Components.Errors;
 using HamstarHelpers.Helpers.ItemHelpers;
+using HamstarHelpers.Services.Timers;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -8,6 +9,16 @@ using Terraria.ModLoader;
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
 		public override bool CanRightClick() {
+			this.item.stack = 2;
+
+			Item myItem = this.item;
+			Timers.SetTimer( "TupperwareRightClickStackRevert_"+this.item.type+"_"+this.item.whoAmI, 1, () => {
+				if( myItem.active && Main.item[myItem.whoAmI] != null && Main.item[myItem.whoAmI].active ) {
+					myItem.stack = 1;
+				}
+				return false;
+			} );
+			
 			return this.StoredItemType > 0 && this.StoredItemStackSize > 0;
 		}
 
@@ -21,7 +32,7 @@ namespace Starvation.Items {
 
 			this.StoredItemStackSize--;
 
-			this.item.stack++;	//<- Special workaround for use of right click "consuming" the tupperware item itself
+			this.item.stack = 1;	//<- Special workaround for use of right click "consuming" the tupperware item itself
 		}
 
 

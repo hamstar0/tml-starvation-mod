@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -10,9 +11,6 @@ namespace Starvation {
 	partial class StarvationItem : GlobalItem {
 		public static void DrawFreshnessGaugeInventory( SpriteBatch sb, Texture2D itemTex, Vector2 pos, float freshness, float scale ) {
 			if( itemTex == null ) {
-				return;
-			}
-			if( freshness >= 1f ) {
 				return;
 			}
 
@@ -135,9 +133,9 @@ namespace Starvation {
 				return true;
 			}
 
-			float freshness = freshnessDuration / (float)maxFreshnessDuration;
+			float freshnessPercent = freshnessDuration / (float)maxFreshnessDuration;
 
-			if( freshness <= 0f ) {
+			if( freshnessPercent <= 0f ) {
 				StarvationItem.DrawSpoilageInventory( sb, Main.itemTexture[item.type], pos, drawColor, scale );
 				return false;
 			}
