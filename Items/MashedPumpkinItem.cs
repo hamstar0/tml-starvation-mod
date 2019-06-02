@@ -24,7 +24,7 @@ namespace Starvation.Items {
 		public override void SetDefaults() {
 			this.item.width = MashedPumpkinItem.Width;
 			this.item.height = MashedPumpkinItem.Height;
-			this.item.maxStack = 30;
+			this.item.maxStack = 1;
 			this.item.value = Item.buyPrice( 0, 0, 2, 50 );
 			this.item.rare = 0;
 		}
