@@ -158,7 +158,7 @@ namespace Starvation {
 			if( Main.mouseItem != null && !Main.mouseItem.IsAir ) {
 				if( plr.HeldItem.type == this.mod.ItemType<TupperwareItem>() ) {
 					if( this.PrevSelectedItem != null ) {
-						this.AttemptTupperwareAddCurrentItem( plr, this.PrevSelectedItem );
+						this.AttemptTupperwareAddCurrentItem( plr );
 						this.PrevSelectedItem = null;
 					}
 				} else {
@@ -213,30 +213,29 @@ namespace Starvation {
 
 		////////////////
 
-		private bool AttemptTupperwareAddCurrentItem( Player player, Item item ) {
+		private bool AttemptTupperwareAddCurrentItem( Player player ) {
 			var tupperItem = Main.mouseItem.modItem as TupperwareItem;
 			if( tupperItem == null ) {
+				return false;
+			}
+
+			if( tupperItem.MyLastInventoryPosition == -1 ) {
+				return false;
+			}
+			Item item = player.inventory[ tupperItem.MyLastInventoryPosition ];
+			if( item == null ) {
 				return false;
 			}
 
 			bool isAdded = false;
 			
 			if( tupperItem.CanAddItem( item ) ) {
-				// Find the item player was holding (trades places with tupperware)
-				for( int i = 0; i < player.inventory.Length; i++ ) {
-					Item invItem = player.inventory[i];
-					if( invItem == null || invItem.IsAir ) {
-						continue;
-					}
+				tupperItem.AddItem( item );
 
-					if( !invItem.IsNotTheSameAs( item ) ) {
-						tupperItem.AddItem( item );
+				player.inventory[ tupperItem.MyLastInventoryPosition ] = Main.mouseItem;
+				Main.mouseItem = new Item();
 
-						player.inventory[ i ] = new Item();
-						isAdded = true;
-						break;
-					}
-				}
+				isAdded = true;
 			}
 
 			return isAdded;

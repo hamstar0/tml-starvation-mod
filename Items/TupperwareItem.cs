@@ -25,6 +25,10 @@ namespace Starvation.Items {
 
 		////////////////
 
+		public int MyLastInventoryPosition { get; private set; }
+
+		////
+
 		public override bool CloneNewInstances => true;
 
 
@@ -104,6 +108,20 @@ namespace Starvation.Items {
 			writer.Write( (int)this.StoredItemStackSize );
 			writer.Write( (int)this.StoredItemType );
 			writer.Write( (int)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) );
+		}
+
+
+		////////////////
+
+		public override void UpdateInventory( Player player ) {
+			this.MyLastInventoryPosition = -1;
+
+			for( int i=0; i<player.inventory.Length; i++ ) {
+				if( player.inventory[i] == this.item ) {
+					this.MyLastInventoryPosition = i;
+					break;
+				}
+			}
 		}
 
 

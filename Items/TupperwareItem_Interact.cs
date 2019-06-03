@@ -1,6 +1,5 @@
 ﻿using HamstarHelpers.Components.Errors;
 using HamstarHelpers.Helpers.ItemHelpers;
-using HamstarHelpers.Services.Timers;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -8,15 +7,18 @@ using Terraria.ModLoader;
 
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
+		public override bool ConsumeItem( Player player ) {
+			return false;
+		}
+
 		public override bool CanRightClick() {
-			Item myItem = this.item;
+			/*Item myItem = this.item;
 			Timers.SetTimer( "TupperwareRightClickStackRevert_"+this.item.GetHashCode(), 2, () => {
 				myItem.stack = 1;
 				return false;
 			} );
 
-			this.item.stack = 2;
-
+			this.item.stack = 2;*/
 			return this.StoredItemType > 0 && this.StoredItemStackSize > 0;
 		}
 
@@ -24,13 +26,10 @@ namespace Starvation.Items {
 			var mymod = (StarvationMod)this.mod;
 			int newItemIdx = ItemHelpers.CreateItem( player.Center, this.StoredItemType, 1, 16, 16 );
 			var newItemInfo = Main.item[ newItemIdx ].GetGlobalItem<StarvationItem>();
-			//float spoilagePercent = (float)this.SpoilageAmount / (float)mymod.Config.FoodIngredientSpoilageDuration;
 
 			newItemInfo.Timestamp = this.Timestamp;
 
 			this.StoredItemStackSize--;
-
-			this.item.stack = 2;	//<- Special workaround for use of right click "consuming" the tupperware item itself
 		}
 
 
