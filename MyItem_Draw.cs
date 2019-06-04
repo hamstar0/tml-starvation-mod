@@ -155,12 +155,12 @@ namespace Starvation {
 			}
 
 			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
-			if( freshnessDuration == -1 ) {
+			if( freshnessDuration <= -1 ) {
 				return;
 			}
 
 			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
-			if( maxFreshnessDuration == -1 ) {
+			if( maxFreshnessDuration <= -1 ) {
 				return;
 			}
 
