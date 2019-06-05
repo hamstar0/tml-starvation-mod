@@ -144,9 +144,9 @@ namespace Starvation.Items {
 			}
 
 			var mymod = (StarvationMod)this.mod;
-			maxFreshnessTickDuration /= mymod.Config.TupperwareSpoilageRateScale;
 
 			float currentTickDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) * 60f;
+			currentTickDuration *= mymod.Config.TupperwareSpoilageRateScale;
 
 			return Math.Max( 1f - (currentTickDuration / maxFreshnessTickDuration), 0f );
 		}

@@ -24,10 +24,16 @@ namespace Starvation.Items {
 
 		public override void RightClick( Player player ) {
 			var mymod = (StarvationMod)this.mod;
-			int newItemIdx = ItemHelpers.CreateItem( player.Center, this.StoredItemType, 1, 16, 16 );
-			var newItemInfo = Main.item[ newItemIdx ].GetGlobalItem<StarvationItem>();
 
-			newItemInfo.Timestamp = this.Timestamp;
+			int newItemIdx = ItemHelpers.CreateItem( player.Center, this.StoredItemType, 1, 16, 16 );
+			Item newItem = Main.item[newItemIdx];
+			var newItemInfo = newItem.GetGlobalItem<StarvationItem>();
+
+			float freshPercent = this.ComputeContainedItemsFreshnessPercent();
+			float maxFreshness = newItemInfo.ComputeMaxFreshnessDurationTicks( newItem );
+			float remainingDuration = maxFreshness * freshPercent;
+
+			newItemInfo.Timestamp = (int)(this.Timestamp - maxFreshness + remainingDuration);
 
 			this.StoredItemStackSize--;
 		}
