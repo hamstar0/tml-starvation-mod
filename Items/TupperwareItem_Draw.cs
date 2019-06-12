@@ -18,7 +18,7 @@ namespace Starvation.Items {
 
 			float customScale = 0.75f;
 			float storedWid = storedItemTex.Width * customScale;
-			float storedHei = storedItemTex.Width * customScale;
+			float storedHei = storedItemTex.Height * customScale;
 
 			float halfTupperWid = ( (float)tupperTex.Width * scale ) * 0.5f;
 			float halfTupperHei = ( (float)tupperTex.Height * scale ) * 0.5f;

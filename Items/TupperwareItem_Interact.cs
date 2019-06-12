@@ -1,4 +1,5 @@
 ﻿using HamstarHelpers.Components.Errors;
+using HamstarHelpers.Helpers.DotNetHelpers;
 using HamstarHelpers.Helpers.ItemHelpers;
 using System;
 using Terraria;
@@ -30,12 +31,18 @@ namespace Starvation.Items {
 			var newItemInfo = newItem.GetGlobalItem<StarvationItem>();
 
 			float freshPercent = this.ComputeContainedItemsFreshnessPercent();
-			float maxFreshness = newItemInfo.ComputeMaxFreshnessDurationTicks( newItem );
+			float maxFreshness = this.ComputeMaxFreshnessDurationTicks();
 			float remainingDuration = maxFreshness * freshPercent;
+			long now = SystemHelpers.TimeStampInSeconds();
+			long elapsed = (long)( maxFreshness - remainingDuration );
 
-			newItemInfo.Timestamp = (int)(this.Timestamp - maxFreshness + remainingDuration);
+			newItemInfo.TimestampInSeconds = now - elapsed;
 
 			this.StoredItemStackSize--;
+
+			if( this.StoredItemStackSize == 0 ) {
+				this._CachedItem = null;
+			}
 		}
 
 
@@ -70,13 +77,13 @@ namespace Starvation.Items {
 			var myitem = item.GetGlobalItem<StarvationItem>();
 
 			if( this.StoredItemStackSize > 0 ) {
-				this.Timestamp = ((long)this.StoredItemStackSize * this.Timestamp) + myitem.Timestamp;
-				this.Timestamp /= (long)this.StoredItemStackSize + 1L;
+				this.TimestampInSeconds = ((long)this.StoredItemStackSize * this.TimestampInSeconds) + myitem.TimestampInSeconds;
+				this.TimestampInSeconds /= (long)(this.StoredItemStackSize + 1);
 			} else {
-				this.Timestamp = myitem.Timestamp;
+				this.TimestampInSeconds = myitem.TimestampInSeconds;
+				this.StoredItemType = item.type;
 			}
 
-			this.StoredItemType = item.type;
 			this.StoredItemStackSize++;
 		}
 	}

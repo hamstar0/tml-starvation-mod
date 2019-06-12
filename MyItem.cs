@@ -46,7 +46,7 @@ namespace Starvation {
 
 		////////////////
 
-		public long Timestamp;
+		public long TimestampInSeconds;
 
 
 		////////////////
@@ -61,7 +61,7 @@ namespace Starvation {
 			var clone = (StarvationItem)base.Clone( item, itemClone );
 
 			if( this.NeedsSaving( item ) ) {
-				clone.Timestamp = this.Timestamp;
+				clone.TimestampInSeconds = this.TimestampInSeconds;
 			}
 
 			return clone;
@@ -74,10 +74,10 @@ namespace Starvation {
 
 		public override void Load( Item item, TagCompound tags ) {
 			if( this.NeedsSaving( item ) ) {
-				this.Timestamp = SystemHelpers.TimeStampInSeconds();
+				this.TimestampInSeconds = SystemHelpers.TimeStampInSeconds();
 
 				if( tags.ContainsKey( "duration" ) ) {
-					this.Timestamp -= tags.GetInt( "duration" );
+					this.TimestampInSeconds -= tags.GetInt( "duration" );
 				}
 			}
 		}
@@ -86,7 +86,7 @@ namespace Starvation {
 		public override TagCompound Save( Item item ) {
 			if( this.NeedsSaving( item ) ) {
 				return new TagCompound {
-					{ "duration", (int)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) }
+					{ "duration", (int)(SystemHelpers.TimeStampInSeconds() - this.TimestampInSeconds) }
 				};
 			}
 			return new TagCompound();
@@ -96,13 +96,13 @@ namespace Starvation {
 
 		public override void NetReceive( Item item, BinaryReader reader ) {
 			if( this.NeedsSaving( item ) ) {
-				this.Timestamp = SystemHelpers.TimeStampInSeconds() - reader.ReadInt32();
+				this.TimestampInSeconds = SystemHelpers.TimeStampInSeconds() - reader.ReadInt32();
 			}
 		}
 
 		public override void NetSend( Item item, BinaryWriter writer ) {
 			if( this.NeedsSaving( item ) ) {
-				writer.Write( (Int32)SystemHelpers.TimeStampInSeconds() - this.Timestamp );
+				writer.Write( (Int32)SystemHelpers.TimeStampInSeconds() - this.TimestampInSeconds );
 			}
 		}
 
@@ -125,8 +125,8 @@ namespace Starvation {
 		public override void Update( Item item, ref float gravity, ref float maxFallSpeed ) {
 			if( this.NeedsSaving( item ) ) {
 				item.maxStack = 1;
-				if( this.Timestamp == 0 ) {
-					this.Timestamp = SystemHelpers.TimeStampInSeconds();
+				if( this.TimestampInSeconds == 0 ) {
+					this.TimestampInSeconds = SystemHelpers.TimeStampInSeconds();
 				}
 			}
 		}
@@ -134,8 +134,8 @@ namespace Starvation {
 		public override void UpdateInventory( Item item, Player player ) {
 			if( this.NeedsSaving( item ) ) {
 				item.maxStack = 1;
-				if( this.Timestamp == 0 ) {
-					this.Timestamp = SystemHelpers.TimeStampInSeconds();
+				if( this.TimestampInSeconds == 0 ) {
+					this.TimestampInSeconds = SystemHelpers.TimeStampInSeconds();
 				}
 			}
 		}

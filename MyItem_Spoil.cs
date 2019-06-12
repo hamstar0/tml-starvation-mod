@@ -23,7 +23,7 @@ namespace Starvation {
 				return -1;
 			}
 
-			if( this.Timestamp == 0 ) {
+			if( this.TimestampInSeconds == 0 ) {
 				return -1;
 			}
 
@@ -31,12 +31,12 @@ namespace Starvation {
 			long now = SystemHelpers.TimeStampInSeconds();
 
 			if( item.buffType == BuffID.WellFed ) {
-				int spoilageSeconds = (int)( (float)(now - this.Timestamp) * mymod.Config.FoodSpoilageRateScale );
+				int spoilageSeconds = (int)( (float)(now - this.TimestampInSeconds) * mymod.Config.FoodSpoilageRateScale );
 				int buffTime = item.buffTime - (spoilageSeconds * 60);
 				
 				return (int)MathHelper.Clamp( buffTime, 0, this.ComputeMaxFreshnessDurationTicks(item) );
 			} else {
-				int spoilageSeconds = (int)( (float)(now - this.Timestamp) * mymod.Config.FoodIngredientSpoilageRatePerSecond );
+				int spoilageSeconds = (int)( (float)(now - this.TimestampInSeconds) * mymod.Config.FoodIngredientSpoilageRatePerSecond );
 				int spoilTime = mymod.Config.FoodIngredientSpoilageTickDuration - ( spoilageSeconds * 60 );
 
 				return (int)MathHelper.Clamp( spoilTime, 0, this.ComputeMaxFreshnessDurationTicks(item) );

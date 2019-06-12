@@ -18,7 +18,7 @@ namespace Starvation.Items {
 
 		private int StoredItemType = 0;
 		private int StoredItemStackSize;
-		private long Timestamp;
+		private long TimestampInSeconds;
 
 		private Item _CachedItem = null;
 
@@ -39,7 +39,7 @@ namespace Starvation.Items {
 			var clone = (TupperwareItem)base.Clone();
 			clone.StoredItemType = this.StoredItemType;
 			clone.StoredItemStackSize = this.StoredItemStackSize;
-			clone.Timestamp = this.Timestamp;
+			clone.TimestampInSeconds = this.TimestampInSeconds;
 			clone._CachedItem = this._CachedItem;
 			return clone;
 		}
@@ -48,7 +48,7 @@ namespace Starvation.Items {
 			var clone = (TupperwareItem)base.Clone( item );
 			clone.StoredItemType = this.StoredItemType;
 			clone.StoredItemStackSize = this.StoredItemStackSize;
-			clone.Timestamp = this.Timestamp;
+			clone.TimestampInSeconds = this.TimestampInSeconds;
 			clone._CachedItem = this._CachedItem;
 			return clone;
 		}
@@ -81,33 +81,33 @@ namespace Starvation.Items {
 		////////////////
 
 		public override void Load( TagCompound tag ) {
-			if( !tag.ContainsKey("stack") ) {
+			if( !tag.ContainsKey( "stack" ) ) {
 				return;
 			}
 
 			this.StoredItemStackSize = tag.GetInt( "stack" );
 			this.StoredItemType = tag.GetInt( "type" );
-			this.Timestamp = SystemHelpers.TimeStampInSeconds() - tag.GetInt( "duration" );
+			this.TimestampInSeconds = SystemHelpers.TimeStampInSeconds() - tag.GetInt( "duration" );
 		}
 
 		public override TagCompound Save() {
 			return new TagCompound {
 				{ "stack", this.StoredItemStackSize },
 				{ "type", this.StoredItemType },
-				{ "duration", (int)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) }
+				{ "duration", (int)(SystemHelpers.TimeStampInSeconds() - this.TimestampInSeconds) }
 			};
 		}
 
 		public override void NetRecieve( BinaryReader reader ) {
 			this.StoredItemStackSize = reader.ReadInt32();
 			this.StoredItemType = reader.ReadInt32();
-			this.Timestamp = SystemHelpers.TimeStampInSeconds() - reader.ReadInt32();
+			this.TimestampInSeconds = SystemHelpers.TimeStampInSeconds() - reader.ReadInt32();
 		}
 
 		public override void NetSend( BinaryWriter writer ) {
 			writer.Write( (int)this.StoredItemStackSize );
 			writer.Write( (int)this.StoredItemType );
-			writer.Write( (int)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) );
+			writer.Write( (int)( SystemHelpers.TimeStampInSeconds() - this.TimestampInSeconds ) );
 		}
 
 
@@ -116,39 +116,12 @@ namespace Starvation.Items {
 		public override void UpdateInventory( Player player ) {
 			this.MyLastInventoryPosition = -1;
 
-			for( int i=0; i<player.inventory.Length; i++ ) {
+			for( int i = 0; i < player.inventory.Length; i++ ) {
 				if( player.inventory[i] == this.item ) {
 					this.MyLastInventoryPosition = i;
 					break;
 				}
 			}
-		}
-
-
-		////////////////
-
-		public float ComputeContainedItemsFreshnessPercent() {
-			if( this.StoredItemStackSize == 0 ) {
-				return -1;
-			}
-			
-			if( this._CachedItem == null || this._CachedItem.type != this.StoredItemType ) {
-				this._CachedItem = new Item();
-				this._CachedItem.SetDefaults( this.StoredItemType, true );
-			}
-
-			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();
-			float maxFreshnessTickDuration = (float)myitem.ComputeMaxFreshnessDurationTicks( this._CachedItem );
-			if( maxFreshnessTickDuration == -1 ) {
-				return -1;
-			}
-
-			var mymod = (StarvationMod)this.mod;
-
-			float currentTickDuration = (float)(SystemHelpers.TimeStampInSeconds() - this.Timestamp) * 60f;
-			currentTickDuration *= mymod.Config.TupperwareSpoilageRateScale;
-
-			return Math.Max( 1f - (currentTickDuration / maxFreshnessTickDuration), 0f );
 		}
 	}
 }
