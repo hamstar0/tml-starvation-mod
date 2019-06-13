@@ -18,7 +18,7 @@ namespace Starvation.Items {
 				return false;
 			}
 
-			return myitem.ComputeRemainingFreshnessDurationTicks(item) == 0;
+			return myitem.ComputeTimeLeftTicks(item) == 0;
 		}
 
 

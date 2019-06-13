@@ -30,13 +30,11 @@ namespace Starvation.Items {
 			Item newItem = Main.item[newItemIdx];
 			var newItemInfo = newItem.GetGlobalItem<StarvationItem>();
 
-			float freshPercent = this.ComputeContainedItemsFreshnessPercent();
-			float maxFreshness = this.ComputeMaxFreshnessDurationTicks();
-			float remainingDuration = maxFreshness * freshPercent;
+			float elapsedTicks = this.ComputeElapsedTicks();
+			long elapsedSeconds = (long)elapsedTicks / 60;
 			long now = SystemHelpers.TimeStampInSeconds();
-			long elapsed = (long)( maxFreshness - remainingDuration );
 
-			newItemInfo.TimestampInSeconds = now - elapsed;
+			newItemInfo.TimestampInSeconds = now - elapsedSeconds;
 
 			this.StoredItemStackSize--;
 
@@ -62,7 +60,7 @@ namespace Starvation.Items {
 			}
 
 			var myitem = item.GetGlobalItem<StarvationItem>();
-			if( myitem.ComputeRemainingFreshnessDurationTicks(item) <= 0 ) {
+			if( myitem.ComputeTimeLeftTicks(item) <= 0 ) {
 				return false;
 			}
 

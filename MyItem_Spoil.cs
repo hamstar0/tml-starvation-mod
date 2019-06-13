@@ -18,32 +18,7 @@ namespace Starvation {
 
 		////////////////
 
-		public int ComputeRemainingFreshnessDurationTicks( Item item ) {
-			if( !this.NeedsSaving( item ) ) {
-				return -1;
-			}
-
-			if( this.TimestampInSeconds == 0 ) {
-				return -1;
-			}
-
-			var mymod = (StarvationMod)this.mod;
-			long now = SystemHelpers.TimeStampInSeconds();
-
-			if( item.buffType == BuffID.WellFed ) {
-				int spoilageSeconds = (int)( (float)(now - this.TimestampInSeconds) * mymod.Config.FoodSpoilageRateScale );
-				int buffTime = item.buffTime - (spoilageSeconds * 60);
-				
-				return (int)MathHelper.Clamp( buffTime, 0, this.ComputeMaxFreshnessDurationTicks(item) );
-			} else {
-				int spoilageSeconds = (int)( (float)(now - this.TimestampInSeconds) * mymod.Config.FoodIngredientSpoilageRatePerSecond );
-				int spoilTime = mymod.Config.FoodIngredientSpoilageTickDuration - ( spoilageSeconds * 60 );
-
-				return (int)MathHelper.Clamp( spoilTime, 0, this.ComputeMaxFreshnessDurationTicks(item) );
-			}
-		}
-
-		public int ComputeMaxFreshnessDurationTicks( Item item ) {
+		public int ComputeMaxElapsedTicks( Item item ) {
 			if( !this.NeedsSaving( item ) ) {
 				return -1;
 			}
@@ -60,6 +35,32 @@ namespace Starvation {
 			return ticks;
 		}
 
+		public int ComputeTimeLeftTicks( Item item ) {
+			if( !this.NeedsSaving( item ) ) {
+				return -1;
+			}
+
+			if( this.TimestampInSeconds == 0 ) {
+				return -1;
+			}
+
+			var mymod = (StarvationMod)this.mod;
+			long now = SystemHelpers.TimeStampInSeconds();
+			float elapsedSeconds = (float)( now - this.TimestampInSeconds );
+
+			if( item.buffType == BuffID.WellFed ) {
+				int spoilageSeconds = (int)( elapsedSeconds * mymod.Config.FoodSpoilageRateScale );
+				int buffTime = item.buffTime - (spoilageSeconds * 60);
+				
+				return (int)MathHelper.Clamp( buffTime, 0, this.ComputeMaxElapsedTicks(item) );
+			} else {
+				int spoilageSeconds = (int)( elapsedSeconds * mymod.Config.FoodIngredientSpoilageRateScale );
+				int spoilTime = mymod.Config.FoodIngredientSpoilageTickDuration - ( spoilageSeconds * 60 );
+
+				return (int)MathHelper.Clamp( spoilTime, 0, this.ComputeMaxElapsedTicks(item) );
+			}
+		}
+
 
 		////////////////
 
@@ -68,7 +69,7 @@ namespace Starvation {
 			int buffIdx = player.FindBuffIndex( BuffID.WellFed );
 
 			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRateScale > 0f ) {
-				int newBuffTime = this.ComputeRemainingFreshnessDurationTicks( item );
+				int newBuffTime = this.ComputeTimeLeftTicks( item );
 
 				if( newBuffTime != -1 ) {
 					if( player.buffTime[buffIdx] < newBuffTime ) {

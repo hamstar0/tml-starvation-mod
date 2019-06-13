@@ -34,7 +34,7 @@ namespace Starvation {
 
 		public bool FoodIngredientsAlsoSpoil = true;
 		public int FoodIngredientSpoilageTickDuration = 30 * 60 * 60;   // 30 minutes
-		public float FoodIngredientSpoilageRatePerSecond = 0.5f;
+		public float FoodIngredientSpoilageRateScale = 1f;
 
 		public bool CraftableUnlifeCrystal = true;
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
@@ -53,20 +53,31 @@ namespace Starvation {
 
 		public string _OLD_SETTINGS_BELOW_ = "";
 
+		[Obsolete( "use StarvationHarm", true )]
 		public int StarvationHarmRate = 10;
+		[Obsolete( "use AddedWellFedDrainRateMultiplierForMaxHealthOver100", true )]
 		public float AddedWellFedDrainRatePerMaxHealthOver100 = (1f + (1f/3f)) / 100f;
+		[Obsolete( "use AddedStarvationHarmMultiplierForMaxHealthOver100", true )]
 		public float AddedStarvationHarmPerMaxHealthOver100 = (1f + (1f/3f)) / 100f;
-		public float AddedWellFedDrainRateMultiplierPerMaxHealthOver100 = (2f/3f) / 100f;
-		public float AddedStarvationHarmMultiplierPerMaxHealthOver100 = (2f/3f) / 100f;
+		[Obsolete( "use WellFedAddedDrainPerTick", true )]
 		public int WellFedDrainRate = 2;
+		[Obsolete( "use StarvationHarmRepeatDelayInTicks", true )]
 		public int StarvationHarmDelay = 10;
+		[Obsolete( "use RespawnWellFedTickDuration", true )]
 		public int RespawnWellFedDuration = 60 * 60 * 3;
+		[Obsolete( "use FoodIngredientSpoilageTickDuration", true )]
 		public int FoodIngredientSpoilageDuration = 30 * 60 * 60;
+		[Obsolete( "use FoodSpoilageRateScale", true)]
 		public float FoodSpoilageRate = 1f;
-		public float FoodIngredientSpoilageRate = 1f;
+		[Obsolete( "use FoodIngredientSpoilageRateScale", true )]
+		public float FoodIngredientSpoilageRatePerSecond = 1f;
+		[Obsolete( "use FoodSpoilageRateScale", true )]
 		public float FoodSpoilageRatePerSecond = 0.5f;
+		[Obsolete( "use FoodSpoilageMinTickDuration", true )]
 		public int FoodSpoilageMinDuration = 60 * 60 * 10;  // 10 minutes
+		[Obsolete( "use FoodSpoilageMaxTickDuration", true )]
 		public int FoodSpoilageMaxDuration = 60 * 60 * 60 * 3;  // 3 hours
+		[Obsolete( "use TupperwareSpoilageRateScale", true )]
 		public float TupperwareSpoilageRate = 0.5f;
 
 
@@ -110,23 +121,7 @@ namespace Starvation {
 				this.SetDefaults();
 			}
 
-			if( versSince < new Version(1, 1, 3) ) {
-				if( this.VersionSinceUpdate != "" ) {
-					this.StarvationHarmRepeatDelayInTicks = this.StarvationHarmRate;
-				}
-			}
-			if( versSince < new Version(1, 3, 1) ) {
-				if( this.FoodSpoilageRatePerSecond == 3f ) {
-					this.FoodSpoilageRatePerSecond = newConfig.FoodSpoilageRatePerSecond;
-				}
-			}
 			if( versSince < new Version(1, 4, 0) ) {
-				if( this.FoodSpoilageRatePerSecond == 2f ) {
-					this.FoodSpoilageRatePerSecond = newConfig.FoodSpoilageRatePerSecond;
-				}
-				if( this.AddedWellFedDrainRatePerMaxHealthOver100 == ((1f + (1f/3f)) / 100f) ) {
-					this.AddedWellFedDrainRatePerMaxHealthOver100 = newConfig.AddedWellFedDrainRatePerMaxHealthOver100;
-				}
 				if( this.WellFedAddedDrainPerTick == 4f ) {
 					this.WellFedAddedDrainPerTick = newConfig.WellFedAddedDrainPerTick;
 				}

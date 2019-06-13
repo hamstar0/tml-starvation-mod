@@ -1,11 +1,8 @@
 ﻿using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.DotNetHelpers;
-using HamstarHelpers.Helpers.TmlHelpers;
 using System;
-using System.IO;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 
 namespace Starvation.Items {
@@ -22,7 +19,7 @@ namespace Starvation.Items {
 
 		////////////////
 
-		public float ComputeMaxFreshnessDurationTicks() {
+		public float ComputeMaxElapsedTicks() {
 			if( this.StoredItemStackSize == 0 ) {
 				return -1;
 			}
@@ -30,25 +27,40 @@ namespace Starvation.Items {
 			var mymod = (StarvationMod)this.mod;
 			StarvationItem myitem = this.GetCachedModItem();
 
-			return myitem.ComputeMaxFreshnessDurationTicks(this._CachedItem) / mymod.Config.TupperwareSpoilageRateScale;
+			float maxTicks = myitem.ComputeMaxElapsedTicks( this._CachedItem );
+			float maxTicksScaled = maxTicks / mymod.Config.TupperwareSpoilageRateScale;
+
+			return maxTicksScaled;
 		}
 
 
-		public float ComputeContainedItemsFreshnessPercent() {
+		public float ComputeElapsedTicks() {
 			if( this.StoredItemStackSize == 0 ) {
-				return -1;
-			}
-
-			float maxFreshnessTickDuration = (float)this.ComputeMaxFreshnessDurationTicks();
-			if( maxFreshnessTickDuration == -1 ) {
 				return -1;
 			}
 
 			var mymod = (StarvationMod)this.mod;
 
-			float currentTickDuration = (float)( SystemHelpers.TimeStampInSeconds() - this.TimestampInSeconds ) * 60f;
+			long now = SystemHelpers.TimeStampInSeconds();
+			float elapsedSeconds = (float)(now - this.TimestampInSeconds);
+			float elapsedTicks = elapsedSeconds * 60;
 
-			return Math.Max( 1f - (currentTickDuration / maxFreshnessTickDuration), 0f );
+			return elapsedTicks;
+		}
+
+
+		public bool ComputeTimeLeftPercent( out float timeLeftPercent ) {
+			float elapsedTicks = this.ComputeElapsedTicks();
+			float maxElapsedTicks = this.ComputeMaxElapsedTicks();
+			if( elapsedTicks == -1 || maxElapsedTicks == -1 ) {
+				timeLeftPercent = maxElapsedTicks;
+				return false;
+			}
+
+			float elapsedPercent = elapsedTicks / maxElapsedTicks;
+			timeLeftPercent = Math.Max( 1f - elapsedPercent, 0f );
+
+			return true;
 		}
 	}
 }

@@ -19,12 +19,12 @@ namespace Starvation {
 
 		private void AddSpoilageTips( Item item, List<TooltipLine> tooltips ) {
 			var mymod = (StarvationMod)this.mod;
-			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
+			int freshnessDuration = this.ComputeTimeLeftTicks( item );
 			if( freshnessDuration == -1 ) {
 				return;
 			}
 
-			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
+			int maxFreshnessDuration = this.ComputeMaxElapsedTicks( item );
 			if( maxFreshnessDuration == -1 ) {
 				return;
 			}
@@ -67,7 +67,7 @@ namespace Starvation {
 			tooltips.Add( tip2 );
 
 			if( mymod.Config.DebugModeInfo ) {
-				tooltips.Add( new TooltipLine( mymod, "SpoilageDEBUG", "maxf:"+maxFreshnessDuration+", f:"+freshnessDuration ) );
+				tooltips.Add( new TooltipLine( mymod, "SpoilageDEBUG", "maxfresh:"+maxFreshnessDuration+", fresh:"+freshnessDuration ) );
 			}
 		}
 	}

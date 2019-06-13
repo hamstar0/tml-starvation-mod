@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -56,17 +57,18 @@ namespace Starvation.Items {
 		public override void PostDrawInInventory( SpriteBatch sb, Vector2 pos, Rectangle _1, Color drawColor, Color _2, Vector2 _3, float scale ) {
 			if( this.StoredItemStackSize == 0 ) { return; }
 
-			Texture2D tupperTex = ModLoader.GetTexture( this.Texture );
-			float freshnessPercent = this.ComputeContainedItemsFreshnessPercent();
-			if( freshnessPercent == -1 ) {
+			float timeLeftPercent;
+			if( !this.ComputeTimeLeftPercent(out timeLeftPercent) ) {
 				return;
 			}
 
-			if( freshnessPercent == 0 ) {
+			Texture2D tupperTex = ModLoader.GetTexture( this.Texture );
+
+			if( timeLeftPercent == 0 ) {
 				StarvationItem.DrawSpoilageInventory( sb, tupperTex, pos, drawColor, scale );
 			} else {
 				TupperwareItem.DrawContainerItemInventory( sb, this.StoredItemType, pos, scale );
-				StarvationItem.DrawFreshnessGaugeInventory( sb, tupperTex, pos, freshnessPercent, scale );
+				StarvationItem.DrawFreshnessGaugeInventory( sb, tupperTex, pos, timeLeftPercent, scale );
 			}
 
 			TupperwareItem.DrawItemStackInventory( sb, pos, this.StoredItemStackSize, scale );
@@ -75,10 +77,27 @@ namespace Starvation.Items {
 		public override void PostDrawInWorld( SpriteBatch sb, Color lightColor, Color _1, float _2, float scale, int whoAmI ) {
 			if( this.StoredItemStackSize == 0 ) { return; }
 
-			float freshnessPercent = this.ComputeContainedItemsFreshnessPercent();
+			float timeLeftPercent;
+			if( !this.ComputeTimeLeftPercent( out timeLeftPercent ) ) {
+				return;
+			}
 
-			if( freshnessPercent == 0 ) {
+			if( timeLeftPercent == 0 ) {
 				StarvationItem.DrawSpoilageWorld( sb, this.item.Center, lightColor, scale );
+			}
+		}
+
+		////////////////
+
+		public override void ModifyTooltips( List<TooltipLine> tooltips ) {
+			var mymod = (StarvationMod)this.mod;
+
+			if( mymod.Config.DebugModeInfo ) {
+				float maxElapsedTicks = this.ComputeMaxElapsedTicks();
+				float timeLeftPercent;
+				this.ComputeTimeLeftPercent( out timeLeftPercent );
+
+				tooltips.Add( new TooltipLine( mymod, "TupperSpoilageDEBUG", "maxfresh:" + maxElapsedTicks + ", currfresh:" + timeLeftPercent ) );
 			}
 		}
 	}

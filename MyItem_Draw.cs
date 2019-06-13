@@ -97,12 +97,12 @@ namespace Starvation {
 			}
 
 			//float freshness = (float)this.ComputeRemainingBuffTime( item ) / (float)item.buffTime;
-			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
+			int freshnessDuration = this.ComputeTimeLeftTicks( item );
 			if( freshnessDuration == -1 ) {
 				return true;
 			}
 
-			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
+			int maxFreshnessDuration = this.ComputeMaxElapsedTicks( item );
 			if( maxFreshnessDuration == -1 ) {
 				return true;
 			}
@@ -123,12 +123,12 @@ namespace Starvation {
 				return true;
 			}
 
-			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
+			int freshnessDuration = this.ComputeTimeLeftTicks( item );
 			if( freshnessDuration == -1 ) {
 				return true;
 			}
 
-			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
+			int maxFreshnessDuration = this.ComputeMaxElapsedTicks( item );
 			if( maxFreshnessDuration == -1 ) {
 				return true;
 			}
@@ -154,12 +154,12 @@ namespace Starvation {
 				return;
 			}
 
-			int freshnessDuration = this.ComputeRemainingFreshnessDurationTicks( item );
+			int freshnessDuration = this.ComputeTimeLeftTicks( item );
 			if( freshnessDuration <= -1 ) {
 				return;
 			}
 
-			int maxFreshnessDuration = this.ComputeMaxFreshnessDurationTicks( item );
+			int maxFreshnessDuration = this.ComputeMaxElapsedTicks( item );
 			if( maxFreshnessDuration <= -1 ) {
 				return;
 			}
