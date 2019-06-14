@@ -17,7 +17,9 @@ namespace Starvation.Items {
 			Texture2D tupperTex = ModLoader.GetTexture( mymod.GetItem<TupperwareItem>().Texture );
 			if( tupperTex == null || storedItemTex == null ) { return; }
 
-			float customScale = 0.75f;
+			int hiDim = storedItemTex.Width > storedItemTex.Height ? storedItemTex.Width : storedItemTex.Height;
+			float customScale = 32f / (float)hiDim;//0.75f;
+
 			float storedWid = storedItemTex.Width * customScale;
 			float storedHei = storedItemTex.Height * customScale;
 
@@ -27,7 +29,7 @@ namespace Starvation.Items {
 			float halfStoredHei = ( (float)storedHei * scale ) * 0.5f;
 			float posX = ( pos.X + halfTupperWid ) - halfStoredWid;
 			float posY = ( pos.Y + halfTupperHei ) - halfStoredHei;
-			posY += 6f * scale;
+			//posY += 6f * scale;
 
 			var srcRect = new Rectangle( 0, 0, storedItemTex.Width, storedItemTex.Height );
 			Color color = Color.White * 0.65f;
@@ -86,6 +88,7 @@ namespace Starvation.Items {
 				StarvationItem.DrawSpoilageWorld( sb, this.item.Center, lightColor, scale );
 			}
 		}
+
 
 		////////////////
 

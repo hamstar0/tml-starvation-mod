@@ -126,6 +126,10 @@ namespace Starvation {
 						if( item == null || item.IsAir ) { continue; }
 
 						if( RotItem.IsRotted(item) ) {
+							if( !Main.mouseItem.IsAir && i == PlayerItemHelpers.VanillaInventorySelectedSlot ) {
+								Main.mouseItem = new Item();
+							}
+
 							player.inventory[i] = new Item();
 							ItemHelpers.CreateItem( player.Center, mymod.ItemType<RotItem>(), item.stack, RotItem.Width, RotItem.Height );
 						}

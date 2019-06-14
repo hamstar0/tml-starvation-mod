@@ -21,7 +21,7 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 
 			float timeLeftPercent;
-			if( !this.ComputeTimeLeftPercent( item, out timeLeftPercent ) ) {
+			if( !this.ComputeTimeLeftPercent(item, out timeLeftPercent) ) {
 				return;
 			}
 			int elapsedTicks;
@@ -29,20 +29,20 @@ namespace Starvation {
 				return;
 			}
 
-			int elapsedSeconds = elapsedTicks / 60;
-			int spoiledSeconds = (int)((float)elapsedSeconds / mymod.Config.FoodSpoilageDurationScale);
+			int elapsedTicksScaled = (int)( (float)elapsedTicks / mymod.Config.FoodSpoilageDurationScale );
+			int elapsedSeconds = elapsedTicksScaled / 60;
 			float spoilagePercent = 1f - timeLeftPercent;
 			string spoiledFmt;
 
-			if( spoiledSeconds <= 60 ) {
-				spoiledFmt = spoiledSeconds + "s";
+			if( elapsedSeconds <= 60 ) {
+				spoiledFmt = elapsedSeconds + "s";
 			} else {
-				spoiledFmt = (spoiledSeconds / 60) + "m";
+				spoiledFmt = (elapsedSeconds / 60) + "m";
 			}
 
 			var tip1 = new TooltipLine( this.mod,
 				"SpoilageRate",
-				"Loses " + Math.Round( 1f / mymod.Config.FoodSpoilageDurationScale, 2 ) + "s freshness every second"
+				"Loses " + Math.Round(1f / mymod.Config.FoodSpoilageDurationScale, 2) + "s freshness every second"
 			);
 
 			string tip2Text;

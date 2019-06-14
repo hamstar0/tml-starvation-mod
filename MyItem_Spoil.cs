@@ -48,10 +48,11 @@ namespace Starvation {
 
 			if( item.buffType == BuffID.WellFed ) {
 				maxElapsedTicks = (int)MathHelper.Clamp(
-					(float)item.buffTime * mymod.Config.FoodSpoilageDurationScale,
+					item.buffTime,
 					mymod.Config.FoodSpoilageMinTickDuration,
 					mymod.Config.FoodSpoilageMaxTickDuration
 				);
+				maxElapsedTicks = (int)((float)maxElapsedTicks * mymod.Config.FoodSpoilageDurationScale);
 			} else {
 				maxElapsedTicks = mymod.Config.FoodIngredientSpoilageTickDuration;
 			}
