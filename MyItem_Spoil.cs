@@ -87,7 +87,8 @@ namespace Starvation {
 				throw new HamstarException( "Could not compute max elapsed ticks." );
 			}
 
-			int elapsedTicks = (int)((float)maxElapsedTicks * timeLeftPercent);
+			float elapsedPercent = 1f - timeLeftPercent;
+			int elapsedTicks = (int)((float)maxElapsedTicks * elapsedPercent);
 			int elapsedSeconds = elapsedTicks / 60;
 			long now = SystemHelpers.TimeStampInSeconds();
 

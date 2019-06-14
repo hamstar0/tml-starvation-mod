@@ -38,7 +38,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Items\RotItem.cs" />
     <Compile Include="Items\MashedPumpkinItem.cs" />
-    <Compile Include="Items\TupperwareItem_Compute.cs" />
+    <Compile Include="Items\TupperwareItem_Spoil.cs" />
     <Compile Include="Items\TupperwareItem_Interact.cs" />
     <Compile Include="Items\TupperwareItem_Draw.cs" />
     <Compile Include="Items\TupperwareItem.cs" />

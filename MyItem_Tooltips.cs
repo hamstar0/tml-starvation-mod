@@ -20,8 +20,8 @@ namespace Starvation {
 		private void AddSpoilageTips( Item item, List<TooltipLine> tooltips ) {
 			var mymod = (StarvationMod)this.mod;
 
-			float freshnessPercent;
-			if( !this.ComputeTimeLeftPercent( item, out freshnessPercent ) ) {
+			float timeLeftPercent;
+			if( !this.ComputeTimeLeftPercent( item, out timeLeftPercent ) ) {
 				return;
 			}
 			int elapsedTicks;
@@ -29,14 +29,15 @@ namespace Starvation {
 				return;
 			}
 
-			int spoiledAmt = elapsedTicks / 60;
-			float spoilagePercent = 1f - freshnessPercent;
+			int elapsedSeconds = elapsedTicks / 60;
+			int spoiledSeconds = (int)((float)elapsedSeconds / mymod.Config.FoodSpoilageDurationScale);
+			float spoilagePercent = 1f - timeLeftPercent;
 			string spoiledFmt;
 
-			if( spoiledAmt <= 60 ) {
-				spoiledFmt = spoiledAmt + "s";
+			if( spoiledSeconds <= 60 ) {
+				spoiledFmt = spoiledSeconds + "s";
 			} else {
-				spoiledFmt = ( spoiledAmt / 60 ) + "m";
+				spoiledFmt = (spoiledSeconds / 60) + "m";
 			}
 
 			var tip1 = new TooltipLine( this.mod,
@@ -63,7 +64,7 @@ namespace Starvation {
 			if( mymod.Config.DebugModeInfo ) {
 				int maxElapsedTicks;
 				this.ComputeMaxElapsedTicks( item, out maxElapsedTicks );
-				tooltips.Add( new TooltipLine( mymod, "SpoilageDEBUG", "maxelapsed:"+ maxElapsedTicks + ", elasped:"+elapsedTicks+", (fresh%:"+(freshnessPercent*100f)+")" ) );
+				tooltips.Add( new TooltipLine( mymod, "SpoilageDEBUG", "maxelapsed:"+ maxElapsedTicks + ", elasped:"+elapsedTicks+", (fresh%:"+(timeLeftPercent*100f)+")" ) );
 			}
 		}
 	}
