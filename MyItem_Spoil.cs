@@ -1,4 +1,5 @@
-﻿using HamstarHelpers.Helpers.DebugHelpers;
+﻿using HamstarHelpers.Components.Errors;
+using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.DotNetHelpers;
 using Microsoft.Xna.Framework;
 using System;
@@ -18,49 +19,83 @@ namespace Starvation {
 
 		////////////////
 
-		public int ComputeMaxElapsedTicks( Item item ) {
+		public bool ComputeElapsedTicks( Item item, out int elapsedTicks ) {
 			if( !this.NeedsSaving( item ) ) {
-				return -1;
-			}
-
-			var mymod = (StarvationMod)this.mod;
-			int ticks;
-
-			if( item.buffType == BuffID.WellFed ) {
-				ticks = (int)MathHelper.Clamp( item.buffTime, mymod.Config.FoodSpoilageMinTickDuration, mymod.Config.FoodSpoilageMaxTickDuration );
-			} else {
-				ticks = mymod.Config.FoodIngredientSpoilageTickDuration;
-			}
-
-			return ticks;
-		}
-
-		public int ComputeTimeLeftTicks( Item item ) {
-			if( !this.NeedsSaving( item ) ) {
-				return -1;
+				elapsedTicks = 0;
+				return false;
 			}
 
 			if( this.TimestampInSeconds == 0 ) {
-				return -1;
+				elapsedTicks = 0;
+				return false;
 			}
 
 			var mymod = (StarvationMod)this.mod;
 			long now = SystemHelpers.TimeStampInSeconds();
-			float elapsedSeconds = (float)( now - this.TimestampInSeconds );
+			int elapsedSeconds = (int)(now - this.TimestampInSeconds);
 
-			if( item.buffType == BuffID.WellFed ) {
-				int spoilageSeconds = (int)( elapsedSeconds * mymod.Config.FoodSpoilageRateScale );
-				int buffTime = item.buffTime - (spoilageSeconds * 60);
-				
-				return (int)MathHelper.Clamp( buffTime, 0, this.ComputeMaxElapsedTicks(item) );
-			} else {
-				int spoilageSeconds = (int)( elapsedSeconds * mymod.Config.FoodIngredientSpoilageRateScale );
-				int spoilTime = mymod.Config.FoodIngredientSpoilageTickDuration - ( spoilageSeconds * 60 );
-
-				return (int)MathHelper.Clamp( spoilTime, 0, this.ComputeMaxElapsedTicks(item) );
-			}
+			elapsedTicks = (int)elapsedSeconds * 60;
+			return true;
 		}
 
+		public bool ComputeMaxElapsedTicks( Item item, out int maxElapsedTicks ) {
+			if( !this.NeedsSaving( item ) ) {
+				maxElapsedTicks = 0;
+				return false;
+			}
+
+			var mymod = (StarvationMod)this.mod;
+
+			if( item.buffType == BuffID.WellFed ) {
+				maxElapsedTicks = (int)MathHelper.Clamp(
+					(float)item.buffTime * mymod.Config.FoodSpoilageDurationScale,
+					mymod.Config.FoodSpoilageMinTickDuration,
+					mymod.Config.FoodSpoilageMaxTickDuration
+				);
+			} else {
+				maxElapsedTicks = mymod.Config.FoodIngredientSpoilageTickDuration;
+			}
+
+			return true;
+		}
+
+
+		public bool ComputeTimeLeftPercent( Item item, out float timeLeftPercent ) {
+			int elapsedTicks, maxElapsedTicks;
+
+			if( !this.ComputeElapsedTicks(item, out elapsedTicks) ) {
+				timeLeftPercent = 1f;
+				return false;
+			}
+			if( !this.ComputeMaxElapsedTicks(item, out maxElapsedTicks) ) {
+				timeLeftPercent = 1f;
+				return false;
+			}
+
+			float timeLeftTicks = maxElapsedTicks - elapsedTicks;
+			timeLeftPercent = MathHelper.Clamp( timeLeftTicks / maxElapsedTicks, 0f, 1f );
+
+			return true;
+		}
+
+
+		////////////////
+
+		public bool SetTimeLeftByPercent( Item item, float timeLeftPercent ) {
+			int maxElapsedTicks;
+			if( !this.ComputeMaxElapsedTicks(item, out maxElapsedTicks) ) {
+				throw new HamstarException( "Could not compute max elapsed ticks." );
+			}
+
+			int elapsedTicks = (int)((float)maxElapsedTicks * timeLeftPercent);
+			int elapsedSeconds = elapsedTicks / 60;
+			long now = SystemHelpers.TimeStampInSeconds();
+
+			this.TimestampInSeconds = now - elapsedSeconds;
+
+			return true;
+		}
+		
 
 		////////////////
 
@@ -68,15 +103,21 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			int buffIdx = player.FindBuffIndex( BuffID.WellFed );
 
-			if( buffIdx >= 0 && mymod.Config.FoodSpoilageRateScale > 0f ) {
-				int newBuffTime = this.ComputeTimeLeftTicks( item );
+			if( buffIdx >= 0 && mymod.Config.FoodSpoilageDurationScale > 0f ) {
+				int elapsedTicks, maxElapsedTicks = -1;
+				if( !this.ComputeElapsedTicks( item, out elapsedTicks ) ) {
+					return;
+				}
+				if( !this.ComputeMaxElapsedTicks( item, out maxElapsedTicks ) ) {
+					return;
+				}
 
-				if( newBuffTime != -1 ) {
-					if( player.buffTime[buffIdx] < newBuffTime ) {
-						player.buffTime[buffIdx] = newBuffTime;
-					} else if( player.buffTime[buffIdx] == item.buffTime ) {
-						player.buffTime[buffIdx] = newBuffTime;
-					}
+				int newBuffTime = maxElapsedTicks - elapsedTicks;
+
+				if( player.buffTime[buffIdx] < newBuffTime ) {
+					player.buffTime[buffIdx] = newBuffTime;
+				} else if( player.buffTime[buffIdx] == item.buffTime ) {
+					player.buffTime[buffIdx] = newBuffTime;
 				}
 			}
 		}

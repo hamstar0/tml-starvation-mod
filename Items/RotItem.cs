@@ -18,7 +18,12 @@ namespace Starvation.Items {
 				return false;
 			}
 
-			return myitem.ComputeTimeLeftTicks(item) == 0;
+			float timeLeftPercent;
+			if( !myitem.ComputeTimeLeftPercent(item, out timeLeftPercent) ) {
+				return false;
+			}
+
+			return timeLeftPercent <= 0;
 		}
 
 

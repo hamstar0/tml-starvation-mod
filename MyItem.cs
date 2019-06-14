@@ -123,15 +123,17 @@ namespace Starvation {
 		////////////////
 
 		public override void Update( Item item, ref float gravity, ref float maxFallSpeed ) {
-			if( this.NeedsSaving( item ) ) {
-				item.maxStack = 1;
-				if( this.TimestampInSeconds == 0 ) {
-					this.TimestampInSeconds = SystemHelpers.TimeStampInSeconds();
-				}
-			}
+			this.ResetTimestampAndMaxStackSize( item );
 		}
 
 		public override void UpdateInventory( Item item, Player player ) {
+			this.ResetTimestampAndMaxStackSize( item );
+		}
+
+
+		////////////////
+
+		public void ResetTimestampAndMaxStackSize( Item item ) {
 			if( this.NeedsSaving( item ) ) {
 				item.maxStack = 1;
 				if( this.TimestampInSeconds == 0 ) {

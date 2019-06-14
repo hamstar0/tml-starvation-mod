@@ -93,11 +93,14 @@ namespace Starvation.Items {
 			var mymod = (StarvationMod)this.mod;
 
 			if( mymod.Config.DebugModeInfo ) {
-				float maxElapsedTicks = this.ComputeMaxElapsedTicks();
+				int elapsedTicks, maxElapsedTicks;
+				this.ComputeMaxElapsedTicks(out maxElapsedTicks);
+				this.ComputeElapsedTicks(out elapsedTicks);
+
 				float timeLeftPercent;
 				this.ComputeTimeLeftPercent( out timeLeftPercent );
 
-				tooltips.Add( new TooltipLine( mymod, "TupperSpoilageDEBUG", "maxfresh:" + maxElapsedTicks + ", currfresh:" + timeLeftPercent ) );
+				tooltips.Add( new TooltipLine( mymod, "TupperSpoilageDEBUG", "maxelapsed:" + maxElapsedTicks + ", elapsed: "+elapsedTicks+", (fresh%:" + timeLeftPercent+")" ) );
 			}
 		}
 	}

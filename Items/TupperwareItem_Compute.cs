@@ -1,4 +1,5 @@
-﻿using HamstarHelpers.Helpers.DebugHelpers;
+﻿using HamstarHelpers.Components.Errors;
+using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.DotNetHelpers;
 using System;
 using Terraria;
@@ -7,60 +8,121 @@ using Terraria.ModLoader;
 
 namespace Starvation.Items {
 	partial class TupperwareItem : ModItem {
+		public static bool PredictMaxElapsedTicksOfItem( Item item, out int maxElapsedTicks ) {
+			var mymod = StarvationMod.Instance;
+			StarvationItem myitem = item.GetGlobalItem<StarvationItem>();
+
+			bool isValid = myitem.ComputeMaxElapsedTicks( item, out maxElapsedTicks );
+			float maxElapsedTicksScaled = (float)maxElapsedTicks * mymod.Config.TupperwareSpoilageDurationScale;
+
+			maxElapsedTicks = (int)maxElapsedTicksScaled;
+			return isValid;
+		}
+
+
+
+		////////////////
+
 		private StarvationItem GetCachedModItem() {
 			if( this._CachedItem == null || this._CachedItem.type != this.StoredItemType ) {
 				this._CachedItem = new Item();
 				this._CachedItem.SetDefaults( this.StoredItemType, true );
 			}
 
-			return this._CachedItem.GetGlobalItem<StarvationItem>();
+			var myitem = this._CachedItem.GetGlobalItem<StarvationItem>();
+			float _ = 0f;
+			myitem.ResetTimestampAndMaxStackSize( this._CachedItem );
+
+			return myitem;
 		}
 
 
 		////////////////
 
-		public float ComputeMaxElapsedTicks() {
+		public bool ComputeMaxElapsedTicks( out int maxElapsedTicks ) {
 			if( this.StoredItemStackSize == 0 ) {
-				return -1;
+				maxElapsedTicks = 0;
+				return false;
 			}
 
 			var mymod = (StarvationMod)this.mod;
 			StarvationItem myitem = this.GetCachedModItem();
 
-			float maxTicks = myitem.ComputeMaxElapsedTicks( this._CachedItem );
-			float maxTicksScaled = maxTicks / mymod.Config.TupperwareSpoilageRateScale;
+			if( !myitem.ComputeMaxElapsedTicks( this._CachedItem, out maxElapsedTicks ) ) {
+				return false;
+			}
+			float maxElapsedTicksScaled = (float)maxElapsedTicks * mymod.Config.TupperwareSpoilageDurationScale;
 
-			return maxTicksScaled;
+			maxElapsedTicks = (int)maxElapsedTicksScaled;
+			return true;
 		}
 
 
-		public float ComputeElapsedTicks() {
+		public bool ComputeElapsedTicks( out int elapsedTicks ) {
 			if( this.StoredItemStackSize == 0 ) {
-				return -1;
+				elapsedTicks = 0;
+				return false;
 			}
 
 			var mymod = (StarvationMod)this.mod;
-
 			long now = SystemHelpers.TimeStampInSeconds();
-			float elapsedSeconds = (float)(now - this.TimestampInSeconds);
-			float elapsedTicks = elapsedSeconds * 60;
+			int elapsedSeconds = (int)(now - this.TimestampInSeconds);
 
-			return elapsedTicks;
+			elapsedTicks = elapsedSeconds * 60;
+			//float elapsedTicksScaled = (float)elapsedTicks * mymod.Config.TupperwareSpoilageRateScale;
+			return true;
 		}
 
 
 		public bool ComputeTimeLeftPercent( out float timeLeftPercent ) {
-			float elapsedTicks = this.ComputeElapsedTicks();
-			float maxElapsedTicks = this.ComputeMaxElapsedTicks();
-			if( elapsedTicks == -1 || maxElapsedTicks == -1 ) {
-				timeLeftPercent = maxElapsedTicks;
+			int elapsedTicks, maxElapsedTicks;
+			if( !this.ComputeElapsedTicks(out elapsedTicks) ) {
+				timeLeftPercent = 1f;
+				return false;
+			}
+			if( !this.ComputeMaxElapsedTicks( out maxElapsedTicks ) ) {
+				timeLeftPercent = 1f;
 				return false;
 			}
 
-			float elapsedPercent = elapsedTicks / maxElapsedTicks;
-			timeLeftPercent = Math.Max( 1f - elapsedPercent, 0f );
+			float elapsedPercent = (float)elapsedTicks / (float)maxElapsedTicks;
 
+			timeLeftPercent = Math.Max( 1f - elapsedPercent, 0f );
 			return true;
+		}
+
+
+		////////////////
+
+		public float ComputeAveragedTimeLeftByPercent( float timeLeftPercent ) {
+			float newTimeLeftPercent;
+
+			if( this.StoredItemStackSize > 0 ) {
+				float myTimeLeftPercent;
+				if( !this.ComputeTimeLeftPercent( out myTimeLeftPercent ) ) {
+					throw new HamstarException( "Could not compute time left." );
+				}
+
+				newTimeLeftPercent = (myTimeLeftPercent * (float)this.StoredItemStackSize) + timeLeftPercent;
+				newTimeLeftPercent /= this.StoredItemStackSize + 1;
+			} else {
+				newTimeLeftPercent = timeLeftPercent;
+			}
+
+			return newTimeLeftPercent;
+		}
+
+
+		////////////////
+
+		public void SetTimeLeftByPercent( int maxElapsedSeconds, float timeLeftPercent ) {
+			float elapsedPercent = 1f - timeLeftPercent;
+			int elapsedTicks = (int)( (float)maxElapsedSeconds * elapsedPercent );
+			int elapsedSeconds = elapsedTicks / 60;
+
+			long now = SystemHelpers.TimeStampInSeconds();
+
+			this.TimestampInSeconds = now - elapsedSeconds;
 		}
 	}
 }

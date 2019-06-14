@@ -229,8 +229,8 @@ namespace Starvation {
 
 			bool isAdded = false;
 			
-			if( tupperItem.CanAddItem( item ) ) {
-				tupperItem.AddItem( item );
+			if( tupperItem.CanStoreItem( item ) ) {
+				tupperItem.StoreItem( item );
 
 				player.inventory[ tupperItem.MyLastInventoryPosition ] = Main.mouseItem;
 				Main.mouseItem = new Item();

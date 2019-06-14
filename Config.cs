@@ -28,19 +28,18 @@ namespace Starvation {
 		public float AddedStarvationHarmPerTickMultiplierPerMaxHealthOver100 = 1f / 100f;
 
 		public bool FoodSpoilageEnabled = false;
-		public float FoodSpoilageRateScale = 0.5f;
+		public float FoodSpoilageDurationScale = 2f;
 		public int FoodSpoilageMinTickDuration = 60 * 60 * 10;  // 10 minutes
 		public int FoodSpoilageMaxTickDuration = 60 * 60 * 60 * 3;	// 3 hours
 
 		public bool FoodIngredientsAlsoSpoil = true;
 		public int FoodIngredientSpoilageTickDuration = 30 * 60 * 60;   // 30 minutes
-		public float FoodIngredientSpoilageRateScale = 1f;
 
 		public bool CraftableUnlifeCrystal = true;
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
 
 		public IDictionary<int, float> TupperwareDropsNpcIdsAndChances = new Dictionary<int, float>(); //NPCID.Skeleton : 0.35f;
-		public float TupperwareSpoilageRateScale = 0.5f;
+		public float TupperwareSpoilageDurationScale = 3f;
 		public int TupperwareMaxStackSize = 30;
 		public int TupperwareSellsFromMerchantByNpcId = NPCID.SkeletonMerchant;
 
@@ -67,18 +66,22 @@ namespace Starvation {
 		public int RespawnWellFedDuration = 60 * 60 * 3;
 		[Obsolete( "use FoodIngredientSpoilageTickDuration", true )]
 		public int FoodIngredientSpoilageDuration = 30 * 60 * 60;
-		[Obsolete( "use FoodSpoilageRateScale", true)]
+		[Obsolete( "use FoodSpoilageDurationScale", true)]
 		public float FoodSpoilageRate = 1f;
-		[Obsolete( "use FoodIngredientSpoilageRateScale", true )]
+		[Obsolete( "use TupperwareSpoilageDurationScale", true )]
 		public float FoodIngredientSpoilageRatePerSecond = 1f;
-		[Obsolete( "use FoodSpoilageRateScale", true )]
+		[Obsolete( "use FoodSpoilageDurationScale", true )]
 		public float FoodSpoilageRatePerSecond = 0.5f;
 		[Obsolete( "use FoodSpoilageMinTickDuration", true )]
 		public int FoodSpoilageMinDuration = 60 * 60 * 10;  // 10 minutes
 		[Obsolete( "use FoodSpoilageMaxTickDuration", true )]
 		public int FoodSpoilageMaxDuration = 60 * 60 * 60 * 3;  // 3 hours
-		[Obsolete( "use TupperwareSpoilageRateScale", true )]
+		[Obsolete( "use TupperwareSpoilageDurationScale", true )]
 		public float TupperwareSpoilageRate = 0.5f;
+		[Obsolete( "use FoodSpoilageDurationScale", true )]
+		public float FoodSpoilageRateScale = 0.5f;
+		[Obsolete( "use TupperwareSpoilageDurationScale", true )]
+		public float TupperwareSpoilageRateScale = 0.5f;
 
 
 
