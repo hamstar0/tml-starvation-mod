@@ -186,12 +186,23 @@ namespace Starvation {
 		public override void SetupStartInventory( IList<Item> items, bool mediumcoreDeath ) {
 			var mymod = (StarvationMod)this.mod;
 
-			if( !mediumcoreDeath && mymod.Config.PlayerStarterSoup > 0 ) {
-				Item soup = new Item();
-				soup.SetDefaults( ItemID.BowlofSoup, true );
-				soup.stack = mymod.Config.PlayerStarterSoup;
+			if( !mediumcoreDeath ) {
+				this.player.AddBuff( BuffID.WellFed, mymod.Config.RespawnWellFedTickDuration );
 
-				items.Add( soup );
+				if( mymod.Config.PlayerStarterSoup > 0 ) {
+					Item soup = new Item();
+					soup.SetDefaults( ItemID.BowlofSoup, true );
+					soup.stack = mymod.Config.PlayerStarterSoup;
+
+					items.Add( soup );
+				}
+
+				if( mymod.Config.PlayerStarterNet ) {
+					Item net = new Item();
+					net.SetDefaults( ItemID.BugNet, true );
+
+					items.Add( net );
+				}
 			}
 		}
 

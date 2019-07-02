@@ -21,6 +21,7 @@ namespace Starvation {
 		public int StarvationHarmRepeatDelayInTicks = 10;
 
 		public int PlayerStarterSoup = 3;
+		public bool PlayerStarterNet = true;
 
 		public int RespawnWellFedTickDuration = 60 * 60 * 3;    // 3 minutes
 
