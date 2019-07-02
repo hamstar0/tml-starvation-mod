@@ -8,27 +8,68 @@ using Terraria.ModLoader;
 
 
 namespace Starvation {
+	class BugNetItemRecipe : ModRecipe {
+		public BugNetItemRecipe( StarvationMod mymod ) : base( mymod ) {
+			this.AddTile( TileID.WorkBenches );
+
+			this.AddIngredient( ItemID.Wood, 5 );
+			this.AddIngredient( ItemID.Cobweb, 20 );
+
+			this.SetResult( ItemID.BugNet, 1 );
+		}
+
+
+		public override bool RecipeAvailable() {
+			var mymod = StarvationMod.Instance;
+			return mymod.Config.BugNetRecipe;
+		}
+	}
+
+
+
+
+	class FishbowlToGoldfishItemRecipe : ModRecipe {
+		public FishbowlToGoldfishItemRecipe( StarvationMod mymod ) : base( mymod ) {
+			this.AddTile( TileID.WorkBenches );
+
+			this.AddIngredient( ItemID.FishBowl );
+
+			this.SetResult( ItemID.Goldfish );
+		}
+
+
+		public override bool RecipeAvailable() {
+			var mymod = StarvationMod.Instance;
+			return mymod.Config.FishbowlToGoldfishRecipe;
+		}
+	}
+
+
+
+
 	partial class StarvationItem : GlobalItem {
-		public static void ApplyRecipeMods() {
+		public static void AddNewRecipes() {
+			var mymod = StarvationMod.Instance;
+
+			var bugNetRecipe = new BugNetItemRecipe( mymod );
+			bugNetRecipe.AddRecipe();
+
+			var fishbowlRecipe = new FishbowlToGoldfishItemRecipe( mymod );
+			fishbowlRecipe.AddRecipe();
+		}
+
+		public static void ApplyRecipeModifications() {
 			var mymod = StarvationMod.Instance;
 
 			if( mymod.Config.CustomPumpkinPieRecipe ) {
-				StarvationItem.ApplyCustomPumpkinPieRecipe();
-			}
-		}
-
-		public static void ApplyNewRecipes() {
-			var mymod = StarvationMod.Instance;
-
-			if( mymod.Config.FishbowlToGoldfishRecipe ) {
-				StarvationItem.AddCustomFishbowlToGoldfishRecipe();
+				StarvationItem.ApplyPumpkinPieRecipeModification();
 			}
 		}
 
 
 		////
 
-		private static void ApplyCustomPumpkinPieRecipe() {
+		private static void ApplyPumpkinPieRecipeModification() {
 			var mymod = StarvationMod.Instance;
 
 			for( int i=0; i<Main.recipe.Length; i++ ) {
@@ -58,16 +99,6 @@ namespace Starvation {
 				}
 				break;
 			}
-		}
-
-
-		private static void AddCustomFishbowlToGoldfishRecipe() {
-			var mymod = StarvationMod.Instance;
-			var myrecipe = new ModRecipe( mymod );
-			myrecipe.AddIngredient( ItemID.FishBowl );
-			myrecipe.AddTile( TileID.WorkBenches );
-			myrecipe.SetResult( ItemID.Goldfish );
-			myrecipe.AddRecipe();
 		}
 
 

@@ -196,13 +196,6 @@ namespace Starvation {
 
 					items.Add( soup );
 				}
-
-				if( mymod.Config.PlayerStarterNet ) {
-					Item net = new Item();
-					net.SetDefaults( ItemID.BugNet, true );
-
-					items.Add( net );
-				}
 			}
 		}
 

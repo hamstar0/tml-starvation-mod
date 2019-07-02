@@ -58,11 +58,11 @@ namespace Starvation {
 		////
 
 		public override void AddRecipes() {
-			StarvationItem.ApplyNewRecipes();
+			StarvationItem.AddNewRecipes();
 		}
 
 		public override void PostAddRecipes() {
-			StarvationItem.ApplyRecipeMods();
+			StarvationItem.ApplyRecipeModifications();
 		}
 
 

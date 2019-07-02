@@ -21,7 +21,6 @@ namespace Starvation {
 		public int StarvationHarmRepeatDelayInTicks = 10;
 
 		public int PlayerStarterSoup = 3;
-		public bool PlayerStarterNet = true;
 
 		public int RespawnWellFedTickDuration = 60 * 60 * 3;    // 3 minutes
 
@@ -44,9 +43,11 @@ namespace Starvation {
 		public int TupperwareMaxStackSize = 30;
 		public int TupperwareSellsFromMerchantByNpcId = NPCID.SkeletonMerchant;
 
+		public bool BugNetRecipe = true;
 		public bool CustomPumpkinPieRecipe = true;
-		public IDictionary<string, int> CustomWellFedTickDurations = new Dictionary<string, int>();
 		public bool FishbowlToGoldfishRecipe = true;
+
+		public IDictionary<string, int> CustomWellFedTickDurations = new Dictionary<string, int>();
 
 
 		////
