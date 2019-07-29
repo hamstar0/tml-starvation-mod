@@ -22,11 +22,13 @@ namespace Starvation {
 		public override void SetupShop( int npcType, Chest shop, ref int nextSlot ) {
 			var mymod = (StarvationMod)this.mod;
 
-			if( mymod.Config.TupperwareSellsFromMerchantByNpc != 0 && npcType == mymod.Config.TupperwareSellsFromMerchantByNpc ) {
-				var tupperware = new Item();
-				tupperware.SetDefaults( mymod.ItemType<TupperwareItem>(), false );
+			if( mymod.Config.TupperwareSellsFromMerchantByNpc != null ) {
+				if( npcType == mymod.Config.TupperwareSellsFromMerchantByNpc.GetID() ) {
+					var tupperware = new Item();
+					tupperware.SetDefaults( mymod.ItemType<TupperwareItem>(), false );
 
-				shop.item[ nextSlot++ ] = tupperware;
+					shop.item[nextSlot++] = tupperware;
+				}
 			}
 		}
 	}
