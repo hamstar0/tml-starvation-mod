@@ -75,7 +75,7 @@ namespace Starvation {
 		[DefaultValue( 30 )]
 		public int TupperwareMaxStackSize = 30;
 
-		public NPCDefinition TupperwareSellsFromMerchantByNpcId;	//= NPCID.SkeletonMerchant;
+		public NPCDefinition TupperwareSellsFromMerchantByNpc;	//= NPCID.SkeletonMerchant;
 
 
 		[DefaultValue( true )]
@@ -88,7 +88,7 @@ namespace Starvation {
 		public bool FishbowlToGoldfishRecipe = true;
 
 
-		public IDictionary<string, int> CustomWellFedTickDurations = new Dictionary<string, int>();
+		public IDictionary<ItemDefinition, int> CustomWellFedTickDurations = new Dictionary<ItemDefinition, int>();
 
 
 
@@ -100,18 +100,18 @@ namespace Starvation {
 				return;
 			}
 
-			this.TupperwareSellsFromMerchantByNpcId = new NPCDefinition( "Terraria", "SkeletonMerchant" );
+			this.TupperwareSellsFromMerchantByNpc = new NPCDefinition( "Terraria", "SkeletonMerchant" );
 
-			this.CustomWellFedTickDurations[ "Cooked Marshmallow" ] = 5 * 60 * 60;			// 5 minutes
-			this.CustomWellFedTickDurations[ "Bowl of Soup" ] = 45 * 60 * 60;				// 45 minutes
-			this.CustomWellFedTickDurations[ "Pumpkin Pie" ] = 25 * 60 * 60;				// 25 minutes
-			this.CustomWellFedTickDurations[ "Cooked Fish" ] = 15 * 60 * 60;                // 15 minutes
-			this.CustomWellFedTickDurations[ "Cooked Shrimp" ] = 15 * 60 * 60;				// 15 minutes
-			this.CustomWellFedTickDurations[ "Sashimi" ] = 15 * 60 * 60;					// 15 minutes
-			this.CustomWellFedTickDurations[ "Grub Soup" ] = 120 * 60 * 60;					// 120 minutes
-			this.CustomWellFedTickDurations[ "Gingerbread Cookie" ] = 5 * 60 * 60;			// 5 minutes
-			this.CustomWellFedTickDurations[ "Sugar Cookie" ] = 5 * 60 * 60;				// 5 minutes
-			this.CustomWellFedTickDurations[ "Christmas Pudding" ] = 5 * 60 * 60;           // 5 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "CookedMarshmallow") ] = 5 * 60 * 60;	// 5 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "BowlofSoup") ] = 45 * 60 * 60;			// 45 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "PumpkinPie") ] = 25 * 60 * 60;			// 25 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "CookedFish") ] = 15 * 60 * 60;			// 15 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "CookedShrimp") ] = 15 * 60 * 60;		// 15 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "Sashimi") ] = 15 * 60 * 60;			// 15 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "GrubSoup") ] = 120 * 60 * 60;			// 120 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "GingerbreadCookie") ] = 5 * 60 * 60;	// 5 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "SugarCookie") ] = 5 * 60 * 60;			// 5 minutes
+			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "ChristmasPudding") ] = 5 * 60 * 60;	// 5 minutes
 
 			this.TupperwareDropsNpcIdsAndChances.Clear();
 			this.TupperwareDropsNpcIdsAndChances[ NPCID.Skeleton ] = 0.35f;
