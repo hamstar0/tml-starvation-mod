@@ -1,5 +1,5 @@
 ﻿using HamstarHelpers.Components.Errors;
-using HamstarHelpers.Helpers.ItemHelpers;
+using HamstarHelpers.Helpers.Items;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -115,7 +115,7 @@ namespace Starvation.Items {
 			}
 
 			int newItemIdx = ItemHelpers.CreateItem( position, this.StoredItemType, 1, 16, 16 );
-			Item newItem = Main.item[newItemIdx];
+			Item newItem = Main.item[ newItemIdx ];
 
 			var newItemInfo = newItem.GetGlobalItem<StarvationItem>();
 			newItemInfo.SetTimeLeftByPercent( newItem, timeLeftPercent );

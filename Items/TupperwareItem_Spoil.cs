@@ -1,6 +1,6 @@
 ﻿using HamstarHelpers.Components.Errors;
-using HamstarHelpers.Helpers.DebugHelpers;
-using HamstarHelpers.Helpers.DotNetHelpers;
+using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Helpers.DotNET;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -100,7 +100,7 @@ namespace Starvation.Items {
 			if( this.StoredItemStackSize > 0 ) {
 				float myTimeLeftPercent;
 				if( !this.ComputeTimeLeftPercent( out myTimeLeftPercent ) ) {
-					throw new HamstarException( "Could not compute time left." );
+					throw new ModHelpersException( "Could not compute time left." );
 				}
 
 				newTimeLeftPercent = (myTimeLeftPercent * (float)this.StoredItemStackSize) + timeLeftPercent;

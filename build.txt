@@ -1,7 +1,6 @@
 author = hamstar
-version = 2.1.2
+version = 2.2.0
 displayName = Starvation
-modReferences = HamstarHelpers@4.4.0
+modReferences = HamstarHelpers@5.0.0
 buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*
-languageVersion = 6
 homepage = https://forums.terraria.org/index.php?threads/starvation-having-no-well-fed-buff-causes-harm-simple-mod.76710/

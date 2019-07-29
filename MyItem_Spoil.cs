@@ -1,6 +1,6 @@
 ﻿using HamstarHelpers.Components.Errors;
-using HamstarHelpers.Helpers.DebugHelpers;
-using HamstarHelpers.Helpers.DotNetHelpers;
+using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Helpers.DotNET;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -85,7 +85,7 @@ namespace Starvation {
 		public bool SetTimeLeftByPercent( Item item, float timeLeftPercent ) {
 			int maxElapsedTicks;
 			if( !this.ComputeMaxElapsedTicks(item, out maxElapsedTicks) ) {
-				throw new HamstarException( "Could not compute max elapsed ticks." );
+				throw new ModHelpersException( "Could not compute max elapsed ticks." );
 			}
 
 			float elapsedPercent = 1f - timeLeftPercent;

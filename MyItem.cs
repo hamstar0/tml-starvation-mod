@@ -1,5 +1,6 @@
-﻿using HamstarHelpers.Helpers.DebugHelpers;
-using HamstarHelpers.Helpers.DotNetHelpers;
+﻿using HamstarHelpers.Components.DataStructures;
+using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Helpers.DotNET;
 using HamstarHelpers.Services.EntityGroups;
 using System;
 using System.IO;
@@ -23,9 +24,9 @@ namespace Starvation {
 			}
 
 			if( mymod.Config.FoodIngredientsAlsoSpoil ) {
-				var itemGrps = EntityGroups.ItemGroups;
+				IReadOnlySet<int> ingredients;
 
-				if( itemGrps.ContainsKey("Any Food Ingredient") && itemGrps["Any Food Ingredient"].Contains( item.type ) ) {
+				if( EntityGroups.TryGetItemGroup("Any Food Ingredient", out ingredients) && ingredients.Contains( item.type ) ) {
 					switch( item.type ) {
 					case ItemID.Pumpkin:
 					case ItemID.BlinkrootSeeds:

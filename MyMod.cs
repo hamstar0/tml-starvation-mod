@@ -1,5 +1,4 @@
-using HamstarHelpers.Components.Config;
-using HamstarHelpers.Helpers.TmlHelpers.ModHelpers;
+using HamstarHelpers.Helpers.TModLoader.Mods;
 using HamstarHelpers.Services.EntityGroups;
 using System;
 using Terraria.ModLoader;
@@ -13,42 +12,20 @@ namespace Starvation {
 
 		////////////////
 		
-		public JsonConfig<StarvationConfigData> ConfigJson { get; private set; }
-		public StarvationConfigData Config => this.ConfigJson.Data;
+		public StarvationConfig Config => this.GetConfig<StarvationConfig>();
 
 
 
 		////////////////
 
 		public StarvationMod() {
-			this.ConfigJson = new JsonConfig<StarvationConfigData>(
-				StarvationConfigData.ConfigFileName,
-				ConfigurationDataBase.RelativePath,
-				new StarvationConfigData()
-			);
+			StarvationMod.Instance = this;
 		}
 
 		////////////////
 
 		public override void Load() {
-			StarvationMod.Instance = this;
-
 			EntityGroups.Enable();
-
-			this.LoadConfig();
-		}
-
-		private void LoadConfig() {
-			if( !this.ConfigJson.LoadFile() ) {
-				this.Config.SetDefaults();
-				this.ConfigJson.SaveFile();
-				ErrorLogger.Log( "Starvation config " + this.Version.ToString() + " created." );
-			}
-
-			if( this.Config.UpdateToLatestVersion() ) {
-				ErrorLogger.Log( "Starvation updated to " + this.Version.ToString() );
-				this.ConfigJson.SaveFile();
-			}
 		}
 
 		public override void Unload() {

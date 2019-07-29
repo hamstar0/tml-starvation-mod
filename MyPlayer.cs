@@ -1,13 +1,12 @@
-﻿using HamstarHelpers.Components.Network;
-using HamstarHelpers.Helpers.DebugHelpers;
-using HamstarHelpers.Helpers.ItemHelpers;
-using HamstarHelpers.Helpers.PlayerHelpers;
-using HamstarHelpers.Helpers.TmlHelpers;
+﻿using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Helpers.Items;
+using HamstarHelpers.Helpers.Players;
+using HamstarHelpers.Helpers.TModLoader;
 using HamstarHelpers.Services.Messages;
+using HamstarHelpers.Services.Messages.Inbox;
 using HamstarHelpers.Services.Timers;
 using Microsoft.Xna.Framework;
 using Starvation.Items;
-using Starvation.NetProtocols;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -65,15 +64,9 @@ namespace Starvation {
 		////////////////
 
 		private void OnConnectSingle() {
-			var mymod = (StarvationMod)this.mod;
-
-			if( !mymod.ConfigJson.LoadFile() ) {
-				mymod.ConfigJson.SaveFile();
-			}
 		}
 
 		private void OnConnectClient() {
-			PacketProtocolRequestToServer.QuickRequest<ModSettingsProtocol>( -1 );
 		}
 
 		private void OnConnectServer() {
