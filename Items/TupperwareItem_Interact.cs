@@ -1,4 +1,4 @@
-﻿using HamstarHelpers.Components.Errors;
+﻿using HamstarHelpers.Classes.Errors;
 using HamstarHelpers.Helpers.Items;
 using Microsoft.Xna.Framework;
 using System;

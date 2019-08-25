@@ -1,10 +1,10 @@
 ﻿using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Items;
 using Starvation.Items;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 
 namespace Starvation {
@@ -107,10 +107,10 @@ namespace Starvation {
 
 		public void ApplyWellFedModifiers( Item item ) {
 			var mymod = (StarvationMod)this.mod;
-			string itemName = ItemIdentityHelpers.GetQualifiedName( item.type );
+			var itemDef = new ItemDefinition( item.type );
 
-			if( mymod.Config.CustomWellFedTickDurations.ContainsKey(itemName) ) {
-				item.buffTime = mymod.Config.CustomWellFedTickDurations[ itemName ];
+			if( mymod.Config.CustomWellFedTickDurations.ContainsKey(itemDef) ) {
+				item.buffTime = mymod.Config.CustomWellFedTickDurations[ itemDef ];
 			}
 		}
 	}

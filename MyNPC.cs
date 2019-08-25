@@ -3,15 +3,17 @@ using Starvation.Items;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 
 namespace Starvation {
 	class MyNPC : GlobalNPC {
 		public override void NPCLoot( NPC npc ) {
 			var mymod = (StarvationMod)this.mod;
+			var npcDef = new NPCDefinition( npc.type );
 
-			if( mymod.Config.TupperwareDropsNpcIdsAndChances.ContainsKey( npc.type ) ) {
-				if( Main.rand.NextFloat() < mymod.Config.TupperwareDropsNpcIdsAndChances[npc.type] ) {
+			if( mymod.Config.TupperwareDropsNpcIdsAndChances.ContainsKey(npcDef) ) {
+				if( Main.rand.NextFloat() < mymod.Config.TupperwareDropsNpcIdsAndChances[npcDef] ) {
 					ItemHelpers.CreateItem( npc.Center, mymod.ItemType<TupperwareItem>(), 1, TupperwareItem.Width, TupperwareItem.Height );
 				}
 			}
@@ -23,7 +25,7 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 
 			if( mymod.Config.TupperwareSellsFromMerchantByNpc != null ) {
-				if( npcType == mymod.Config.TupperwareSellsFromMerchantByNpc.GetID() ) {
+				if( npcType == mymod.Config.TupperwareSellsFromMerchantByNpc.Type ) {
 					var tupperware = new Item();
 					tupperware.SetDefaults( mymod.ItemType<TupperwareItem>(), false );
 

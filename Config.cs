@@ -67,7 +67,7 @@ namespace Starvation {
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
 
 
-		public IDictionary<int, float> TupperwareDropsNpcIdsAndChances = new Dictionary<int, float>(); //NPCID.Skeleton : 0.35f;
+		public IDictionary<NPCDefinition, float> TupperwareDropsNpcIdsAndChances = new Dictionary<NPCDefinition, float>(); //NPCID.Skeleton : 0.35f;
 
 		[DefaultValue( 3f )]
 		public float TupperwareSpoilageDurationScale = 3f;
@@ -94,13 +94,8 @@ namespace Starvation {
 
 		////////////////
 
-		[OnDeserialized]
-		internal void OnDeserializedMethod( StreamingContext context ) {
-			if( this.CustomWellFedTickDurations != null ) {
-				return;
-			}
-
-			this.TupperwareSellsFromMerchantByNpc = new NPCDefinition( "Terraria", "SkeletonMerchant" );
+		public StarvationConfig() {
+			this.TupperwareSellsFromMerchantByNpc = new NPCDefinition( NPCID.SkeletonMerchant );
 
 			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "CookedMarshmallow") ] = 5 * 60 * 60;	// 5 minutes
 			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "BowlofSoup") ] = 45 * 60 * 60;			// 45 minutes
@@ -112,9 +107,8 @@ namespace Starvation {
 			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "GingerbreadCookie") ] = 5 * 60 * 60;	// 5 minutes
 			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "SugarCookie") ] = 5 * 60 * 60;			// 5 minutes
 			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "ChristmasPudding") ] = 5 * 60 * 60;	// 5 minutes
-
-			this.TupperwareDropsNpcIdsAndChances.Clear();
-			this.TupperwareDropsNpcIdsAndChances[ NPCID.Skeleton ] = 0.35f;
+			
+			this.TupperwareDropsNpcIdsAndChances[ new NPCDefinition(NPCID.Skeleton) ] = 0.35f;
 		}
 	}
 }
