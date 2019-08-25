@@ -67,7 +67,7 @@ namespace Starvation {
 		public bool UnlifeCrystalReturnsLifeCrystal = true;
 
 
-		public IDictionary<NPCDefinition, float> TupperwareDropsNpcIdsAndChances = new Dictionary<NPCDefinition, float>(); //NPCID.Skeleton : 0.35f;
+		public Dictionary<NPCDefinition, float> TupperwareDropsNpcIdsAndChances = new Dictionary<NPCDefinition, float>(); //NPCID.Skeleton : 0.35f;
 
 		[DefaultValue( 3f )]
 		public float TupperwareSpoilageDurationScale = 3f;
@@ -88,7 +88,7 @@ namespace Starvation {
 		public bool FishbowlToGoldfishRecipe = true;
 
 
-		public IDictionary<ItemDefinition, int> CustomWellFedTickDurations = new Dictionary<ItemDefinition, int>();
+		public Dictionary<ItemDefinition, int> CustomWellFedTickDurations = new Dictionary<ItemDefinition, int>();
 
 
 
