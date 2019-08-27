@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.Serialization;
+using System.Linq;
 using Terraria.ID;
 using Terraria.ModLoader.Config;
 
@@ -109,6 +109,20 @@ namespace Starvation {
 			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "ChristmasPudding") ] = 5 * 60 * 60;	// 5 minutes
 			
 			this.TupperwareDropsNpcIdsAndChances[ new NPCDefinition(NPCID.Skeleton) ] = 0.35f;
+		}
+
+		////////////////
+
+		public override ModConfig Clone() {
+			var clone = (StarvationConfig)base.Clone();
+
+			clone.TupperwareSellsFromMerchantByNpc = this.TupperwareSellsFromMerchantByNpc;
+			clone.CustomWellFedTickDurations = this.CustomWellFedTickDurations
+				.ToDictionary( kv=>kv.Key, kv=>kv.Value );
+			clone.TupperwareDropsNpcIdsAndChances = this.TupperwareDropsNpcIdsAndChances
+				.ToDictionary( kv => kv.Key, kv => kv.Value );
+
+			return clone;
 		}
 	}
 }
