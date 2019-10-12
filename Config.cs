@@ -7,6 +7,14 @@ using Terraria.ModLoader.Config;
 
 
 namespace Starvation {
+	public class IntTickSetting {
+		[Range( 0, 60 * 60 * 60 )]
+		public int Ticks = 1;
+	}
+
+
+
+
 	public class StarvationConfig : ModConfig {
 		public override ConfigScope Mode => ConfigScope.ServerSide;
 
@@ -16,39 +24,49 @@ namespace Starvation {
 		public bool DebugModeInfo = false;
 
 
+		[Range( 0, 100 )]
 		[DefaultValue( 1 )]
 		public int WellFedAddedDrainPerTick = 1;
 
+		[Range( 0, 1000 )]
 		[DefaultValue( 1 )]
 		public int StarvationHarm = 1;
 
+		[Range( 0, 1000 )]
 		[DefaultValue( 10 )]
 		public int StarvationHarmRepeatDelayInTicks = 10;
 
 
+		[Range( 0, 99 )]
 		[DefaultValue( 3 )]
 		public int PlayerStarterSoup = 3;
 
 
+		[Range( 0, 60 * 60 * 60 * 24 )]
 		[DefaultValue( 60 * 60 * 3 )]
 		public int RespawnWellFedTickDuration = 60 * 60 * 3;    // 3 minutes
 
 
+		[Range( 0f, 100f )]
 		[DefaultValue( 1f / 200f )]
 		public float AddedWellFedDrainRatePerTickMultiplierPerMaxHealthOver100 = 1f / 200f;
 
+		[Range( 0f, 100f )]
 		[DefaultValue( 1f / 100f )]
 		public float AddedStarvationHarmPerTickMultiplierPerMaxHealthOver100 = 1f / 100f;
 
 
 		public bool FoodSpoilageEnabled = false;
 
+		[Range( 0f, 100f )]
 		[DefaultValue( 2f )]
 		public float FoodSpoilageDurationScale = 2f;
 
+		[Range( 0, 60 * 60 * 60 * 24 * 7 )]
 		[DefaultValue( 60 * 60 * 10 )]
 		public int FoodSpoilageMinTickDuration = 60 * 60 * 10;  // 10 minutes
 
+		[Range( 0, 60 * 60 * 60 * 24 * 7 )]
 		[DefaultValue( 60 * 60 * 60 * 3 )]
 		public int FoodSpoilageMaxTickDuration = 60 * 60 * 60 * 3;  // 3 hours
 
@@ -56,6 +74,7 @@ namespace Starvation {
 		[DefaultValue( true )]
 		public bool FoodIngredientsAlsoSpoil = true;
 
+		[Range( 0, 60 * 60 * 60 * 24 * 7 )]
 		[DefaultValue( 30 * 60 * 60 )]
 		public int FoodIngredientSpoilageTickDuration = 30 * 60 * 60;   // 30 minutes
 
@@ -69,9 +88,11 @@ namespace Starvation {
 
 		public Dictionary<NPCDefinition, float> TupperwareDropsNpcIdsAndChances = new Dictionary<NPCDefinition, float>(); //NPCID.Skeleton : 0.35f;
 
+		[Range( 0f, 100f )]
 		[DefaultValue( 3f )]
 		public float TupperwareSpoilageDurationScale = 3f;
 
+		[Range( 1, 999 )]
 		[DefaultValue( 30 )]
 		public int TupperwareMaxStackSize = 30;
 
@@ -88,8 +109,13 @@ namespace Starvation {
 		public bool FishbowlToGoldfishRecipe = true;
 
 
-		public Dictionary<ItemDefinition, int> CustomWellFedTickDurations = new Dictionary<ItemDefinition, int>();
+		public Dictionary<ItemDefinition, IntTickSetting> PerItemWellFedTickDurations = new Dictionary<ItemDefinition, IntTickSetting>();
 
+
+		////
+
+		[Header( "\n \nOBSOLETE SETTINGS BELOW" )]
+		public Dictionary<ItemDefinition, int> CustomWellFedTickDurations = new Dictionary<ItemDefinition, int>();
 
 
 		////////////////
@@ -97,16 +123,16 @@ namespace Starvation {
 		public StarvationConfig() {
 			this.TupperwareSellsFromMerchantByNpc = new NPCDefinition( NPCID.SkeletonMerchant );
 
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "CookedMarshmallow") ] = 5 * 60 * 60;	// 5 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "BowlofSoup") ] = 45 * 60 * 60;			// 45 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "PumpkinPie") ] = 25 * 60 * 60;			// 25 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "CookedFish") ] = 15 * 60 * 60;			// 15 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "CookedShrimp") ] = 15 * 60 * 60;		// 15 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "Sashimi") ] = 15 * 60 * 60;			// 15 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "GrubSoup") ] = 120 * 60 * 60;			// 120 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "GingerbreadCookie") ] = 5 * 60 * 60;	// 5 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "SugarCookie") ] = 5 * 60 * 60;			// 5 minutes
-			this.CustomWellFedTickDurations[ new ItemDefinition("Terraria", "ChristmasPudding") ] = 5 * 60 * 60;	// 5 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.CookedMarshmallow) ] = new IntTickSetting { Ticks = 5 * 60 * 60 };	// 5 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.BowlofSoup) ] = new IntTickSetting { Ticks = 45 * 60 * 60 };			// 45 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.PumpkinPie) ] = new IntTickSetting { Ticks = 25 * 60 * 60 };			// 25 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.CookedFish) ] = new IntTickSetting { Ticks = 15 * 60 * 60 };			// 15 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.CookedShrimp) ] = new IntTickSetting { Ticks = 15 * 60 * 60 };		// 15 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.Sashimi) ] = new IntTickSetting { Ticks = 15 * 60 * 60 };			// 15 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.GrubSoup) ] = new IntTickSetting { Ticks = 120 * 60 * 60 };			// 120 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.GingerbreadCookie) ] = new IntTickSetting { Ticks = 5 * 60 * 60 };	// 5 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.SugarCookie) ] = new IntTickSetting { Ticks = 5 * 60 * 60 };			// 5 minutes
+			this.PerItemWellFedTickDurations[ new ItemDefinition(ItemID.ChristmasPudding) ] = new IntTickSetting { Ticks = 5 * 60 * 60 };	// 5 minutes
 			
 			this.TupperwareDropsNpcIdsAndChances[ new NPCDefinition(NPCID.Skeleton) ] = 0.35f;
 		}
@@ -117,7 +143,7 @@ namespace Starvation {
 			var clone = (StarvationConfig)base.Clone();
 
 			clone.TupperwareSellsFromMerchantByNpc = this.TupperwareSellsFromMerchantByNpc;
-			clone.CustomWellFedTickDurations = this.CustomWellFedTickDurations
+			clone.PerItemWellFedTickDurations = this.PerItemWellFedTickDurations
 				.ToDictionary( kv=>kv.Key, kv=>kv.Value );
 			clone.TupperwareDropsNpcIdsAndChances = this.TupperwareDropsNpcIdsAndChances
 				.ToDictionary( kv => kv.Key, kv => kv.Value );

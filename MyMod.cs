@@ -12,7 +12,7 @@ namespace Starvation {
 
 		////////////////
 		
-		public StarvationConfig Config => this.GetConfig<StarvationConfig>();
+		public StarvationConfig Config => ModContent.GetInstance<StarvationConfig>();
 
 
 

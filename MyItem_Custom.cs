@@ -82,7 +82,7 @@ namespace Starvation {
 				for( int j=0; j<recipe.requiredItem.Length; j++ ) {
 					if( recipe.requiredItem[j].type == ItemID.Pumpkin ) {
 						recipe.requiredItem[j] = new Item();
-						recipe.requiredItem[j].SetDefaults( mymod.ItemType<MashedPumpkinItem>() );
+						recipe.requiredItem[j].SetDefaults( ModContent.ItemType<MashedPumpkinItem>() );
 						continue;
 					}
 
@@ -109,8 +109,8 @@ namespace Starvation {
 			var mymod = (StarvationMod)this.mod;
 			var itemDef = new ItemDefinition( item.type );
 
-			if( mymod.Config.CustomWellFedTickDurations.ContainsKey(itemDef) ) {
-				item.buffTime = mymod.Config.CustomWellFedTickDurations[ itemDef ];
+			if( mymod.Config.PerItemWellFedTickDurations.ContainsKey(itemDef) ) {
+				item.buffTime = mymod.Config.PerItemWellFedTickDurations[ itemDef ].Ticks;
 			}
 		}
 	}

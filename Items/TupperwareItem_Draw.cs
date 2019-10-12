@@ -14,7 +14,7 @@ namespace Starvation.Items {
 
 			var mymod = StarvationMod.Instance;
 			Texture2D storedItemTex = Main.itemTexture[ storedItemType ];
-			Texture2D tupperTex = ModContent.GetTexture( mymod.GetItem<TupperwareItem>().Texture );
+			Texture2D tupperTex = ModContent.GetTexture( ModContent.GetInstance<TupperwareItem>().Texture );
 			if( tupperTex == null || storedItemTex == null ) { return; }
 
 			int hiDim = storedItemTex.Width > storedItemTex.Height ? storedItemTex.Width : storedItemTex.Height;
@@ -42,7 +42,7 @@ namespace Starvation.Items {
 
 		public static void DrawItemStackInventory( SpriteBatch sb, Vector2 pos, int stackSize, float scale ) {
 			var mymod = StarvationMod.Instance;
-			Texture2D tupperTex = ModContent.GetTexture( mymod.GetItem<TupperwareItem>().Texture );
+			Texture2D tupperTex = ModContent.GetTexture( ModContent.GetInstance<TupperwareItem>().Texture );
 			
 			var newPos = new Vector2(
 				pos.X,

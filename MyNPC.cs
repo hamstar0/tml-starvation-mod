@@ -14,7 +14,7 @@ namespace Starvation {
 
 			if( mymod.Config.TupperwareDropsNpcIdsAndChances.ContainsKey(npcDef) ) {
 				if( Main.rand.NextFloat() < mymod.Config.TupperwareDropsNpcIdsAndChances[npcDef] ) {
-					ItemHelpers.CreateItem( npc.Center, mymod.ItemType<TupperwareItem>(), 1, TupperwareItem.Width, TupperwareItem.Height );
+					ItemHelpers.CreateItem( npc.Center, ModContent.ItemType<TupperwareItem>(), 1, TupperwareItem.Width, TupperwareItem.Height );
 				}
 			}
 		}
@@ -27,7 +27,7 @@ namespace Starvation {
 			if( mymod.Config.TupperwareSellsFromMerchantByNpc != null ) {
 				if( npcType == mymod.Config.TupperwareSellsFromMerchantByNpc.Type ) {
 					var tupperware = new Item();
-					tupperware.SetDefaults( mymod.ItemType<TupperwareItem>(), false );
+					tupperware.SetDefaults( ModContent.ItemType<TupperwareItem>(), false );
 
 					shop.item[nextSlot++] = tupperware;
 				}

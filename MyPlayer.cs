@@ -2,7 +2,6 @@
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.Players;
 using HamstarHelpers.Helpers.TModLoader;
-using HamstarHelpers.Services.Messages;
 using HamstarHelpers.Services.Messages.Inbox;
 using HamstarHelpers.Services.Timers;
 using Microsoft.Xna.Framework;
@@ -124,7 +123,7 @@ namespace Starvation {
 							}
 
 							player.inventory[i] = new Item();
-							ItemHelpers.CreateItem( player.Center, mymod.ItemType<RotItem>(), item.stack, RotItem.Width, RotItem.Height );
+							ItemHelpers.CreateItem( player.Center, ModContent.ItemType<RotItem>(), item.stack, RotItem.Width, RotItem.Height );
 						}
 					}
 
@@ -137,7 +136,7 @@ namespace Starvation {
 
 							if( RotItem.IsRotted( item ) ) {
 								myChest[i] = new Item();
-								ItemHelpers.CreateItem( player.Center, mymod.ItemType<RotItem>(), item.stack, RotItem.Width, RotItem.Height );
+								ItemHelpers.CreateItem( player.Center, ModContent.ItemType<RotItem>(), item.stack, RotItem.Width, RotItem.Height );
 							}
 						}
 					}
@@ -153,7 +152,7 @@ namespace Starvation {
 			if( plr.whoAmI != Main.myPlayer ) { return; }
 			
 			if( Main.mouseItem != null && !Main.mouseItem.IsAir ) {
-				if( plr.HeldItem.type == this.mod.ItemType<TupperwareItem>() ) {
+				if( plr.HeldItem.type == ModContent.ItemType<TupperwareItem>() ) {
 					if( this.PrevSelectedItem != null ) {
 						this.AttemptTupperwareAddCurrentItem( plr );
 						this.PrevSelectedItem = null;
