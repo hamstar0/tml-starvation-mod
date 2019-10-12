@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HamstarHelpers.Classes.UI.ModConfig;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,6 +8,11 @@ using Terraria.ModLoader.Config;
 
 
 namespace Starvation {
+	class MyFloatInputElement : FloatInputElement { }
+
+
+
+
 	public class IntTickSetting {
 		[Range( 0, 60 * 60 * 60 )]
 		public int Ticks = 1;
@@ -49,10 +55,12 @@ namespace Starvation {
 
 		[Range( 0f, 100f )]
 		[DefaultValue( 1f / 200f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float AddedWellFedDrainRatePerTickMultiplierPerMaxHealthOver100 = 1f / 200f;
 
 		[Range( 0f, 100f )]
 		[DefaultValue( 1f / 100f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float AddedStarvationHarmPerTickMultiplierPerMaxHealthOver100 = 1f / 100f;
 
 
@@ -60,6 +68,7 @@ namespace Starvation {
 
 		[Range( 0f, 100f )]
 		[DefaultValue( 2f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float FoodSpoilageDurationScale = 2f;
 
 		[Range( 0, 60 * 60 * 60 * 24 * 7 )]
@@ -90,6 +99,7 @@ namespace Starvation {
 
 		[Range( 0f, 100f )]
 		[DefaultValue( 3f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float TupperwareSpoilageDurationScale = 3f;
 
 		[Range( 1, 999 )]
